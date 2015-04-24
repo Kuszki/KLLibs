@@ -1,7 +1,7 @@
 /***********************************************************************
  *
- * {description}
- * Copyright (C) {year}  {fullname}
+ * Lightweight List interpretation for KLLibs
+ * Copyright (C) 2015  Łukasz "Kuszki" Dróżdż
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,13 +18,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  **********************************************************************/
 
-/*! \file kllist.hpp
- *  \brief Deklaracje dla klasy KLList i jej składników.
+/*! \file		kllist.hpp
+ *  \brief	Deklaracje dla klasy KLList i jej składników.
  *
  */
 
-/*! \file kllist.cpp
- *  \brief Implementacja klasy KLList i jej składników.
+/*! \file		kllist.cpp
+ *  \brief	Implementacja klasy KLList i jej składników.
  *
  */
 
@@ -51,8 +51,8 @@ class KLList
 	protected: struct KLListItem
 	{
 
-		KLListItem* Next;	//!< Wskaźnik na kolejny element.
-		Data* Record;		//!< Wskaźnik na przechowywane dane.
+		KLListItem*	Next;	//!< Wskaźnik na kolejny element.
+		Data*		Record;	//!< Wskaźnik na przechowywane dane.
 
 		/*! \brief		Destruktor.
 		 *

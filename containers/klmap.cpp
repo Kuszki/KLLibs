@@ -1,7 +1,7 @@
 /***********************************************************************
  *
- * {description}
- * Copyright (C) {year}  {fullname}
+ * Lightweight Map interpretation for KLLibs
+ * Copyright (C) 2015  Łukasz "Kuszki" Dróżdż
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

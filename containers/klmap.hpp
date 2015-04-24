@@ -1,7 +1,7 @@
 /***********************************************************************
  *
- * {description}
- * Copyright (C) {year}  {fullname}
+ * Lightweight Map interpretation for KLLibs
+ * Copyright (C) 2015  Łukasz "Kuszki" Dróżdż
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,29 @@
 #ifndef KLMAP_HPP
 #define KLMAP_HPP
 
+/*! \file		klmap.hpp
+ *  \brief	Deklaracje dla klasy KLMap i jej składników.
+ *
+ */
+
+/*! \file		klmap.cpp
+ *  \brief	Implementacja klasy KLMap i jej składników.
+ *
+ */
+
+/*! \brief	Lekka interpretacja listy.
+ *  \tparam	Data	Typ przechowywanych danych.
+ *  \tparam	Key	Typ używanego klucza.
+ *  \note		Do użycia wymagany jest konstruktor kopiujący dla klucza i danych.
+ *  \warning	Brak możliwości kopiowania mapy.
+ *  \warning	Brak sprawdzania czy element o podanym kluczu istnieje.
+ *  \todo		Możliwość kopiowania mapy.
+ *  \todo		Możliwość zmiany klucza.
+ *  \todo		Detekcja kluczy.
+ *
+ * Prosta i lekka interpretacja mapy elementów. Wspiera możliwość iteracji po zakresie.
+ *
+ */
 template<typename Data, typename Key>
 class KLMap
 {
@@ -28,19 +51,36 @@ class KLMap
 	public: struct KLMapRecord
 	{
 
-		Data Value;
-		Key ID;
+		Data	Value;	//!< Dane obiektu.
+		Key	ID;		//!< Klucz obiektu.
 
+		/*! \brief		Konstruktor rekordu.
+		 *  \param [in]	_Value	Dane rekordu.
+		 *  \param [in]	_ID		Klucz rekordu.
+		 *
+		 * Tworzy nowy rekord na podstawie podanych obiektów klucza i danych. Kopiuje wszystkie obiekty.
+		 *
+		 */
 		KLMapRecord(const Data& _Value, const Key& _ID);
 
 	};
 
+	/*! \brief		Struktura elementu mapy.
+	 *
+	 * Przechowuje dane pojedynczego elementu listy i umożliwia usunięcie go.
+	 *
+	 */
 	protected: struct KLMapItem
 	{
 
-		KLMapItem* Next;
-		KLMapRecord* Record;
+		KLMapItem*	Next;	//!< Wskaźnik na kolejny element.
+		KLMapRecord*	Record;	//!< Wskaźnik na dane elementu.
 
+		/*! \brief		Destruktor.
+		 *
+		 * Automatycznie usuwa przechowywane dane. Nie modyfikuje kolejnego elementu.
+		 *
+		 */
 		~KLMapItem(void);
 
 	};
@@ -81,30 +121,81 @@ class KLMap
 
 	protected:
 
-		KLMapItem* Begin;
-		KLMapItem* End;
+		KLMapItem* Begin;	//!< Wskaźnik na początek mapy.
+		KLMapItem* End;	//!< Wskaźnik na koniec mapy.
 
-		int Capacity;
+		int Capacity;		//!< Liczba elementów mapy.
 
 	public:
 
+		KLMap(const KLMap<Data, Key>&) = delete;
+
+		/*! \brief		Domyślny konstruktor.
+		 *
+		 * Inicjuje wszystkie pola obiektu.
+		 *
+		 */
 		KLMap(void);
+
+		/*! \brief		Destruktor.
+		 *
+		 * Zwalnia wszystkie użyte zasoby.
+		 *
+		 */
 		~KLMap(void);
 
+		/*! \brief		Wstawianie elementu.
+		 *  \param [in]	Item	Element dodawany do listy.
+		 *  \param [in]	ID	Identyfikator obiektu.
+		 *  \return		Aktualna liczba elementów.
+		 *  \bug			Brak kontroli kluczy.
+		 *
+		 * Dodaje do listy kopie podanego elementu i zwraca nową ilość elementów.
+		 *
+		 */
 		int Insert(const Data& Item, const Key& ID);
+
+		/*! \brief		Usunięcie elementu.
+		 *  \param [in]	ID Klucz elementu.
+		 *  \return		Aktualna liczba elementów lub -1 w przypadku błędu.
+		 *
+		 * Usuwa wybrany element i zwraca aktualną ilość elementów. Gdy nie istnieje element o wybranym indeksie medoda zwróci -1.
+		 *
+		 */
 		int Delete(const Key& ID);
 
+		/*! \brief		Sprawdzenie ilości elementów.
+		 *  \return		Aktualna liczba elementów.
+		 *
+		 * Zwraca aktualną liczbę elementów.
+		 *
+		 */
 		int Size(void) const;
 
+		/*! \brief		Czyszczenie mapy.
+		 *
+		 * Usuwa wszystkie elementy mapy.
+		 *
+		 */
 		void Clean(void);
+
+		/*! \brief		Wybór elementu.
+		 *  \param [in]	ID Klucz elementu.
+		 *  \return		Referencja do wybranego elementu.
+		 *  \warning		Gdy element o podanym kluczo nie istnieje to zwrócona zostanie niepoprawna referencja do `nullptr` co zapewne spowoduje krytyczny wyjątek.
+		 *
+		 * Wybiera element o podanym kluczu z mapy.
+		 *
+		 */
+		Data& operator[] (const Key& ID);
+
+		KLMap<Data, Key>& operator= (const KLMap<Data, Key>&) = delete;
 
 		KLMapVarIterator begin(void);
 		KLMapVarIterator end(void);
 
 		KLMapConstIterator begin(void) const;
 		KLMapConstIterator end(void) const;
-
-		Data& operator[] (const Key& ID);
 
 };
 
