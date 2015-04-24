@@ -36,10 +36,7 @@
  *  \tparam	Key	Typ używanego klucza.
  *  \note		Do użycia wymagany jest konstruktor kopiujący dla klucza i danych.
  *  \warning	Brak możliwości kopiowania mapy.
- *  \warning	Brak sprawdzania czy element o podanym kluczu istnieje.
  *  \todo		Możliwość kopiowania mapy.
- *  \todo		Możliwość zmiany klucza.
- *  \todo		Detekcja kluczy.
  *
  * Prosta i lekka interpretacja mapy elementów. Wspiera możliwość iteracji po zakresie.
  *
@@ -163,6 +160,25 @@ class KLMap
 		 *
 		 */
 		int Delete(const Key& ID);
+
+		/*! \brief		Test klucza.
+		 *  \param [in]	ID Klucz do sprawdzenia.
+		 *  \return		`true` jeśli element o podanym kluczu istnieje, lub `false` gdy nie iestnieje.
+		 *
+		 * Sprawdza czy obiekt o podanym kluczu istnieje i zwraca odpowiednią wartość.
+		 *
+		 */
+		bool Exists(const Key& ID) const;
+
+		/*! \brief		Zmiana klucza obiektu.
+		 *  \param [in]	OldID	Klucz do zamiany.
+		 *  \param [in]	NewID	Nowy klucz.
+		 *  \return		Powodzenie operacji.
+		 *
+		 * Zamienia podany klucz na nowy. Zwraca `true` gdy udało się zamienić klucz, lub `false` gdy nie znaleziono podanego klucza.
+		 *
+		 */
+		bool Update(const Key& OldID, const Key& NewID);
 
 		/*! \brief		Sprawdzenie ilości elementów.
 		 *  \return		Aktualna liczba elementów.

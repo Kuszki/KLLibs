@@ -141,6 +141,42 @@ int KLMap<Data, Key>::Delete(const Key& ID)
 }
 
 template<typename Data, typename Key>
+bool KLMap<Data, Key>::Exists(const Key& ID) const
+{
+	KLMapItem* MapItem = Begin;
+
+	while (MapItem)
+	{
+		if (MapItem->Record->ID == ID)
+			return true;
+		else
+			MapItem = MapItem->Next;
+	}
+
+	return false;
+}
+
+template<typename Data, typename Key>
+bool KLMap<Data, Key>::Update(const Key& OldID, const Key& NewID)
+{
+	KLMapItem* MapItem = Begin;
+
+	while (MapItem)
+	{
+		if (MapItem->Record->ID == OldID)
+		{
+			MapItem->Record->ID = NewID;
+
+			return true;
+		}
+		else
+			MapItem = MapItem->Next;
+	}
+
+	return false;
+}
+
+template<typename Data, typename Key>
 int KLMap<Data, Key>::Size(void) const
 {
 	return Capacity;
