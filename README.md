@@ -23,7 +23,7 @@ Możliwości:
 Kontener reprezentujący mape
 
 - Szablon umożliwiający użycie dowolnych typów.
-- W przypadku wyboru nieistniejącego obiektu zostanie zwrócona referencja na pusty wskaźnik!
+- W przypadku wyboru nieistniejącego obiektu zostanie zwrócona referencja na pusty wskaźnik.
 - Brak kontroli czy wybrany klucz jest w użyciu (SID).
 
 - [x] Dodawanie obiektów.
