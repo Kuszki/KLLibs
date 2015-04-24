@@ -18,8 +18,33 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  **********************************************************************/
 
-#ifndef KLSCRIPT_GLOBAL_HPP
-#define KLSCRIPT_GLOBAL_HPP
+/*! \file		kllibs.hpp
+ *  \brief	Pomocnicze deklaracje.
+ *
+ * Zawiera pomocnicze deklaracje mark używanych przy budowaniu biblioteki.
+ *
+ */
+
+/*! \page		links Linki
+ *
+ *  \section	source Kod źródłowy
+ *
+ * - [Projekt w serwisie GitHub](https://github.com/Kuszki/KLLibs)
+ *
+ *  \section	license Licencja
+ *
+ * - [GNU GPL v2 angielski](http://www.gnu.org/licenses/gpl-2.0.html)
+ * - [GNU GPL v2 polski](http://gnu.org.pl/text/licencja-gnu.html)
+ *
+ *  \section	author Autor
+ *
+ * - [Profil GitHub](https://github.com/Kuszki)
+ * - [e-mail](l.drozdz@o2.pl)
+ *
+ */
+
+#ifndef KLLIBS_GLOBAL_HPP
+#define KLLIBS_GLOBAL_HPP
 
 #if defined(KLLIBS_LIBRARY)
 	#include <QtCore/qglobal.h>
@@ -28,4 +53,4 @@
 	#define EXPORT Q_DECL_IMPORT
 #endif
 
-#endif // KLSCRIPT_GLOBAL_HPP
+#endif // KLLIBS_GLOBAL_HPP

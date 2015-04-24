@@ -1,4 +1,4 @@
-# KLLibs
+# KLLibs {#mainpage}
 Lekki zestaw bibliotek napisany w C++ przeznaczony do współpracy z kontrolerem AVR lub innym dowolnym procesorem.
 
 Biblioteki używają minimalnej ilości wbudowanych funkcji C/C++ i są zaimplementowane z użyciem mechanizmów dostarczanych przez C++11.
