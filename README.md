@@ -5,60 +5,52 @@ Biblioteki używają minimalnej ilości wbudowanych funkcji C/C++ i są zaimplem
 
 # Składniki
 
-Kontenery
-==============================
+##Kontenery
 
-KLList
-------------------------------
+###KLList
 Kontener reprezentujący liste obiektów.
 
 - Indeksy tworzone są automatycznie. Indeks to numer elementu licząc od zera od paczątku listy.
 - W przypadku wyboru nieistniejącego obiektu zostanie zwrócona referencja na pusty wskaźnik!
 
 Możliwości:
-[x] Dodawanie obiektów.
-[x] Usuwanie obiektów.
-[x] Iteracja po zakresie.
-[x] Sprawdzenie ilości obiektów.
+- [x] Dodawanie obiektów.
+- [x] Usuwanie obiektów.
+- [x] Iteracja po zakresie.
+- [x] Sprawdzenie ilości obiektów.
 
-KLMap
-------------------------------
+###KLMap
 Kontener reprezentujący mape
 
 - Szablon umożliwiający użycie dowolnych typów.
 - W przypadku wyboru nieistniejącego obiektu zostanie zwrócona referencja na pusty wskaźnik!
 - Brak kontroli czy wybrany klucz jest w użyciu (SID).
 
-[x] Dodawanie obiektów.
-[x] Usuwanie obiektów.
-[x] Iteracja po zakresie.
-[x] Sprawdzenie ilości obiektów.
-[ ] Sprawdzanie dostępności lub użycia klucza.
-[ ] Zmiana klucza (możliwa jedynie w iteracji po zakresie; SID).
+- [x] Dodawanie obiektów.
+- [x] Usuwanie obiektów.
+- [x] Iteracja po zakresie.
+- [x] Sprawdzenie ilości obiektów.
+- [ ] Sprawdzanie dostępności lub użycia klucza.
+- [ ] Zmiana klucza (możliwa jedynie w iteracji po zakresie; SID).
 
-KLString
-------------------------------
+###KLString
 Kontener reprezentujący łańcuch znaków.
 
 - SID
 
-Interpreter skryptów
-==============================
+##Interpreter skryptów
 
-KLScript
-------------------------------
+###KLScript
 Prosty interpreter skryptów.
 
 - SID
 
-KLBindings
-------------------------------
+###KLBindings
 Bindy funkcji dostępne z poziomu skryptu.
 
 - SID
 
-KLVariables
-------------------------------
+###KLVariables
 Zmienne dostępne w skrypcie i ich powiązania ze zmiennymi programu.
 
 - SID
