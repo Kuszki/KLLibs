@@ -205,6 +205,16 @@ class KLMap
 		 */
 		Data& operator[] (const Key& ID);
 
+		/*! \brief		Wybór elementu.
+		 *  \param [in]	ID Klucz elementu.
+		 *  \return		Stała referencja do wybranego elementu.
+		 *  \warning		Gdy element o podanym kluczo nie istnieje to zwrócona zostanie niepoprawna referencja do `nullptr` co zapewne spowoduje krytyczny wyjątek.
+		 *
+		 * Wybiera element o podanym kluczu z mapy.
+		 *
+		 */
+		const Data& operator[] (const Key& ID) const;
+
 		KLMap<Data, Key>& operator= (const KLMap<Data, Key>&) = delete;
 
 		KLMapVarIterator begin(void);

@@ -211,6 +211,22 @@ Data& KLList<Data>::operator[] (int ID)
 }
 
 template<typename Data>
+const Data& KLList<Data>::operator[] (int ID) const
+{
+	KLListItem* ListItem = Begin;
+
+	for (int i = 0; i < ID; i++)
+	{
+		if (ListItem)
+			ListItem = ListItem->Next;
+		else
+			return *((Data*)(nullptr));
+	}
+
+	return *ListItem->Record;
+}
+
+template<typename Data>
 KLList<Data>& KLList<Data>::operator= (const KLList<Data>& List)
 {
 	if (this == &List) return *this;

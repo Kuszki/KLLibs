@@ -238,4 +238,20 @@ Data& KLMap<Data, Key>::operator[] (const Key& ID)
 	return *((Data*)(nullptr));
 }
 
+template<typename Data, typename Key>
+const Data& KLMap<Data, Key>::operator[] (const Key& ID) const
+{
+	KLMapItem* MapItem = Begin;
+
+	while (MapItem)
+	{
+		if (MapItem->Record->ID == ID)
+			return MapItem->Record->Value;
+		else
+			MapItem = MapItem->Next;
+	}
+
+	return *((Data*)(nullptr));
+}
+
 #endif // KLMAP_CPP

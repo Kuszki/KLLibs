@@ -171,6 +171,16 @@ class KLList
 		 */
 		Data& operator[] (int ID);
 
+		/*! \brief		Wybór elementu.
+		 *  \param [in]	ID Indeks elementu.
+		 *  \return		Stała referencja do wybranego elementu.
+		 *  \warning		Gdy element o podanym indeksie nie istnieje to zwrócona zostanie niepoprawna referencja do `nullptr` co zapewne spowoduje krytyczny wyjątek.
+		 *
+		 * Wybiera element o podanym indeksie z listy.
+		 *
+		 */
+		const Data& operator[] (int ID) const;
+
 		/*! \brief		Operator przypisania.
 		 *  \param [in]	List Obiekt do sklonowania.
 		 *  \return		Referencja do bierzącego obiektu.
