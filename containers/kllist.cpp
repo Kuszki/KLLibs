@@ -80,6 +80,20 @@ bool KLList<Data>::KLListConstIterator::operator!= (const KLListConstIterator& I
 }
 
 template<typename Data>
+KLList<Data>::KLList(const KLList<Data>& List)
+: KLList()
+{
+	KLListItem* ListItem = List.Begin;
+
+	while (ListItem)
+	{
+		Insert(*ListItem->Record);
+
+		ListItem = ListItem->Next;
+	}
+}
+
+template<typename Data>
 KLList<Data>::KLList(void)
 : Begin(nullptr), End(nullptr), Capacity(0) {}
 
@@ -98,7 +112,7 @@ int KLList<Data>::Insert(const Data& Item)
 	}
 	else
 	{
-		End = End->Next =new KLListItem;
+		End = End->Next = new KLListItem;
 	}
 
 	End->Record = new Data(Item);
@@ -194,6 +208,25 @@ Data& KLList<Data>::operator[] (int ID)
 	}
 
 	return *ListItem->Record;
+}
+
+template<typename Data>
+KLList<Data>& KLList<Data>::operator= (const KLList<Data>& List)
+{
+	if (this == &List) return *this;
+
+	KLListItem* ListItem = List.Begin;
+
+	Clean();
+
+	while (ListItem)
+	{
+		Insert(*ListItem->Record);
+
+		ListItem = ListItem->Next;
+	}
+
+	return *this;
 }
 
 #endif // KLLIST_CPP

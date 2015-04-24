@@ -106,7 +106,13 @@ class KLList
 
 	public:
 
-		KLList(const KLList<Data>&) = delete;
+		/*! \brief		Konstruktor kopiujący.
+		 *  \param [in]	List Lista do sklonowania.
+		 *
+		 * Klonuje wybraną instancje listy.
+		 *
+		 */
+		KLList(const KLList<Data>& List);
 
 		/*! \brief		Domyślny konstruktor.
 		 *
@@ -165,7 +171,14 @@ class KLList
 		 */
 		Data& operator[] (int ID);
 
-		KLList& operator= (const KLList<Data>&) = delete;
+		/*! \brief		Operator przypisania.
+		 *  \param [in]	List Obiekt do sklonowania.
+		 *  \return		Referencja do bierzącego obiektu.
+		 *
+		 * Zwalnia dotychczasowe zasoby i klonuje wybrany obiekt.
+		 *
+		 */
+		KLList& operator= (const KLList<Data>& List);
 
 		KLListVarIterator begin(void);
 		KLListVarIterator end(void);
