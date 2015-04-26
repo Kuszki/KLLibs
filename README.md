@@ -43,8 +43,8 @@ Kontener reprezentujący łańcuch znaków.
 - [x] Zamiana fraz.
 - [x] Porównywanie łańcuchów.
 - [ ] Iteracja po zakresie (nie planowane).
-- [ ] Konstruktory konwertujące z typów liczbowych.
-- [ ] Operatory konwersji na typy liczbowe.
+- [X] Konstruktory konwertujące z typów liczbowych.
+- [X] Operatory konwersji na typy liczbowe.
 
 ## Interpreter skryptów
 

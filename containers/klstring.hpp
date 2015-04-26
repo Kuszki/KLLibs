@@ -22,6 +22,8 @@
 #define KLSTRING_HPP
 
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 /*! \brief	Lekka interpretacja łańcucha znaków.
  *
@@ -38,6 +40,22 @@ class KLString
 		int Capacity;	//!< Ilość przechowywanych danych.
 
 	public:
+
+		/*! \brief		Konstruktor konwertujący z `long int`.
+		 *  \param [in]	Int Wybrana liczba całkowita.
+		 *
+		 * Tworzy obiekt konwertując liczbę do postaci łańcucha znaków.
+		 *
+		 */
+		KLString(long Int);
+
+		/*! \brief		Konstruktor konwertujący z `Float`.
+		 *  \param [in]	Float Wybrana liczba zmiennoprzecinkowa.
+		 *
+		 * Tworzy obiekt konwertując liczbę do postaci łańcucha znaków.
+		 *
+		 */
+		KLString(double Float);
 
 		/*! \brief		Konstruktor konwertujący z `char`.
 		 *  \param [in]	Char Wybrany znak.
@@ -236,6 +254,22 @@ class KLString
 		 *
 		 */
 		operator const char* (void) const;
+
+		/*! \brief		Operator konwersji na `long int`.
+		 *  \return		Interpretacja łańcucha jako liczba całkowita.
+		 *
+		 * Zwraca wynik funkcji `atol` użytaj na łańcuchu.
+		 *
+		 */
+		operator long (void) const;
+
+		/*! \brief		Operator konwersji na `double`.
+		 *  \return		Interpretacja łańcucha jako liczba zmiennoprzecinkowa.
+		 *
+		 * Zwraca wynik funkcji `atof` użytaj na łańcuchu.
+		 *
+		 */
+		operator double (void) const;
 
 };
 

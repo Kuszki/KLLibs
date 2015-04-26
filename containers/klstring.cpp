@@ -20,6 +20,33 @@
 
 #include "klstring.hpp"
 
+KLString::KLString(long Int)
+{
+	char Buffer[32];
+
+	snprintf(Buffer, 32, "%li", Int);
+
+	Capacity = strlen(Buffer);
+
+	Data = new char[Capacity + 1];
+
+	memcpy(Data, Buffer, Capacity + 1);
+}
+
+KLString::KLString(double Float)
+{
+	char Buffer[32];
+
+	snprintf(Buffer, 32, "%lf", Float);
+
+	Capacity = strlen(Buffer);
+
+	Data = new char[Capacity + 1];
+
+	memcpy(Data, Buffer, Capacity + 1);
+}
+
+
 KLString::KLString(char Char)
 : Capacity(1)
 {
@@ -256,4 +283,14 @@ KLString& KLString::operator+= (const KLString& String)
 KLString::operator const char* (void) const
 {
 	return Data;
+}
+
+KLString::operator long (void) const
+{
+	return atol(Data);
+}
+
+KLString::operator double (void) const
+{
+	return atof(Data);
 }
