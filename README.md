@@ -36,7 +36,6 @@ Kontener reprezentujący mape
 Kontener reprezentujący łańcuch znaków.
 
 - Przechowywanie łańcuchów znaków i operacje na nich.
-- Uniwersalny konstruktor konwertujący z typów liczbowych.
 
 - [x] Dodawanie i usuwanie fraz.
 - [x] Wyszukiwanie znaków i fraz.
@@ -44,7 +43,7 @@ Kontener reprezentujący łańcuch znaków.
 - [x] Zamiana fraz.
 - [x] Porównywanie łańcuchów.
 - [ ] Iteracja po zakresie (nieplanowane).
-- [X] Konstruktory konwertujące z typów liczbowych (uniwersalny konstruktor).
+- [X] Konstruktory konwertujące z typów liczbowych (double, int i const void*).
 - [ ] Operatory konwersji na typy liczbowe (nieplanowane).
 
 ## Interpreter skryptów

@@ -41,16 +41,21 @@ class KLString
 
 	public:
 
-		/*! \brief		Konstruktor konwertujący z dowolnego typu.
-		 *  \tparam		Mixed	Wybrany typ
-		 *  \param [in]	Value	Wybrana liczba.
-		 *  \param [in]	Expr		Wyrażenie przekazywane do `snprintf`.
+		/*! \brief		Konstruktor konwertujący z typu `double`.
+		 *  \param [in]	Value Wybrana liczba.
 		 *
 		 * Tworzy obiekt konwertując liczbę do postaci łańcucha znaków.
 		 *
 		 */
-		template<typename Mixed> KLString(const Mixed& Value,
-								    const char Expr[]);
+		KLString(double Value);
+
+		/*! \brief		Konstruktor konwertujący z typu `int`.
+		 *  \param [in]	Value Wybrana liczba.
+		 *
+		 * Tworzy obiekt konwertując liczbę do postaci łańcucha znaków.
+		 *
+		 */
+		KLString(int Value);
 
 		/*! \brief		Konstruktor konwertujący z `char`.
 		 *  \param [in]	Char Wybrany znak.
@@ -60,13 +65,21 @@ class KLString
 		 */
 		KLString(char Char);
 
+		/*! \brief		Konstruktor konwertujący z typu `const void*`.
+		 *  \param [in]	Value Wybrany adres.
+		 *
+		 * Tworzy obiekt konwertując liczbę do postaci łańcucha znaków.
+		 *
+		 */
+		KLString(const void* Value);
+
 		/*! \brief		Konstruktor konwertujący z `const char*`.
 		 *  \param [in]	String Wybrany łańcuch znaków.
 		 *
 		 * Tworzy obiekt na bazie podanego łańcucha kopiując go do pamięci.
 		 *
 		 */
-		KLString(const char String[]);
+		KLString(const char* String);
 
 		/*! \brief		Konstruktor kopiujący.
 		 *  \param [in]	String Obiekt do skopiowania.

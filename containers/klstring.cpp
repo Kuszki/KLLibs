@@ -20,12 +20,24 @@
 
 #include "klstring.hpp"
 
-template<typename Mixed>
-KLString::KLString(const Mixed& Value, const char Expr[])
+KLString::KLString(double Value)
 {
 	char Buffer[32];
 
-	snprintf(Buffer, 32, Expr, Value);
+	snprintf(Buffer, 32, "%f", Value);
+
+	Capacity = strlen(Buffer);
+
+	Data = new char[Capacity + 1];
+
+	memcpy(Data, Buffer, Capacity + 1);
+}
+
+KLString::KLString(int Value)
+{
+	char Buffer[32];
+
+	snprintf(Buffer, 32, "%i", Value);
 
 	Capacity = strlen(Buffer);
 
@@ -43,7 +55,20 @@ KLString::KLString(char Char)
 	Data[1] = 0;
 }
 
-KLString::KLString(const char String[])
+KLString::KLString(const void* Value)
+{
+	char Buffer[32];
+
+	snprintf(Buffer, 32, "%p", Value);
+
+	Capacity = strlen(Buffer);
+
+	Data = new char[Capacity + 1];
+
+	memcpy(Data, Buffer, Capacity + 1);
+}
+
+KLString::KLString(const char* String)
 {
 	Capacity = strlen(String);
 
@@ -282,16 +307,3 @@ KLString::operator const char* (void) const
 {
 	return Data;
 }
-
-template KLString::KLString(const long double&, const char*);
-template KLString::KLString(const double&, const char*);
-template KLString::KLString(const float&, const char*);
-
-template KLString::KLString(const long unsigned&, const char*);
-template KLString::KLString(const unsigned&, const char*);
-template KLString::KLString(const short unsigned&, const char*);
-
-template KLString::KLString(const long long int&, const char*);
-template KLString::KLString(const long int&, const char*);
-template KLString::KLString(const int&, const char*);
-template KLString::KLString(const short int&, const char*);
