@@ -23,33 +23,13 @@
 
 #include "containers/klmap.hpp"
 #include "containers/kllist.hpp"
+#include "containers/klstring.hpp"
 
 using namespace std;
 
 int main(int ArgC, char* Args[])
 {
-	KLList<int> mapa;
 
-	cout << "args C: " << ArgC << '\n';
-
-	for (int i = 1; i < ArgC; i++)
-	{
-		float f = strlen(Args[i]);
-
-		cout << "adding " << f << " size: " << mapa.Insert(f) << endl;
-	}
-
-	for (const auto& item: mapa)
-	{
-		cout << item << "\n";
-	}
-
-	mapa.Delete(3);
-
-	for (const auto& item: mapa)
-	{
-		cout << item << "\n";
-	}
 
 	return 0;
 }

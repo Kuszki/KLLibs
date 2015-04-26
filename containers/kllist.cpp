@@ -204,7 +204,7 @@ Data& KLList<Data>::operator[] (int ID)
 		if (ListItem)
 			ListItem = ListItem->Next;
 		else
-			return *((Data*)(nullptr));
+			return *((Data*) nullptr);
 	}
 
 	return *ListItem->Record;
@@ -220,7 +220,7 @@ const Data& KLList<Data>::operator[] (int ID) const
 		if (ListItem)
 			ListItem = ListItem->Next;
 		else
-			return *((Data*)(nullptr));
+			return *((Data*) nullptr);
 	}
 
 	return *ListItem->Record;

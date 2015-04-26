@@ -84,6 +84,20 @@ bool KLMap<Data, Key>::KLMapConstIterator::operator!= (const KLMapConstIterator&
 }
 
 template<typename Data, typename Key>
+KLMap<Data, Key>::KLMap(const KLMap<Data, Key>& Map)
+: KLMap()
+{
+	KLMapItem MapItem = Map.Begin;
+
+	while (MapItem)
+	{
+		Insert(MapItem->Record->Value, MapItem->Record->ID);
+
+		MapItem = MapItem->Next;
+	}
+}
+
+template<typename Data, typename Key>
 KLMap<Data, Key>::KLMap(void)
 : Begin(nullptr), End(nullptr), Capacity(0) {}
 
@@ -235,7 +249,7 @@ Data& KLMap<Data, Key>::operator[] (const Key& ID)
 			MapItem = MapItem->Next;
 	}
 
-	return *((Data*)(nullptr));
+	return *((Data*) nullptr);
 }
 
 template<typename Data, typename Key>
@@ -251,7 +265,26 @@ const Data& KLMap<Data, Key>::operator[] (const Key& ID) const
 			MapItem = MapItem->Next;
 	}
 
-	return *((Data*)(nullptr));
+	return *((Data*) nullptr);
+}
+
+template<typename Data, typename Key>
+KLMap<Data, Key>& KLMap<Data, Key>::operator= (const KLMap<Data, Key>& Map)
+{
+	if (this == &Map) return *this;
+
+	KLMapItem MapItem = Map.Begin;
+
+	Clean();
+
+	while (MapItem)
+	{
+		Insert(MapItem->Record->Value, MapItem->Record->ID);
+
+		MapItem = MapItem->Next;
+	}
+
+	return *this;
 }
 
 #endif // KLMAP_CPP

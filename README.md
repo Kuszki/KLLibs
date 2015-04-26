@@ -24,7 +24,6 @@ Kontener reprezentujący mape
 
 - Szablon umożliwiający użycie dowolnych typów.
 - W przypadku wyboru nieistniejącego obiektu zostanie zwrócona referencja na pusty wskaźnik.
-- Brak automatycznej kontroli czy wybrany klucz jest w użyciu - musisz sam sprawdzić to zagadnienie.
 
 - [x] Dodawanie obiektów.
 - [x] Usuwanie obiektów.
@@ -36,7 +35,16 @@ Kontener reprezentujący mape
 ### KLString
 Kontener reprezentujący łańcuch znaków.
 
-- SID
+- Przechowywanie łańcuchów znaków i operacje na nich.
+
+- [x] Dodawanie i usuwanie fraz.
+- [x] Wyszukiwanie znaków i fraz.
+- [x] Zliczanie fraz i znaków.
+- [x] Zamiana fraz.
+- [x] Porównywanie łańcuchów.
+- [ ] Iteracja po zakresie (nie planowane).
+- [ ] Konstruktory konwertujące z typów liczbowych.
+- [ ] Operatory konwersji na typy liczbowe.
 
 ## Interpreter skryptów
 

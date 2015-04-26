@@ -125,7 +125,13 @@ class KLMap
 
 	public:
 
-		KLMap(const KLMap<Data, Key>&) = delete;
+		/*! \brief		Konstruktor kopiujący.
+		 *  \param [in]	Map Mapa do sklonowania.
+		 *
+		 * Klonuje wybraną instancje mapy.
+		 *
+		 */
+		KLMap(const KLMap<Data, Key>& Map);
 
 		/*! \brief		Domyślny konstruktor.
 		 *
@@ -150,7 +156,8 @@ class KLMap
 		 * Dodaje do listy kopie podanego elementu i zwraca nową ilość elementów.
 		 *
 		 */
-		int Insert(const Data& Item, const Key& ID);
+		int Insert(const Data& Item,
+				 const Key& ID);
 
 		/*! \brief		Usunięcie elementu.
 		 *  \param [in]	ID Klucz elementu.
@@ -178,7 +185,8 @@ class KLMap
 		 * Zamienia podany klucz na nowy. Zwraca `true` gdy udało się zamienić klucz, lub `false` gdy nie znaleziono podanego klucza.
 		 *
 		 */
-		bool Update(const Key& OldID, const Key& NewID);
+		bool Update(const Key& OldID,
+				  const Key& NewID);
 
 		/*! \brief		Sprawdzenie ilości elementów.
 		 *  \return		Aktualna liczba elementów.
@@ -198,7 +206,7 @@ class KLMap
 		/*! \brief		Wybór elementu.
 		 *  \param [in]	ID Klucz elementu.
 		 *  \return		Referencja do wybranego elementu.
-		 *  \warning		Gdy element o podanym kluczo nie istnieje to zwrócona zostanie niepoprawna referencja do `nullptr` co zapewne spowoduje krytyczny wyjątek.
+		 *  \warning		Gdy element o podanym kluczu nie istnieje to zwrócona zostanie niepoprawna referencja do `nullptr` co zapewne spowoduje krytyczny wyjątek.
 		 *
 		 * Wybiera element o podanym kluczu z mapy.
 		 *
@@ -208,14 +216,21 @@ class KLMap
 		/*! \brief		Wybór elementu.
 		 *  \param [in]	ID Klucz elementu.
 		 *  \return		Stała referencja do wybranego elementu.
-		 *  \warning		Gdy element o podanym kluczo nie istnieje to zwrócona zostanie niepoprawna referencja do `nullptr` co zapewne spowoduje krytyczny wyjątek.
+		 *  \warning		Gdy element o podanym kluczu nie istnieje to zwrócona zostanie niepoprawna referencja do `nullptr` co zapewne spowoduje krytyczny wyjątek.
 		 *
 		 * Wybiera element o podanym kluczu z mapy.
 		 *
 		 */
 		const Data& operator[] (const Key& ID) const;
 
-		KLMap<Data, Key>& operator= (const KLMap<Data, Key>&) = delete;
+		/*! \brief		Operator przypisania.
+		 *  \param [in]	Map Obiekt do sklonowania.
+		 *  \return		Referencja do bierzącego obiektu.
+		 *
+		 * Zwalnia dotychczasowe zasoby i klonuje wybrany obiekt.
+		 *
+		 */
+		KLMap<Data, Key>& operator= (const KLMap<Data, Key>& Map);
 
 		KLMapVarIterator begin(void);
 		KLMapVarIterator end(void);
