@@ -41,21 +41,16 @@ class KLString
 
 	public:
 
-		/*! \brief		Konstruktor konwertujący z `long int`.
-		 *  \param [in]	Int Wybrana liczba całkowita.
+		/*! \brief		Konstruktor konwertujący z dowolnego typu.
+		 *  \tparam		Mixed	Wybrany typ
+		 *  \param [in]	Value	Wybrana liczba.
+		 *  \param [in]	Expr		Wyrażenie przekazywane do `snprintf`.
 		 *
 		 * Tworzy obiekt konwertując liczbę do postaci łańcucha znaków.
 		 *
 		 */
-		KLString(long Int);
-
-		/*! \brief		Konstruktor konwertujący z `Float`.
-		 *  \param [in]	Float Wybrana liczba zmiennoprzecinkowa.
-		 *
-		 * Tworzy obiekt konwertując liczbę do postaci łańcucha znaków.
-		 *
-		 */
-		KLString(double Float);
+		template<typename Mixed> KLString(const Mixed& Value,
+								    const char Expr[]);
 
 		/*! \brief		Konstruktor konwertujący z `char`.
 		 *  \param [in]	Char Wybrany znak.
@@ -164,6 +159,22 @@ class KLString
 		 */
 		void Clean(void);
 
+		/*! \brief		Operator konwersji na `long int`.
+		 *  \return		Interpretacja łańcucha jako liczba całkowita.
+		 *
+		 * Zwraca wynik funkcji `atol` użytej na łańcuchu.
+		 *
+		 */
+		int ToInt(void) const;
+
+		/*! \brief		Operator konwersji na `double`.
+		 *  \return		Interpretacja łańcucha jako liczba zmiennoprzecinkowa.
+		 *
+		 * Zwraca wynik funkcji `atof` użytej na łańcuchu.
+		 *
+		 */
+		double ToNumber(void) const;
+
 		/*! \brief		Wybór znaku.
 		 *  \param [in]	ID Pozycja znaku.
 		 *  \return		Referencja do wybranego znaku.
@@ -254,22 +265,6 @@ class KLString
 		 *
 		 */
 		operator const char* (void) const;
-
-		/*! \brief		Operator konwersji na `long int`.
-		 *  \return		Interpretacja łańcucha jako liczba całkowita.
-		 *
-		 * Zwraca wynik funkcji `atol` użytaj na łańcuchu.
-		 *
-		 */
-		operator long (void) const;
-
-		/*! \brief		Operator konwersji na `double`.
-		 *  \return		Interpretacja łańcucha jako liczba zmiennoprzecinkowa.
-		 *
-		 * Zwraca wynik funkcji `atof` użytaj na łańcuchu.
-		 *
-		 */
-		operator double (void) const;
 
 };
 
