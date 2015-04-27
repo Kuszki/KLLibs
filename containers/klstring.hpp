@@ -21,6 +21,12 @@
 #ifndef KLSTRING_HPP
 #define KLSTRING_HPP
 
+#ifdef QT_VERSION
+	#include "kllibs.hpp"
+#else
+	#define EXPORT
+#endif
+
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -30,7 +36,7 @@
  * Prosta i lekka interpretacja łańcucha znaków. Wymaga jedynie kilku podstawowych funkcji biblioteki `string.h`.
  *
  */
-class KLString
+class EXPORT KLString
 {
 
 	protected:
@@ -47,7 +53,7 @@ class KLString
 		 * Tworzy obiekt konwertując liczbę do postaci łańcucha znaków.
 		 *
 		 */
-		KLString(double Value);
+		explicit KLString(double Value);
 
 		/*! \brief		Konstruktor konwertujący z typu `int`.
 		 *  \param [in]	Value Wybrana liczba.
@@ -55,7 +61,23 @@ class KLString
 		 * Tworzy obiekt konwertując liczbę do postaci łańcucha znaków.
 		 *
 		 */
-		KLString(int Value);
+		explicit KLString(int Value);
+
+		/*! \brief		Konstruktor konwertujący z `bool`.
+		 *  \param [in]	Bool Wartość logiczna.
+		 *
+		 * Tworzy obiekt na podstawie wartości logicznej.
+		 *
+		 */
+		explicit KLString(bool Bool);
+
+		/*! \brief		Konstruktor konwertujący z typu `const void*`.
+		 *  \param [in]	Value Wybrany adres.
+		 *
+		 * Tworzy obiekt konwertując liczbę do postaci łańcucha znaków.
+		 *
+		 */
+		explicit KLString(const void* Value);
 
 		/*! \brief		Konstruktor konwertujący z `char`.
 		 *  \param [in]	Char Wybrany znak.
@@ -64,14 +86,6 @@ class KLString
 		 *
 		 */
 		KLString(char Char);
-
-		/*! \brief		Konstruktor konwertujący z typu `const void*`.
-		 *  \param [in]	Value Wybrany adres.
-		 *
-		 * Tworzy obiekt konwertując liczbę do postaci łańcucha znaków.
-		 *
-		 */
-		KLString(const void* Value);
 
 		/*! \brief		Konstruktor konwertujący z `const char*`.
 		 *  \param [in]	String Wybrany łańcuch znaków.
@@ -88,6 +102,14 @@ class KLString
 		 *
 		 */
 		KLString(const KLString& String);
+
+		/*! \brief		Konstruktor przenoszący.
+		 *  \param [in]	String Obiekt do przeniesienia.
+		 *
+		 * Tworzy nowy obiekt na podstawie podanego obiektu bez niepotrzebnych alokacji.
+		 *
+		 */
+		KLString(KLString&& String);
 
 		/*! \brief		Konstruktor domyślny.
 		 *
@@ -139,7 +161,7 @@ class KLString
 				  bool All = false);
 
 		/*! \brief		Zliczanie wystąpień.
-		 *  \param [in]	String Łańcuch do wyszukania
+		 *  \param [in]	String Łańcuch do wyszukania.
 		 *  \return		Ilość wystąpień.
 		 *
 		 * Szuka w łańcuchu wybranejfrazy i zwraca ilość wystąpień.
@@ -148,7 +170,7 @@ class KLString
 		int Count(const KLString& String) const;
 
 		/*! \brief		Wyszukiwanie frazy.
-		 *  \param [in]	String Łańcuch do wyszukania
+		 *  \param [in]	String Łańcuch do wyszukania.
 		 *  \return		Miejsce wystąpienia numerowane od zera lub -1 gdy nic nie znaleziono.
 		 *
 		 * Szuka w łańcuchu wybranejfrazy i zwraca miejsce pierwszego wystąpienia.
@@ -156,6 +178,16 @@ class KLString
 		 */
 		int Find(const KLString& String) const;
 
+		/*! \brief		Kopia części łańcucha.
+		 *  \param [in]	Start	Początek ciągu.
+		 *  \param [in]	Stop		Koniec ciągu.
+		 *  \return		Łańcuch złożony z części obejmującej podany zakres.
+		 *
+		 * Kopiuje znaki od wybranego znaku początkowego do końcowego i zwraca nowy łańcuch.
+		 *
+		 */
+		KLString Part(int Start,
+				    int Stop) const;
 
 		/*! \brief		Długość łańcucha.
 		 *  \return		Liczba znaków w łańcuchu.
@@ -172,10 +204,18 @@ class KLString
 		 */
 		void Clean(void);
 
-		/*! \brief		Operator konwersji na `long int`.
+		/*! \brief		Operator konwersji na `bool`.
+		 *  \return		Interpretacja łańcucha jako wartość logiczna.
+		 *
+		 * Zwraca `true` gdy ciąg jest liczbą niezerową lub ma wartość "true".
+		 *
+		 */
+		int ToBool(void) const;
+
+		/*! \brief		Operator konwersji na `int`.
 		 *  \return		Interpretacja łańcucha jako liczba całkowita.
 		 *
-		 * Zwraca wynik funkcji `atol` użytej na łańcuchu.
+		 * Zwraca wynik funkcji `atoi` użytej na łańcuchu.
 		 *
 		 */
 		int ToInt(void) const;
@@ -261,6 +301,15 @@ class KLString
 		 *
 		 */
 		KLString& operator= (const KLString& String);
+
+		/*! \brief		Operator przeniesienia.
+		 *  \param [in]	String Łańcuch do przeniesienia.
+		 *  \return		Referencja do bierzącego obiektu.
+		 *
+		 * Przenosi podany łańcuch i zastępuje bierzący podanym.
+		 *
+		 */
+		KLString& operator= (KLString&& String);
 
 		/*! \brief		Operator przypisania z dodawaniam.
 		 *  \param [in]	String Łańcuch do dodania.

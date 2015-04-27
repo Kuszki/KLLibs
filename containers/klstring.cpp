@@ -46,13 +46,15 @@ KLString::KLString(int Value)
 	memcpy(Data, Buffer, Capacity + 1);
 }
 
-KLString::KLString(char Char)
-: Capacity(1)
+KLString::KLString(bool Bool)
 {
-	Data = new char[2];
+	const char* Buffer[] = {"true", "false"};
 
-	Data[0] = Char;
-	Data[1] = 0;
+	Capacity = Bool ? 4 : 5;
+
+	Data = new char[Capacity + 1];
+
+	memcpy(Data, Buffer, Capacity + 1);
 }
 
 KLString::KLString(const void* Value)
@@ -68,6 +70,15 @@ KLString::KLString(const void* Value)
 	memcpy(Data, Buffer, Capacity + 1);
 }
 
+KLString::KLString(char Char)
+: Capacity(1)
+{
+	Data = new char[2];
+
+	Data[0] = Char;
+	Data[1] = 0;
+}
+
 KLString::KLString(const char* String)
 {
 	Capacity = strlen(String);
@@ -79,6 +90,12 @@ KLString::KLString(const char* String)
 
 KLString::KLString(const KLString& String)
 : KLString(String.Data) {}
+
+KLString::KLString(KLString&& String)
+: Data(String.Data), Capacity(String.Capacity)
+{
+	String.Data = nullptr;
+}
 
 KLString::KLString(void)
 : Data(nullptr), Capacity(0) {}
@@ -206,6 +223,22 @@ int KLString::Find(const KLString& String) const
 	return -1;
 }
 
+KLString KLString::Part(int Start, int Stop) const
+{
+	if (Start >= Stop || Start >= Capacity || Stop > Capacity) return KLString();
+
+	KLString Buffer;
+
+	Buffer.Capacity = Stop - Start;
+	Buffer.Data = new char[Buffer.Capacity + 1];
+
+	memcpy(Buffer.Data, Data + Start, Buffer.Capacity);
+
+	Buffer.Data[Buffer.Capacity] = 0;
+
+	return Buffer;
+}
+
 int KLString::Size(void) const
 {
 	return Capacity;
@@ -220,6 +253,11 @@ void KLString::Clean(void)
 		Data = nullptr;
 		Capacity = 0;
 	}
+}
+
+int KLString::ToBool(void) const
+{
+	return atoi(Data) || strcmp(Data, "true") == 0 || strcmp(Data, "TRUE");
 }
 
 int KLString::ToInt(void) const
@@ -292,6 +330,19 @@ KLString& KLString::operator= (const KLString& String)
 	Clean();
 
 	Insert(String.Data);
+
+	return *this;
+}
+
+KLString& KLString::operator= (KLString&& String)
+{
+	Clean();
+
+	Data = String.Data;
+
+	Capacity = String.Capacity;
+
+	String.Data = nullptr;
 
 	return *this;
 }
