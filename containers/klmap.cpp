@@ -87,7 +87,7 @@ template<typename Data, typename Key>
 KLMap<Data, Key>::KLMap(const KLMap<Data, Key>& Map)
 : KLMap()
 {
-	KLMapItem MapItem = Map.Begin;
+	KLMapItem* MapItem = Map.Begin;
 
 	while (MapItem)
 	{
