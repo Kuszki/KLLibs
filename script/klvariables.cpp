@@ -20,6 +20,232 @@
 
 #include "klvariables.hpp"
 
-KLVariables::KLVariables()
+KLVariables::KLVariable::KLVariable(const KLVariable& Object)
+: Type(Object.Type), Binded(Object.Binded)
 {
+	if (!Binded)
+		switch (Type)
+		{
+			case STRING:
+				Pointer = new KLString(*((KLString*) Object.Pointer));
+			break;
+			case NUMBER:
+				Pointer = new double(*((double*) Object.Pointer));
+			break;
+			case INTEGER:
+				Pointer = new int(*((int*) Object.Pointer));
+			break;
+		}
+	else
+		Pointer = Object.Pointer;
+}
+
+KLVariables::KLVariable::KLVariable(KLVariable&& Object)
+: Type(Object.Type), Binded(Object.Binded)
+{
+	Pointer = Object.Pointer;
+
+	Object.Pointer = nullptr;
+}
+
+KLVariables::KLVariable::KLVariable(TYPE VarType, void* Bind)
+: Type(VarType), Binded(Bind)
+{
+	if (!Binded)
+		switch (Type)
+		{
+			case STRING:
+				Pointer = new KLString();
+			break;
+			case NUMBER:
+				Pointer = new double;
+			break;
+			case INTEGER:
+				Pointer = new int;
+			break;
+		}
+	else
+		Pointer = Bind;
+}
+
+KLVariables::KLVariable::~KLVariable(void)
+{
+	if (!Binded)
+		switch (Type)
+		{
+			case STRING:
+				delete ((KLString*) Pointer);
+			break;
+			default:
+				delete (char*) Pointer;
+		}
+}
+
+KLString KLVariables::KLVariable::ToString(void) const
+{
+	switch (Type)
+	{
+		case STRING:
+			return KLString(*((KLString*) Pointer));
+		break;
+		case NUMBER:
+			return KLString(*((double*) Pointer));
+		break;
+		case INTEGER:
+			return KLString(*((int*) Pointer));
+		break;
+	}
+
+	return KLString();
+}
+
+double KLVariables::KLVariable::ToNumber(void) const
+{
+	switch (Type)
+	{
+		case STRING:
+			return ((KLString*) Pointer)->ToNumber();
+		break;
+		case NUMBER:
+			return *((double*) Pointer);
+		break;
+		case INTEGER:
+			return *((int*) Pointer);
+		break;
+	}
+
+	return double();
+}
+
+int KLVariables::KLVariable::ToInt(void) const
+{
+	switch (Type)
+	{
+		case STRING:
+			return ((KLString*) Pointer)->ToInt();
+		break;
+		case NUMBER:
+			return *((double*) Pointer);
+		break;
+		case INTEGER:
+			return *((int*) Pointer);
+		break;
+	}
+
+	return int();
+}
+
+void KLVariables::KLVariable::Set(const KLString& String)
+{
+	switch (Type)
+	{
+		case STRING:
+			*((KLString*) Pointer) = String;
+		break;
+		case NUMBER:
+			*((double*) Pointer) = String.ToNumber();
+		break;
+		case INTEGER:
+			*((int*) Pointer) = String.ToInt();
+		break;
+	}
+}
+
+void KLVariables::KLVariable::Set(double Number)
+{
+	switch (Type)
+	{
+		case STRING:
+			*((KLString*) Pointer) = KLString(Number);
+		break;
+		case NUMBER:
+			*((double*) Pointer) = Number;
+		break;
+		case INTEGER:
+			*((int*) Pointer) = Number;
+		break;
+	}
+}
+
+void KLVariables::KLVariable::Set(int Integer)
+{
+	switch (Type)
+	{
+		case STRING:
+			*((KLString*) Pointer) = KLString(Integer);
+		break;
+		case NUMBER:
+			*((double*) Pointer) = Integer;
+		break;
+		case INTEGER:
+			*((int*) Pointer) = Integer;
+		break;
+	}
+}
+
+KLVariables::KLVariables(KLVariables* Parent)
+: UpperScoope(Parent) {}
+
+KLVariables::KLVariables(const KLVariables& Objects)
+: Variables(Objects.Variables), UpperScoope(Objects.UpperScoope) {}
+
+bool KLVariables::Add(const KLString& Name, TYPE Type)
+{
+	if (Variables.Exists(Name))
+		return false;
+	else
+		return Variables.Insert(KLVariable(Type), Name);
+}
+
+bool KLVariables::Add(const KLString& Name, KLString& String)
+{
+	if (Variables.Exists(Name))
+		return false;
+	else
+		return Variables.Insert(KLVariable(STRING, &String), Name);
+}
+
+bool KLVariables::Add(const KLString& Name, double& Number)
+{
+	if (Variables.Exists(Name))
+		return false;
+	else
+		return Variables.Insert(KLVariable(NUMBER, &Number), Name);
+}
+
+bool KLVariables::Add(const KLString& Name, int& Integer)
+{
+	if (Variables.Exists(Name))
+		return false;
+	else
+		return Variables.Insert(KLVariable(INTEGER, &Integer), Name);
+}
+
+bool KLVariables::Delete(const KLString& Name)
+{
+	return Variables.Delete(Name) != -1;
+}
+
+bool KLVariables::Exists(const KLString& Name) const
+{
+	if (UpperScoope)
+		return Variables.Exists(Name) || UpperScoope->Exists(Name);
+	else
+		return Variables.Exists(Name);
+}
+
+KLVariables::KLVariable& KLVariables::operator[] (const KLString& Name)
+{
+	if (!Variables.Exists(Name))
+		return (*UpperScoope)[Name];
+	else
+		return Variables[Name];
+}
+
+const KLVariables::KLVariable& KLVariables::operator[] (const KLString& Name) const
+{
+	if (!Variables.Exists(Name))
+		return (*UpperScoope)[Name];
+	else
+		return Variables[Name];
 }

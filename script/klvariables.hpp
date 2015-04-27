@@ -21,51 +21,111 @@
 #ifndef KLVARIABLES_HPP
 #define KLVARIABLES_HPP
 
+#ifdef QT_VERSION
+	#include "kllibs.hpp"
+#else
+	#define EXPORT
+#endif
+
+#include "containers/klmap.hpp"
+#include "containers/kllist.hpp"
+#include "containers/klstring.hpp"
+
 #ifndef size_t
 	typedef unsigned int size;
 #else
 	typedef size_t size;
 #endif
 
-class KLVariables
+class EXPORT KLVariables
 {
 
-	protected: class KLVariable
+	public: enum TYPE
 	{
+		STRING,
+		NUMBER,
+		INTEGER
+	};
+
+	private: class KLVariable
+	{
+
+
+
+		protected: union DATA
+		{
+			KLString* String;
+
+			double* Number;
+			int* Integer;
+		};
 
 		protected:
 
-			void* Adress;
+			const TYPE Type;
 
-			bool Binded;
+			const bool Binded;
 
-			size Size;
+			void* Pointer;
 
 		public:
 
-			template<typename Mixed> KLVariable(Mixed& Variable);
 
-			KLVariable(void);
+			KLVariable(const KLVariable& Object);
+
+			KLVariable(KLVariable&& Object);
+
+			KLVariable(TYPE VarType = STRING,
+					 void* Bind = nullptr);
+
 			~KLVariable(void);
 
-			template<typename Mixed> void SetValue(Mixed Value);
-			template<typename Mixed> Mixed GetValue(void) const;
+			KLString ToString(void) const;
 
-			template<typename Mixed> void Bind(Mixed& Variable);
+			double ToNumber(void) const;
 
-			void Unbind(void);
+			int ToInt(void) const;
 
-			void Free(void);
+			void Set(const KLString& String);
+
+			void Set(double Number);
+
+			void Set(int Integer);
 
 	};
 
 	protected:
 
+		KLMap<KLVariable, KLString> Variables;
 
+		KLVariables* const UpperScoope;
 
 	public:
 
-		KLVariables();
+		explicit KLVariables(KLVariables* Parent = nullptr);
+
+		KLVariables(const KLVariables& Objects);
+
+		bool Add(const KLString& Name,
+			    TYPE Type);
+
+		bool Add(const KLString& Name,
+			    KLString& String);
+
+		bool Add(const KLString& Name,
+			    double& Number);
+
+		bool Add(const KLString& Name,
+			    int& Integer);
+
+		bool Delete(const KLString& Name);
+
+		bool Exists(const KLString& Name) const;
+
+		KLVariable& operator[] (const KLString& Name);
+
+		const KLVariable& operator[] (const KLString& Name) const;
+
 };
 
 #endif // KLVARIABLES_HPP

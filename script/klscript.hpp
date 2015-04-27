@@ -41,6 +41,7 @@ class EXPORT KLScript
 	public:
 
 		KLVariables	Variables;
+
 		KLBindings	Bindings;
 
 		KLScript();
