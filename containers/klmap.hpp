@@ -35,8 +35,6 @@
  *  \tparam	Data	Typ przechowywanych danych.
  *  \tparam	Key	Typ używanego klucza.
  *  \note		Do użycia wymagany jest konstruktor kopiujący dla klucza i danych.
- *  \warning	Brak możliwości kopiowania mapy.
- *  \todo		Możliwość kopiowania mapy.
  *
  * Prosta i lekka interpretacja mapy elementów. Wspiera możliwość iteracji po zakresie.
  *
@@ -45,6 +43,11 @@ template<typename Data, typename Key>
 class KLMap
 {
 
+	/*! \brief		Struktura reprezentująca parę klucz-dane.
+	 *
+	 * Struktura przechowująca informacje o obiekcie przechowywanym w mapie.
+	 *
+	 */
 	public: struct KLMapRecord
 	{
 
@@ -82,7 +85,7 @@ class KLMap
 
 	};
 
-	protected: class KLMapVarIterator
+	public: class KLMapVarIterator
 	{
 
 		protected:
@@ -99,7 +102,7 @@ class KLMap
 
 	};
 
-	protected: class KLMapConstIterator
+	public: class KLMapConstIterator
 	{
 
 		protected:
