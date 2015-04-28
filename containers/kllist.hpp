@@ -63,7 +63,7 @@ class KLList
 
 	};
 
-	protected: class KLListVarIterator
+	public: class KLListVarIterator
 	{
 
 		protected:
@@ -80,7 +80,7 @@ class KLList
 
 	};
 
-	protected: class KLListConstIterator
+	public: class KLListConstIterator
 	{
 
 		protected:
