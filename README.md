@@ -25,6 +25,7 @@ Kontener reprezentujący mape
 - Szablon umożliwiający użycie dowolnych typów.
 - W przypadku wyboru nieistniejącego obiektu zostanie zwrócona referencja na pusty wskaźnik.
 
+Możliwości:
 - [X] Dodawanie obiektów.
 - [X] Usuwanie obiektów.
 - [X] Iteracja po zakresie.
@@ -37,6 +38,7 @@ Kontener reprezentujący łańcuch znaków.
 
 - Przechowywanie łańcuchów znaków i operacje na nich.
 
+Możliwości:
 - [X] Dodawanie i usuwanie fraz.
 - [X] Wyszukiwanie znaków i fraz.
 - [X] Zliczanie fraz i znaków.
@@ -65,6 +67,7 @@ System zarządzania zmiennymi w skrypcie.
 - Silne typowanie (typowanie dynamiczne wykonywane ręcznie).
 - Zarządzanie pamięcią.
 
+Możliwości:
 - [X] Bindowanie lokalnych obiektów.
 - [X] Kopiowanie obiektów i zakresów.
 - [X] Organizacja wielopoziomowa.
