@@ -42,8 +42,8 @@ Kontener reprezentujący łańcuch znaków.
 - [x] Zliczanie fraz i znaków.
 - [x] Zamiana fraz.
 - [x] Porównywanie łańcuchów.
+- [X] Jawne konstruktory konwertujące z typów liczbowych (double, int i const void*).
 - [ ] Iteracja po zakresie (nieplanowane).
-- [X] Konstruktory konwertujące z typów liczbowych (double, int i const void*).
 - [ ] Operatory konwersji na typy liczbowe (nieplanowane).
 
 ## Interpreter skryptów
@@ -59,9 +59,23 @@ Bindy funkcji dostępne z poziomu skryptu.
 - SID
 
 ### KLVariables
-Zmienne dostępne w skrypcie i ich powiązania ze zmiennymi programu.
+System zarządzania zmiennymi w skrypcie.
 
-- SID
+- Przechowywanie łańcuchów znaków, typów całkowitych i zmiennoprzecinkowych.
+- Silne typowanie (typowanie dynamiczne wykonywane ręcznie).
+- Zarządzanie pamięcią.
+
+- [X] Bindowanie lokalnych obiektów.
+- [X] Kopiowanie obiektów i zakresów.
+- [X] Organizacja wielopoziomowa.
+- [X] Rekursywne przeszukiwanie poziomów.
+- [X] Informacja o typie.
+- [X] Informacja o bindzie.
+- [X] Iteracja po zakresie (zgodnie z KLMap).
+- [ ] Iteracja po zakresie lub wybór zmiennej bez znajomości jej nazwy (TODO).
+- [ ] Automatyczna kontrola typu przy poeracjach wyłuskania.
+- [ ] Słabe typowanie.
+- [ ] Dynamiczna zmiana typu.
 
 # Licencja
 
