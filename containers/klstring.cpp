@@ -80,16 +80,28 @@ KLString::KLString(char Char)
 }
 
 KLString::KLString(const char* String)
+: KLString()
 {
-	Capacity = strlen(String);
+	if (String)
+	{
+		Capacity = strlen(String);
 
-	Data = new char[Capacity + 1];
+		Data = new char[Capacity + 1];
 
-	memcpy(Data, String, Capacity + 1);
+		memcpy(Data, String, Capacity + 1);
+	}
 }
 
 KLString::KLString(const KLString& String)
-: KLString(String.Data) {}
+: Data(nullptr), Capacity(String.Capacity)
+{
+	if (Capacity)
+	{
+		Data = new char[Capacity + 1];
+
+		memcpy(Data, String.Data, Capacity + 1);
+	}
+}
 
 KLString::KLString(KLString&& String)
 : Data(String.Data), Capacity(String.Capacity)

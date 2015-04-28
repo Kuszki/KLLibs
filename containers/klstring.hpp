@@ -21,6 +21,16 @@
 #ifndef KLSTRING_HPP
 #define KLSTRING_HPP
 
+/*! \file		klstring.hpp
+ *  \brief	Deklaracje dla klasy KLString i jej składników.
+ *
+ */
+
+/*! \file		klstring.cpp
+ *  \brief	Implementacja klasy KLString i jej składników.
+ *
+ */
+
 #ifdef QT_VERSION
 	#include "kllibs.hpp"
 #else
