@@ -110,6 +110,8 @@ KLMap<Data, Key>::~KLMap(void)
 template<typename Data, typename Key>
 int KLMap<Data, Key>::Insert(const Data& Item, const Key& ID)
 {
+	if (Exists(ID)) return -1;
+
 	if (!Begin)
 	{
 		Begin = End = new KLMapItem;

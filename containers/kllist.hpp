@@ -34,7 +34,6 @@
 /*! \brief	Lekka interpretacja listy.
  *  \tparam	Data Typ przechowywanych danych.
  *  \warning	Brak możliwości kopiowania listy.
- *  \todo		Możliwość kopiowania listy.
  *
  * Prosta i lekka interpretacja listy elementów. Lista jednokierunkowa bez wbudowanej obsługi kolejki i stosu.
  *

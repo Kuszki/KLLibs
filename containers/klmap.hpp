@@ -154,7 +154,6 @@ class KLMap
 		 *  \param [in]	Item	Element dodawany do listy.
 		 *  \param [in]	ID	Identyfikator obiektu.
 		 *  \return		Aktualna liczba elementów.
-		 *  \bug			Brak kontroli kluczy.
 		 *
 		 * Dodaje do listy kopie podanego elementu i zwraca nową ilość elementów.
 		 *

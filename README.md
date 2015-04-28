@@ -10,14 +10,14 @@ Biblioteki używają minimalnej ilości wbudowanych funkcji C/C++ i są zaimplem
 ### KLList
 Kontener reprezentujący liste obiektów.
 
-- Indeksy tworzone są automatycznie. Indeks to numer elementu licząc od zera od paczątku listy.
+- Indeksy tworzone są automatycznie. Indeks to numer elementu licząc od zera od początku listy.
 - W przypadku wyboru nieistniejącego obiektu zostanie zwrócona referencja na pusty wskaźnik!
 
 Możliwości:
-- [x] Dodawanie obiektów.
-- [x] Usuwanie obiektów.
-- [x] Iteracja po zakresie.
-- [x] Sprawdzenie ilości obiektów.
+- [X] Dodawanie obiektów.
+- [X] Usuwanie obiektów.
+- [X] Iteracja po zakresie.
+- [X] Sprawdzenie ilości obiektów.
 
 ### KLMap
 Kontener reprezentujący mape
@@ -25,10 +25,10 @@ Kontener reprezentujący mape
 - Szablon umożliwiający użycie dowolnych typów.
 - W przypadku wyboru nieistniejącego obiektu zostanie zwrócona referencja na pusty wskaźnik.
 
-- [x] Dodawanie obiektów.
-- [x] Usuwanie obiektów.
-- [x] Iteracja po zakresie.
-- [x] Sprawdzenie ilości obiektów.
+- [X] Dodawanie obiektów.
+- [X] Usuwanie obiektów.
+- [X] Iteracja po zakresie.
+- [X] Sprawdzenie ilości obiektów.
 - [X] Sprawdzanie dostępności lub użycia klucza.
 - [X] Zmiana klucza (KLMap::Update).
 
@@ -37,11 +37,11 @@ Kontener reprezentujący łańcuch znaków.
 
 - Przechowywanie łańcuchów znaków i operacje na nich.
 
-- [x] Dodawanie i usuwanie fraz.
-- [x] Wyszukiwanie znaków i fraz.
-- [x] Zliczanie fraz i znaków.
-- [x] Zamiana fraz.
-- [x] Porównywanie łańcuchów.
+- [X] Dodawanie i usuwanie fraz.
+- [X] Wyszukiwanie znaków i fraz.
+- [X] Zliczanie fraz i znaków.
+- [X] Zamiana fraz.
+- [X] Porównywanie łańcuchów.
 - [X] Jawne konstruktory konwertujące z typów liczbowych (double, int i const void*).
 - [ ] Iteracja po zakresie (nieplanowane).
 - [ ] Operatory konwersji na typy liczbowe (nieplanowane).
