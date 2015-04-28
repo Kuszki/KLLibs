@@ -21,7 +21,7 @@
 #include "klvariables.hpp"
 
 KLVariables::KLVariable::KLVariable(const KLVariable& Object)
-: Type(Object.Type), Binded(Object.Binded)
+: Binded(Object.Binded), Type(Object.Type)
 {
 	if (!Binded)
 		switch (Type)
@@ -40,16 +40,8 @@ KLVariables::KLVariable::KLVariable(const KLVariable& Object)
 		Pointer = Object.Pointer;
 }
 
-KLVariables::KLVariable::KLVariable(KLVariable&& Object)
-: Type(Object.Type), Binded(Object.Binded)
-{
-	Pointer = Object.Pointer;
-
-	Object.Pointer = nullptr;
-}
-
 KLVariables::KLVariable::KLVariable(TYPE VarType, void* Bind)
-: Type(VarType), Binded(Bind)
+: Binded(Bind), Type(VarType)
 {
 	if (!Binded)
 		switch (Type)
@@ -183,6 +175,26 @@ void KLVariables::KLVariable::Set(int Integer)
 	}
 }
 
+KLVariables::KLVariable& KLVariables::KLVariable::operator= (const KLVariable& Object)
+{
+	if (this == &Object) return *this;
+
+	switch (Type)
+	{
+		case STRING:
+			*((KLString*) Pointer) = Object.ToString();
+		break;
+		case NUMBER:
+			*((double*) Pointer) = Object.ToNumber();
+		break;
+		case INTEGER:
+			*((int*) Pointer) = Object.ToInt();
+		break;
+	}
+
+	return *this;
+}
+
 KLVariables::KLVariables(KLVariables* Parent)
 : UpperScoope(Parent) {}
 
@@ -248,4 +260,24 @@ const KLVariables::KLVariable& KLVariables::operator[] (const KLString& Name) co
 		return (*UpperScoope)[Name];
 	else
 		return Variables[Name];
+}
+
+KLMap<KLVariables::KLVariable, KLString>::KLMapVarIterator KLVariables::begin(void)
+{
+	return Variables.begin();
+}
+
+KLMap<KLVariables::KLVariable, KLString>::KLMapVarIterator KLVariables::end(void)
+{
+	return Variables.end();
+}
+
+KLMap<KLVariables::KLVariable, KLString>::KLMapConstIterator KLVariables::begin(void) const
+{
+	return Variables.begin();
+}
+
+KLMap<KLVariables::KLVariable, KLString>::KLMapConstIterator KLVariables::end(void) const
+{
+	return Variables.end();
 }
