@@ -11,7 +11,7 @@ Biblioteki używają minimalnej ilości wbudowanych funkcji C/C++ i są zaimplem
 Kontener reprezentujący liste obiektów.
 
 - Indeksy tworzone są automatycznie. Indeks to numer elementu licząc od zera od początku listy.
-- W przypadku wyboru nieistniejącego obiektu zostanie zwrócona referencja na pusty wskaźnik!
+- W przypadku wyboru nieistniejącego obiektu zostanie zwrócona referencja na pusty wskaźnik.
 
 Możliwości:
 - [X] Dodawanie obiektów.
@@ -31,7 +31,7 @@ Możliwości:
 - [X] Iteracja po zakresie.
 - [X] Sprawdzenie ilości obiektów.
 - [X] Sprawdzanie dostępności lub użycia klucza.
-- [X] Zmiana klucza (KLMap::Update).
+- [X] Zmiana klucza (`KLMap::Update`).
 
 ### KLString
 Kontener reprezentujący łańcuch znaków.
@@ -44,7 +44,7 @@ Możliwości:
 - [X] Zliczanie fraz i znaków.
 - [X] Zamiana fraz.
 - [X] Porównywanie łańcuchów.
-- [X] Jawne konstruktory konwertujące z typów liczbowych (double, int i const void*).
+- [X] Jawne konstruktory konwertujące z typów liczbowych (`double`, `int` i `const void*`).
 - [ ] Iteracja po zakresie (nieplanowane).
 - [ ] Operatory konwersji na typy liczbowe (nieplanowane).
 
@@ -58,7 +58,14 @@ Prosty interpreter skryptów.
 ### KLBindings
 Bindy funkcji dostępne z poziomu skryptu.
 
-- SID
+- Wywoływanie funkcji o stałym prototypie ze skryptu.
+- Przekazywanie parametrów i zwracanie wyników za pośrednictwem systemu `KLVariables`.
+
+Moźliwości:
+- [X] Bindowanie funkcji.
+- [X] Edycja i zarządzanie zmiennymi w funkcji.
+- [X] Edycja (usuwanie i aktualizacja) bindów.
+- [X] Zwracanie wartości do skryptu (za pomocą listy zmiennych).
 
 ### KLVariables
 System zarządzania zmiennymi w skrypcie.
@@ -74,7 +81,7 @@ Możliwości:
 - [X] Rekursywne przeszukiwanie poziomów.
 - [X] Informacja o typie.
 - [X] Informacja o bindzie.
-- [X] Iteracja po zakresie (zgodnie z KLMap).
+- [X] Iteracja po zakresie (zgodnie z `KLMap`).
 - [ ] Iteracja po zakresie lub wybór zmiennej bez znajomości jej nazwy (TODO).
 - [ ] Automatyczna kontrola typu przy poeracjach wyłuskania.
 - [ ] Słabe typowanie.
