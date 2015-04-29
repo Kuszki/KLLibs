@@ -1,7 +1,7 @@
 /***********************************************************************
  *
- * {description}
- * Copyright (C) {year}  {fullname}
+ * Function binding management system interpretation for KLLibs
+ * Copyright (C) 2015  Łukasz "Kuszki" Dróżdż
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,37 @@
 
 #include "klbindings.hpp"
 
-KLBindings::KLBindings()
+bool KLBindings::Add(const KLString& Name, KLSENTRY Entry)
 {
+	if (!Entry) return false;
+
+	return Bindings.Insert(Entry, Name);
+}
+
+bool KLBindings::Delete(const KLString& Name)
+{
+	return Bindings.Delete(Name) != -1;
+}
+
+bool KLBindings::Call(const KLString& Name, KLVariables& Scoope)
+{
+	if (!Bindings.Exists(Name)) return false;
+
+	Bindings[Name](Scoope);
+
+	return true;
+}
+
+bool KLBindings::Update(const KLString& Name, KLSENTRY Entry)
+{
+	if (!Bindings.Exists(Name)) return false;
+
+	Bindings[Name] = Entry;
+
+	return true;
+}
+
+bool KLBindings::Exists(const KLString& Name) const
+{
+	return Bindings.Exists(Name);
 }
