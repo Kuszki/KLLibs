@@ -35,8 +35,7 @@ class EXPORT KLScript
 
 	protected:
 
-		unsigned	Start;
-		unsigned	Stop;
+
 
 	public:
 
