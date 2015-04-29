@@ -38,7 +38,6 @@
 #endif
 
 #include "containers/klmap.hpp"
-#include "containers/kllist.hpp"
 #include "containers/klstring.hpp"
 
 #ifndef size_t
@@ -177,17 +176,17 @@ class EXPORT KLVariables
 
 		KLMap<KLVariable, KLString> Variables;	//!< Mapa zmiennych.
 
-		KLVariables* const UpperScoope;		//!< Zmienne wyższego zakresu.
-
 	public:
 
+		KLVariables* const Parent;			//!< Zmienne wyższego zakresu.
+
 		/*! \brief		Domyślny konstruktor.
-		 *  \param [in]	Parent System zmiennych wyższego zakresu.
+		 *  \param [in]	UpperScoope System zmiennych wyższego zakresu.
 		 *
 		 * Tworzy nowy system zmiennych i opcjonalnie zapamiętuje wskaźnik na zmienne z wyższego zakresu.
 		 *
 		 */
-		explicit KLVariables(KLVariables* Parent = nullptr);
+		explicit KLVariables(KLVariables* UpperScoope = nullptr);
 
 		/*! \brief		Konstruktor kopiujący.
 		 *  \param [in]	Objects System zmiennych do skopiowania.
@@ -196,6 +195,17 @@ class EXPORT KLVariables
 		 *
 		 */
 		KLVariables(const KLVariables& Objects);
+
+		/*! \brief		Tworzenie zmiennej w systemie.
+		 *  \param [in]	Name		Nazwa zmiennej.
+		 *  \param [in]	Object	Instancja zmiennej.
+		 *  \return		Powodzenie operacji.
+		 *
+		 * Tworzy nową zmienną w systemie zgodnie z regułami konstruktora `KLVariable::KLVariable(const KLVariable&)`.
+		 *
+		 */
+		bool Add(const KLString& Name,
+			    const KLVariable& Object);
 
 		/*! \brief		Tworzenie zmiennej w systemie.
 		 *  \param [in]	Name		Nazwa zmiennej.
@@ -258,6 +268,14 @@ class EXPORT KLVariables
 		 *
 		 */
 		bool Exists(const KLString& Name) const;
+
+		/*! \brief		Pobranie ilości zmiennych.
+		 *  \return		Ilośc zmiennych w obecnym zakresie.
+		 *
+		 * Sprawdza ile zmiennych istnieje w systemie.
+		 *
+		 */
+		int Size(void) const;
 
 		/*! \brief		Operator wyboru.
 		 *  \param [in]	Name Nazwa zmiennej.

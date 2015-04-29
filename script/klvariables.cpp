@@ -195,42 +195,35 @@ KLVariables::KLVariable& KLVariables::KLVariable::operator= (const KLVariable& O
 	return *this;
 }
 
-KLVariables::KLVariables(KLVariables* Parent)
-: UpperScoope(Parent) {}
+KLVariables::KLVariables(KLVariables* UpperScoope)
+: Parent(UpperScoope) {}
 
 KLVariables::KLVariables(const KLVariables& Objects)
-: Variables(Objects.Variables), UpperScoope(Objects.UpperScoope) {}
+: Variables(Objects.Variables), Parent(Objects.Parent) {}
+
+bool KLVariables::Add(const KLString& Name, const KLVariable& Object)
+{
+	return Variables.Insert(Object, Name) != -1;
+}
 
 bool KLVariables::Add(const KLString& Name, TYPE Type)
 {
-	if (Variables.Exists(Name))
-		return false;
-	else
-		return Variables.Insert(KLVariable(Type), Name);
+	return Variables.Insert(KLVariable(Type), Name) != -1;
 }
 
 bool KLVariables::Add(const KLString& Name, KLString& String)
 {
-	if (Variables.Exists(Name))
-		return false;
-	else
-		return Variables.Insert(KLVariable(STRING, &String), Name);
+	return Variables.Insert(KLVariable(STRING, &String), Name) != -1;
 }
 
 bool KLVariables::Add(const KLString& Name, double& Number)
 {
-	if (Variables.Exists(Name))
-		return false;
-	else
-		return Variables.Insert(KLVariable(NUMBER, &Number), Name);
+	return Variables.Insert(KLVariable(NUMBER, &Number), Name) != -1;
 }
 
 bool KLVariables::Add(const KLString& Name, int& Integer)
 {
-	if (Variables.Exists(Name))
-		return false;
-	else
-		return Variables.Insert(KLVariable(INTEGER, &Integer), Name);
+	return Variables.Insert(KLVariable(INTEGER, &Integer), Name) != -1;
 }
 
 bool KLVariables::Delete(const KLString& Name)
@@ -240,16 +233,21 @@ bool KLVariables::Delete(const KLString& Name)
 
 bool KLVariables::Exists(const KLString& Name) const
 {
-	if (UpperScoope)
-		return Variables.Exists(Name) || UpperScoope->Exists(Name);
+	if (Parent)
+		return Variables.Exists(Name) || Parent->Exists(Name);
 	else
 		return Variables.Exists(Name);
+}
+
+int KLVariables::Size(void) const
+{
+	return Variables.Size();
 }
 
 KLVariables::KLVariable& KLVariables::operator[] (const KLString& Name)
 {
 	if (!Variables.Exists(Name))
-		return (*UpperScoope)[Name];
+		return (*Parent)[Name];
 	else
 		return Variables[Name];
 }
@@ -257,7 +255,7 @@ KLVariables::KLVariable& KLVariables::operator[] (const KLString& Name)
 const KLVariables::KLVariable& KLVariables::operator[] (const KLString& Name) const
 {
 	if (!Variables.Exists(Name))
-		return (*UpperScoope)[Name];
+		return (*Parent)[Name];
 	else
 		return Variables[Name];
 }
