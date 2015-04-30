@@ -173,6 +173,31 @@ int KLString::Delete(const KLString& String, bool All)
 	return Counter;
 }
 
+int KLString::Delete(int Start, int Stop)
+{
+	if (Stop > Capacity) Stop = Capacity;
+
+	if (Stop <= Start) return 0;
+
+	int NewCap = Capacity - Stop + Start - 1;
+	int OldCap = Capacity;
+
+	char* Buffer = new char[NewCap + 1];
+
+	memcpy(Buffer, Data, Start);
+	memcpy(Buffer + Start, Data + Stop + 1, OldCap - Stop - 1);
+
+	Buffer[NewCap] = 0;
+
+	delete [] Data;
+
+	Data = Buffer;
+
+	Capacity = NewCap;
+
+	return OldCap - NewCap;
+}
+
 int KLString::Replace(const KLString& Old, const KLString& New, bool All)
 {
 	if (Capacity < Old.Capacity) return 0;
@@ -202,12 +227,13 @@ int KLString::Replace(const KLString& Old, const KLString& New, bool All)
 	return Counter;
 }
 
-int KLString::Count(const KLString& String) const
+int KLString::Count(const KLString& String, int Start, int Stop) const
 {
-	int Steps = Capacity - String.Capacity;
+	Stop = ((Stop && Stop < Capacity) ? Stop : Capacity) - String.Capacity;
+
 	int Counter = 0;
 
-	for (int i = 0; i < Steps; i++)
+	for (int i = Start; i < Stop; i++)
 	{
 		if (!strncmp(Data + i, String.Data, String.Capacity))
 		{
@@ -220,11 +246,11 @@ int KLString::Count(const KLString& String) const
 	return Counter;
 }
 
-int KLString::Find(const KLString& String) const
+int KLString::Find(const KLString& String, int Start, int Stop) const
 {
-	int Steps = Capacity - String.Capacity;
+	Stop = ((Stop && Stop < Capacity) ? Stop : Capacity) - String.Capacity;
 
-	for (int i = 0; i < Steps; i++)
+	for (int i = Start; i < Stop; i++)
 	{
 		if (!strncmp(Data + i, String.Data, String.Capacity))
 		{
@@ -237,11 +263,11 @@ int KLString::Find(const KLString& String) const
 
 KLString KLString::Part(int Start, int Stop) const
 {
-	if (Start >= Stop || Start >= Capacity || Stop > Capacity) return KLString();
+	if (Start > Stop || Start >= Capacity || Stop >= Capacity) return KLString();
 
 	KLString Buffer;
 
-	Buffer.Capacity = Stop - Start;
+	Buffer.Capacity = Stop - Start + 1;
 	Buffer.Data = new char[Buffer.Capacity + 1];
 
 	memcpy(Buffer.Data, Data + Start, Buffer.Capacity);

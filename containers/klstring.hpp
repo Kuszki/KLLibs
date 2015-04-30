@@ -157,6 +157,17 @@ class EXPORT KLString
 		int Delete(const KLString& String,
 				 bool All = false);
 
+		/*! \brief		Usuwanie części łańcucha.
+		 *  \param [in]	Start	Punkt początkowy.
+		 *  \param [in]	Stop		Punkt końcowy.
+		 *  \return		Ilość usunięć.
+		 *
+		 * Usuwa z łańcucha wybrany fragment.
+		 *
+		 */
+		int Delete(int Start,
+				 int Stop);
+
 		/*! \brief		Zamiana słów.
 		 *  \param [in]	Old	Łańcuch do usunięcia.
 		 *  \param [in]	New	Łańcuch do wstawienia.
@@ -171,22 +182,30 @@ class EXPORT KLString
 				  bool All = false);
 
 		/*! \brief		Zliczanie wystąpień.
-		 *  \param [in]	String Łańcuch do wyszukania.
+		 *  \param [in]	String	Łańcuch do wyszukania.
+		 *  \param [in]	Start	Początek wyszukiwania.
+		 *  \param [in]	Stop		Koniec wyszukiwania.
 		 *  \return		Ilość wystąpień.
 		 *
 		 * Szuka w łańcuchu wybranejfrazy i zwraca ilość wystąpień.
 		 *
 		 */
-		int Count(const KLString& String) const;
+		int Count(const KLString& String,
+				int Start = 0,
+				int Stop = 0) const;
 
 		/*! \brief		Wyszukiwanie frazy.
-		 *  \param [in]	String Łańcuch do wyszukania.
+		 *  \param [in]	String	Łańcuch do wyszukania.
+		 *  \param [in]	Start	Początek wyszukiwania.
+		 *  \param [in]	Stop		Koniec wyszukiwania.
 		 *  \return		Miejsce wystąpienia numerowane od zera lub -1 gdy nic nie znaleziono.
 		 *
 		 * Szuka w łańcuchu wybranejfrazy i zwraca miejsce pierwszego wystąpienia.
 		 *
 		 */
-		int Find(const KLString& String) const;
+		int Find(const KLString& String,
+			    int Start = 0,
+			    int Stop = 0) const;
 
 		/*! \brief		Kopia części łańcucha.
 		 *  \param [in]	Start	Początek ciągu.
