@@ -27,15 +27,57 @@
 	#define EXPORT
 #endif
 
+#include "containers/klstring.hpp"
+
 #include "script/klvariables.hpp"
 #include "script/klbindings.hpp"
 
 class EXPORT KLScript
 {
 
+	protected: enum KLScrpitOperation
+	{
+		ASSIGMENT,
+		CALLING,
+
+		IF_STATEMENT,
+		ELSE_STATEMENT,
+		ELSEIF_STATEMENT,
+		ENDIF_STATEMENT
+	};
+
+	public: enum KLScrpitErrorCode
+	{
+		NO_ERROR,
+
+		UNDEFINED_VARIABLE,
+		UNDEFINED_FUNCTION,
+
+		UNKNOWN_EXPRESSION,
+
+		QUOTEMARK_EXPECTED,
+		BRACKET_EXPECTED,
+
+		UNEXPECTED_SYMBOL
+	};
+
+	public: struct KLScrpitError
+	{
+		KLScrpitErrorCode Code;
+
+		unsigned Row;
+		unsigned Col;
+	};
+
 	protected:
 
+		KLScrpitError LastError;
 
+		KLString GetLine(const KLString& Code);
+
+		KLString GetExpr(const KLString& Code);
+
+		void ResetError(void);
 
 	public:
 
@@ -43,7 +85,9 @@ class EXPORT KLScript
 
 		KLBindings	Bindings;
 
-		KLScript();
+		KLScrpitError Run(const KLString& Code);
+
+		KLScrpitError GetLastError(void) const;
 
 };
 
