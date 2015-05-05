@@ -19,7 +19,8 @@ SOURCES	+=	main.cpp \
 			script/klbindings.cpp \
 			containers/klmap.cpp \
 			containers/kllist.cpp \
-			containers/klstring.cpp
+			containers/klstring.cpp \
+			containers/kltree.cpp
 
 HEADERS	+=	kllibs.hpp \
 			script/klscript.hpp \
@@ -27,7 +28,8 @@ HEADERS	+=	kllibs.hpp \
 			script/klbindings.hpp \
 			containers/klmap.hpp \
 			containers/kllist.hpp \
-			containers/klstring.hpp
+			containers/klstring.hpp \
+			containers/kltree.hpp
 
 unix
 {
