@@ -94,6 +94,15 @@ KLList<Data>::KLList(const KLList<Data>& List)
 }
 
 template<typename Data>
+KLList<Data>::KLList(KLList<Data>&& List)
+: Begin(List.Begin), End(List.End), Capacity(List.Capacity)
+{
+	List.Begin = nullptr;
+	List.End = nullptr;
+	List.Capacity = 0;
+}
+
+template<typename Data>
 KLList<Data>::KLList(void)
 : Begin(nullptr), End(nullptr), Capacity(0) {}
 

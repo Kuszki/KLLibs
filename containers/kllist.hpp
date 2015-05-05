@@ -113,6 +113,14 @@ class KLList
 		 */
 		KLList(const KLList<Data>& List);
 
+		/*! \brief		Konstruktor przenoszący.
+		 *  \param [in]	List Lista do przeniesienia.
+		 *
+		 * Przenosi wybraną instancje listy.
+		 *
+		 */
+		KLList(KLList<Data>& List);
+
 		/*! \brief		Domyślny konstruktor.
 		 *
 		 * Inicjuje wszystkie pola obiektu.
