@@ -136,6 +136,14 @@ class KLMap
 		 */
 		KLMap(const KLMap<Data, Key>& Map);
 
+		/*! \brief		Konstruktor przenoszący.
+		 *  \param [in]	Map Mapa do przeniesienia.
+		 *
+		 * Przenosi wybraną instancje mapy.
+		 *
+		 */
+		KLMap(KLMap<Data, Key>&& Map);
+
 		/*! \brief		Domyślny konstruktor.
 		 *
 		 * Inicjuje wszystkie pola obiektu.

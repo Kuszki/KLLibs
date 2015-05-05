@@ -98,6 +98,15 @@ KLMap<Data, Key>::KLMap(const KLMap<Data, Key>& Map)
 }
 
 template<typename Data, typename Key>
+KLMap<Data, Key>::KLMap(KLMap<Data, Key>&& Map)
+: Begin(Map.Begin), End(Map.End), Capacity(Map.Capacity)
+{
+	Map.Begin = nullptr;
+	Map.End = nullptr;
+	Map.Capacity = 0;
+}
+
+template<typename Data, typename Key>
 KLMap<Data, Key>::KLMap(void)
 : Begin(nullptr), End(nullptr), Capacity(0) {}
 
