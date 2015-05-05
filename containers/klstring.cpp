@@ -107,6 +107,7 @@ KLString::KLString(KLString&& String)
 : Data(String.Data), Capacity(String.Capacity)
 {
 	String.Data = nullptr;
+	String.Capacity = 0;
 }
 
 KLString::KLString(void)
@@ -125,7 +126,7 @@ int KLString::Insert(const KLString& String, int Position)
 	{
 		memcpy(Buffer, String.Data, String.Capacity + 1);
 	}
-	else	if (Position == -1 || Position == Capacity)
+	else	if (Position < 0 || Position == Capacity)
 	{
 		memcpy(Buffer, Data, Capacity);
 		memcpy(Buffer + Capacity, String.Data, String.Capacity + 1);
