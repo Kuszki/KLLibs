@@ -19,9 +19,24 @@
  **********************************************************************/
 
 #include "klscript.hpp"
-/*
-KLScript::KLScript()
+
+KLString KLScript::GetLine(KLString& Code)
 {
 
 }
-*/
+
+bool KLScript::Run(KLString Code)
+{
+	Code.Replace(';', '\n', true);
+	Code.Delete("\\\n", true);
+
+	LastError.Code = NO_ERROR;
+
+	while (!LastError.Code)
+	{
+		KLString Line = GetLine(Code);
+
+		//switch ()
+	}
+
+}

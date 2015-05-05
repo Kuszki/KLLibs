@@ -37,6 +37,8 @@ class EXPORT KLScript
 
 	protected: enum KLScrpitOperation
 	{
+		DEFAULT,
+
 		ASSIGMENT,
 		CALLING,
 
@@ -61,6 +63,17 @@ class EXPORT KLScript
 		UNEXPECTED_SYMBOL
 	};
 
+	protected: struct KLScrpitState
+	{
+		KLScrpitOperation Expected;
+
+		unsigned LineStart;
+		unsigned LineStop;
+
+		unsigned ExprStart;
+		unsigned ExprStop;
+	};
+
 	public: struct KLScrpitError
 	{
 		KLScrpitErrorCode Code;
@@ -73,11 +86,13 @@ class EXPORT KLScript
 
 		KLScrpitError LastError;
 
-		KLString GetLine(const KLString& Code);
+		KLScrpitState Status;
 
-		KLString GetExpr(const KLString& Code);
+		KLScrpitOperation GetOperation(const KLString& Line) const;
 
-		void ResetError(void);
+		KLString GetLine(KLString& Code);
+
+		KLString GetExpr(KLString& Code);
 
 	public:
 
@@ -85,7 +100,7 @@ class EXPORT KLScript
 
 		KLBindings	Bindings;
 
-		KLScrpitError Run(const KLString& Code);
+		bool Run(KLString Code);
 
 		KLScrpitError GetLastError(void) const;
 
