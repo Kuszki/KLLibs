@@ -28,6 +28,10 @@ KLMap<Data, Key>::KLMapRecord::KLMapRecord(const Data& _Value, const Key& _ID)
 : Value(_Value), ID(_ID) {}
 
 template<typename Data, typename Key>
+KLMap<Data, Key>::KLMapItem::KLMapItem(void)
+: Next(nullptr), Record(nullptr) {}
+
+template<typename Data, typename Key>
 KLMap<Data, Key>::KLMapItem::~KLMapItem(void)
 {
 	delete Record;

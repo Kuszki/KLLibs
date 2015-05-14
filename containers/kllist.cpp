@@ -24,6 +24,10 @@
 #include "kllist.hpp"
 
 template<typename Data>
+KLList<Data>::KLListItem::KLListItem(void)
+: Next(nullptr), Record(nullptr) {}
+
+template<typename Data>
 KLList<Data>::KLListItem::~KLListItem(void)
 {
 	delete Record;
@@ -125,7 +129,6 @@ int KLList<Data>::Insert(const Data& Item)
 	}
 
 	End->Record = new Data(Item);
-	End->Next = nullptr;
 
 	return ++Capacity;
 }

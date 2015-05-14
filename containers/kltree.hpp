@@ -39,70 +39,265 @@
  *
  */
 
+
+/*! \brief	Lekka interpretacja drzewa.
+ *  \tparam	Data Typ przechowywanych danych.
+ *
+ * Prosta i lekka interpretacja drzewa elementów.
+ *
+ */
 template<typename Data>
 class KLTree
 {
 
-	protected: struct KLTreeRecord
+	/*! \brief		Struktura elementu drzewa.
+	 *
+	 * Przechowuje dane pojedynczego elementu drzewa i umożliwia usunięcie go.
+	 *
+	 */
+	protected: struct KLTreeItem
 	{
 
-		KLTreeRecord* Next;
-		KLTreeRecord* Branch;
-		KLTreeRecord* Root;
+		KLTreeItem* Next;
+		KLTreeItem* Branch;
+		KLTreeItem* Root;
 
 		Data* Record;
 
-		~KLTreeRecord(void);
+		KLTreeItem(void);
+
+		~KLTreeItem(void);
 
 	};
 
-	public: enum SELECT_CODE : int
+	/*! \brief		Wyliczenie specjalnych węzłów.
+	 *
+	 * Jednoznacznie określa specjalne indeksy dla wybranych węzłów.
+	 *
+	 */
+	public: enum NOODES : int
 	{
-		SELECT_ROOT = -1,
-		SELECT_PREV = -2
+		ROOT = -1,	//!< Węzeł główny.
+		PREV = -2,	//!< Poprzedni węzeł.
+		CURRENT = -3	//!< Obecny węzeł.
+	};
+
+	public: class KLTreeVarIterator
+	{
+
+		protected:
+
+			KLTreeItem* Current;
+
+		public:
+
+			KLTreeVarIterator(KLTreeItem* Begin);
+
+			Data& operator* (void);
+			KLTreeVarIterator& operator++ (void);
+			bool operator!= (const KLTreeVarIterator& Iterator) const;
+
+	};
+
+	public: class KLTreeConstIterator
+	{
+
+		protected:
+
+			KLTreeItem* Current;
+
+		public:
+
+			KLTreeConstIterator(KLTreeItem* Begin);
+
+			const Data& operator* (void) const;
+			KLTreeConstIterator& operator++ (void);
+			bool operator!= (const KLTreeConstIterator& Iterator) const;
+
 	};
 
 	protected:
 
-		KLTreeRecord* Root;
+		KLTreeItem* Root;		//!< Wskaźnik na główny węzeł.
 
-		KLTreeRecord* Current;
+		KLTreeItem* Current;	//!< Wskaźnik na obecny węzeł.
 
-		explicit KLTree(KLTreeRecord* Branch);
+		/*! \brief		Specjalny konstruktor.
+		 *  \param [in]	Branch Gałąź główna.
+		 *
+		 * Tworzy tymczasowy obiekt będący ograniczeniem bazowego obiektu.
+		 *
+		 */
+		explicit KLTree(KLTreeItem* Branch);
+
+		/*! \brief		Usuwa gałąź.
+		 *  \param [in]	Branch Gałąź do usunięcia.
+		 *  \return		Ilość usuniętych pozycji w bazowym zakresie.
+		 *
+		 * Rekurencyjnie usuwa gałąź i jej składniki.
+		 *
+		 */
+		int Delete(KLTreeItem* Branch);
+
+		/*! \brief		Dodaje gałąź.
+		 *  \param [in]	Branch Gałąź do wstawienia.
+		 *  \return		Ilość dodanych pozycji w bazowym zakresie.
+		 *
+		 * Rekurencyjnie dodaje gałąź i jej składniki.
+		 *
+		 */
+		int Insert(KLTreeItem* Branch);
 
 	public:
 
-		KLTree(const KLTree& Tree) = delete;
+		/*! \brief		Konstruktor kopiujący.
+		 *  \param [in]	Tree Drzewo do skopiowania.
+		 *
+		 * Rekurencyjnie kopiuje całą strukturę drzewa.
+		 *
+		 */
+		KLTree(const KLTree<Data>& Tree);
 
-		KLTree(KLTree&& Tree);
+		/*! \brief		Konstruktor przenoszący.
+		 *  \param [in]	Tree Drzewo do przeniesienia.
+		 *
+		 * Przenosi tymczasowy obiekt do bierzącego.
+		 *
+		 */
+		KLTree(KLTree<Data>&& Tree);
 
+		/*! \brief		Domyślny konstruktor.
+		 *
+		 * Inicjuje wszystkie pola obiektu.
+		 *
+		 */
 		KLTree(void);
 
+		/*! \brief		Destruktor.
+		 *
+		 * Automatycznie usuwa przechowywane dane. Nie niszczy obiektu jeśli jest on gałęzią innego.
+		 *
+		 */
 		~KLTree(void);
 
-		int Insert(const Data &Item,
-				 int ID);
+		/*! \brief		Wstawianie elementu.
+		 *  \param [in]	Item Element dodawany do drzewa.
+		 *  \return		Aktualna liczba elementów.
+		 *
+		 * Dodaje do drzewa kopie podanego elementu i zwraca nową ilość elementów w bieżącym zakresie.
+		 *
+		 */
+		int Insert(const Data& Item);
 
-		int Insert(const KLTree& Tree,
-				 int ID);
+		/*! \brief		Wstawianie elementu.
+		 *  \param [in]	Tree Drzewo dodawane do drzewa.
+		 *  \return		Aktualna liczba elementów.
+		 *
+		 * Dodaje do drzewa kopie podanego drzewa i zwraca nową ilość elementów w bieżącym zakresie.
+		 *
+		 */
+		int Insert(const KLTree<Data>& Tree);
 
-		int Delete(int ID);
+		/*! \brief		Usunięcie elementu.
+		 *  \param [in]	ID Indeks elementu numerowany od zera.
+		 *  \return		Powodzenie operacji.
+		 *
+		 * Usuwa wybrany element i zwraca stan operacji.
+		 *
+		 */
+		bool Delete(int ID);
 
-		int Size(void) const;
-
-		int Deep(void) const;
-
+		/*! \brief		Wybór gałęzi.
+		 *  \param [in]	ID Indeks elementu numerowany od zera.
+		 *  \return		Powodzenie operacji.
+		 *  \see			KLTree::NOODES.
+		 *
+		 * Wybiera podaną gałąź jako roboczą.
+		 *
+		 */
 		bool Select(int ID);
 
-		KLTree Branch(int ID);
+		/*! \brief		Sprawdzenie ilości elementów.
+		 *  \return		Aktualna liczba elementów.
+		 *
+		 * Zwraca aktualną liczbę elementów w bierzącej gałęzi.
+		 *
+		 */
+		int Size(void) const;
 
-		const KLTree Branch(int ID) const;
+		/*! \brief		Sprawdzenie głębokości.
+		 *  \return		Aktualna głębokość.
+		 *
+		 * Zwraca aktualną głębokość na jakiej znajduję się bierząca gałąź.
+		 *
+		 */
+		int Deep(void) const;
 
+		/*! \brief		Wybór gałęzi.
+		 *  \param [in]	ID Indeks elementu numerowany od zera.
+		 *  \return		Obiekt tymczasowy reprezentujący gałąź.
+		 *  \see			KLTree::NOODES.
+		 *
+		 * Zwraca tymczasowy obiekt będący referencją do wybranej gałęzi.
+		 *
+		 */
+		KLTree<Data> Branch(int ID);
+
+		/*! \brief		Wybór gałęzi.
+		 *  \param [in]	ID Indeks elementu numerowany od zera.
+		 *  \return		Obiekt tymczasowy reprezentujący gałąź.
+		 *  \see			KLTree::NOODES.
+		 *
+		 * Zwraca tymczasowy obiekt będący referencją do wybranej gałęzi.
+		 *
+		 */
+		const KLTree<Data> Branch(int ID) const;
+
+		/*! \brief		Czyszczenie drzewa.
+		 *
+		 * Usuwa wszystkie elementy drzewa.
+		 *
+		 */
+		void Clean(void);
+
+		/*! \brief		Wybór elementu.
+		 *  \param [in]	ID Indeks elementu.
+		 *  \return		Referencja do wybranego elementu.
+		 *  \warning		Gdy element o podanym indeksie nie istnieje to zwrócona zostanie niepoprawna referencja do `nullptr` co zapewne spowoduje krytyczny wyjątek.
+		 *
+		 * Wybiera element o podanym indeksie z drzewa.
+		 *
+		 */
 		Data& operator[] (int ID);
 
+		/*! \brief		Wybór elementu.
+		 *  \param [in]	ID Indeks elementu.
+		 *  \return		Stała referencja do wybranego elementu.
+		 *  \warning		Gdy element o podanym indeksie nie istnieje to zwrócona zostanie niepoprawna referencja do `nullptr` co zapewne spowoduje krytyczny wyjątek.
+		 *
+		 * Wybiera element o podanym indeksie z drzewa.
+		 *
+		 */
 		const Data& operator[] (int ID) const;
 
-		template<typename ...Steps> int Select(int ID, Steps... IDS);
+		/*! \brief		Operator przypisania.
+		 *  \param [in]	Tree Obiekt do sklonowania.
+		 *  \return		Referencja do bierzącego obiektu.
+		 *
+		 * Zwalnia dotychczasowe zasoby i klonuje wybrany obiekt.
+		 *
+		 */
+		KLTree<Data>& operator= (const KLTree<Data>& Tree);
+
+		template<typename ...Steps> void Select(int ID, Steps... IDS);
+
+		KLTreeVarIterator begin(void);
+		KLTreeVarIterator end(void);
+
+		KLTreeConstIterator begin(void) const;
+		KLTreeConstIterator end(void) const;
 };
+
+#include "kltree.cpp"
 
 #endif // KLTREE_HPP

@@ -48,6 +48,19 @@ Możliwości:
 - [ ] Iteracja po zakresie (nieplanowane).
 - [ ] Operatory konwersji na typy liczbowe (nieplanowane).
 
+### KLTree
+Kontener reprezentujący drzewo obiektów.
+
+- Indeksy tworzone są automatycznie. Indeks to numer elementu licząc od zera od początku drzewa.
+- W przypadku wyboru nieistniejącego obiektu zostanie zwrócona referencja na pusty wskaźnik.
+
+Możliwości:
+- [X] Dodawanie obiektów.
+- [X] Usuwanie obiektów.
+- [X] Iteracja po zakresie.
+- [X] Sprawdzenie ilości obiektów.
+- [X] Przełączanie się pomiędzy gałęziami.
+
 ## Interpreter skryptów
 
 ### KLScript

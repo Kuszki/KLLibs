@@ -76,6 +76,13 @@ class KLMap
 		KLMapItem*	Next;	//!< Wskaźnik na kolejny element.
 		KLMapRecord*	Record;	//!< Wskaźnik na dane elementu.
 
+		/*! \brief		Domyślny konstruktor.
+		 *
+		 * Inicjuje wszystkie pola obiektu.
+		 *
+		 */
+		KLMapItem(void);
+
 		/*! \brief		Destruktor.
 		 *
 		 * Automatycznie usuwa przechowywane dane. Nie modyfikuje kolejnego elementu.

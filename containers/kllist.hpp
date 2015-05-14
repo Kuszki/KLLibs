@@ -33,7 +33,6 @@
 
 /*! \brief	Lekka interpretacja listy.
  *  \tparam	Data Typ przechowywanych danych.
- *  \warning	Brak możliwości kopiowania listy.
  *
  * Prosta i lekka interpretacja listy elementów. Lista jednokierunkowa bez wbudowanej obsługi kolejki i stosu.
  *
@@ -52,6 +51,13 @@ class KLList
 
 		KLListItem*	Next;	//!< Wskaźnik na kolejny element.
 		Data*		Record;	//!< Wskaźnik na przechowywane dane.
+
+		/*! \brief		Domyślny konstruktor.
+		 *
+		 * Inicjuje wszystkie pola obiektu.
+		 *
+		 */
+		KLListItem(void);
 
 		/*! \brief		Destruktor.
 		 *
@@ -119,7 +125,7 @@ class KLList
 		 * Przenosi wybraną instancje listy.
 		 *
 		 */
-		KLList(KLList<Data>& List);
+		KLList(KLList<Data>&& List);
 
 		/*! \brief		Domyślny konstruktor.
 		 *

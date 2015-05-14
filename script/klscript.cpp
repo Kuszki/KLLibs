@@ -22,7 +22,7 @@
 
 KLString KLScript::GetLine(KLString& Code)
 {
-
+	return KLString();
 }
 
 bool KLScript::Run(KLString Code)
@@ -38,5 +38,7 @@ bool KLScript::Run(KLString Code)
 
 		//switch ()
 	}
+
+	return true;
 
 }
