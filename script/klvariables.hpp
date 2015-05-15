@@ -65,7 +65,7 @@ class EXPORT KLVariables
 	 */
 	public: enum TYPE
 	{
-		STRING,	//!< Łańcuch znaków.
+		BOOLEAN,	//!< Łańcuch znaków.
 		NUMBER,	//!< Typ zmiennoprzecinkowy.
 		INTEGER	//!< Typ całkowity.
 	};
@@ -104,7 +104,7 @@ class EXPORT KLVariables
 			 * Tworzy zmienną na podstawie podanego typu i opcjonalnie binduje ją pod wskazany adres.
 			 *
 			 */
-			KLVariable(TYPE VarType = STRING,
+			KLVariable(TYPE VarType = NUMBER,
 					 void* Bind = nullptr);
 
 			/*! \brief		Destruktor.
@@ -137,6 +137,14 @@ class EXPORT KLVariables
 			 *
 			 */
 			int ToInt(void) const;
+
+			/*! \brief		Konwersja na `bool`.
+			 *  \return		Reprezentacja zmiennej jako `bool`.
+			 *
+			 * Konwertuje obiekt do `bool` i zwraca wynik.
+			 *
+			 */
+			int ToBool(void) const;
 
 			/*! \brief		Zmiana wartość zmiennej.
 			 *  \param [in]	String Łańcuch do przypisania.
@@ -220,14 +228,14 @@ class EXPORT KLVariables
 
 		/*! \brief		Tworzenie zmiennej w systemie.
 		 *  \param [in]	Name		Nazwa zmiennej.
-		 *  \param [in]	String	Referencja do zbindowanego obiektu.
+		 *  \param [in]	Boolean	Referencja do zbindowanego obiektu.
 		 *  \return		Powodzenie operacji.
 		 *
 		 * Tworzy nową zmienną w systemie bindując do niej podany obiekt.
 		 *
 		 */
 		bool Add(const KLString& Name,
-			    KLString& String);
+			    bool& Boolean);
 
 		/*! \brief		Tworzenie zmiennej w systemie.
 		 *  \param [in]	Name		Nazwa zmiennej.

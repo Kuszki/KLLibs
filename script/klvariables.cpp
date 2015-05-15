@@ -26,14 +26,17 @@ KLVariables::KLVariable::KLVariable(const KLVariable& Object)
 	if (!Binded)
 		switch (Type)
 		{
-			case STRING:
-				Pointer = new KLString(*((KLString*) Object.Pointer));
+			case BOOLEAN:
+				Pointer = malloc(sizeof(bool));
+				*((bool*) Pointer) = *((bool*) Object.Pointer);
 			break;
 			case NUMBER:
-				Pointer = new double(*((double*) Object.Pointer));
+				Pointer = malloc(sizeof(double));
+				*((double*) Pointer) = *((double*) Object.Pointer);
 			break;
 			case INTEGER:
-				Pointer = new int(*((int*) Object.Pointer));
+				Pointer = malloc(sizeof(int));
+				*((int*) Pointer) = *((int*) Object.Pointer);
 			break;
 		}
 	else
@@ -46,14 +49,14 @@ KLVariables::KLVariable::KLVariable(TYPE VarType, void* Bind)
 	if (!Binded)
 		switch (Type)
 		{
-			case STRING:
-				Pointer = new KLString();
+			case BOOLEAN:
+				Pointer = malloc(sizeof(bool));
 			break;
 			case NUMBER:
-				Pointer = new double;
+				Pointer = malloc(sizeof(double));
 			break;
 			case INTEGER:
-				Pointer = new int;
+				Pointer = malloc(sizeof(int));
 			break;
 		}
 	else
@@ -62,23 +65,15 @@ KLVariables::KLVariable::KLVariable(TYPE VarType, void* Bind)
 
 KLVariables::KLVariable::~KLVariable(void)
 {
-	if (!Binded)
-		switch (Type)
-		{
-			case STRING:
-				delete ((KLString*) Pointer);
-			break;
-			default:
-				delete (char*) Pointer;
-		}
+	if (!Binded) free(Pointer);
 }
 
 KLString KLVariables::KLVariable::ToString(void) const
 {
 	switch (Type)
 	{
-		case STRING:
-			return KLString(*((KLString*) Pointer));
+		case BOOLEAN:
+			return KLString(*((bool*) Pointer));
 		break;
 		case NUMBER:
 			return KLString(*((double*) Pointer));
@@ -95,8 +90,8 @@ double KLVariables::KLVariable::ToNumber(void) const
 {
 	switch (Type)
 	{
-		case STRING:
-			return ((KLString*) Pointer)->ToNumber();
+		case BOOLEAN:
+			return *((bool*) Pointer);
 		break;
 		case NUMBER:
 			return *((double*) Pointer);
@@ -113,8 +108,8 @@ int KLVariables::KLVariable::ToInt(void) const
 {
 	switch (Type)
 	{
-		case STRING:
-			return ((KLString*) Pointer)->ToInt();
+		case BOOLEAN:
+			return *((bool*) Pointer);
 		break;
 		case NUMBER:
 			return *((double*) Pointer);
@@ -127,12 +122,30 @@ int KLVariables::KLVariable::ToInt(void) const
 	return int();
 }
 
+int KLVariables::KLVariable::ToBool(void) const
+{
+	switch (Type)
+	{
+		case BOOLEAN:
+			return *((bool*) Pointer);
+		break;
+		case NUMBER:
+			return *((double*) Pointer);
+		break;
+		case INTEGER:
+			return *((int*) Pointer);
+		break;
+	}
+
+	return bool();
+}
+
 void KLVariables::KLVariable::Set(const KLString& String)
 {
 	switch (Type)
 	{
-		case STRING:
-			*((KLString*) Pointer) = String;
+		case BOOLEAN:
+			*((bool*) Pointer) = String.ToBool();
 		break;
 		case NUMBER:
 			*((double*) Pointer) = String.ToNumber();
@@ -147,8 +160,8 @@ void KLVariables::KLVariable::Set(double Number)
 {
 	switch (Type)
 	{
-		case STRING:
-			*((KLString*) Pointer) = KLString(Number);
+		case BOOLEAN:
+			*((bool*) Pointer) = Number;
 		break;
 		case NUMBER:
 			*((double*) Pointer) = Number;
@@ -163,8 +176,8 @@ void KLVariables::KLVariable::Set(int Integer)
 {
 	switch (Type)
 	{
-		case STRING:
-			*((KLString*) Pointer) = KLString(Integer);
+		case BOOLEAN:
+			*((bool*) Pointer) = Integer;
 		break;
 		case NUMBER:
 			*((double*) Pointer) = Integer;
@@ -181,8 +194,8 @@ KLVariables::KLVariable& KLVariables::KLVariable::operator= (const KLVariable& O
 
 	switch (Type)
 	{
-		case STRING:
-			*((KLString*) Pointer) = Object.ToString();
+		case BOOLEAN:
+			*((bool*) Pointer) = Object.ToBool();
 		break;
 		case NUMBER:
 			*((double*) Pointer) = Object.ToNumber();
@@ -211,9 +224,9 @@ bool KLVariables::Add(const KLString& Name, TYPE Type)
 	return Variables.Insert(KLVariable(Type), Name) != -1;
 }
 
-bool KLVariables::Add(const KLString& Name, KLString& String)
+bool KLVariables::Add(const KLString& Name, bool& Boolean)
 {
-	return Variables.Insert(KLVariable(STRING, &String), Name) != -1;
+	return Variables.Insert(KLVariable(BOOLEAN, &Boolean), Name) != -1;
 }
 
 bool KLVariables::Add(const KLString& Name, double& Number)
