@@ -21,16 +21,6 @@
 #ifndef KLSTRING_HPP
 #define KLSTRING_HPP
 
-/*! \file		klstring.hpp
- *  \brief	Deklaracje dla klasy KLString i jej składników.
- *
- */
-
-/*! \file		klstring.cpp
- *  \brief	Implementacja klasy KLString i jej składników.
- *
- */
-
 #ifdef QT_VERSION
 	#include "kllibs.hpp"
 #else
@@ -40,6 +30,16 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+
+/*! \file		klstring.hpp
+ *  \brief	Deklaracje dla klasy KLString i jej składników.
+ *
+ */
+
+/*! \file		klstring.cpp
+ *  \brief	Implementacja klasy KLString i jej składników.
+ *
+ */
 
 /*! \brief	Lekka interpretacja łańcucha znaków.
  *
@@ -145,6 +145,20 @@ class EXPORT KLString
 		 */
 		int Insert(const KLString& String,
 				 int Position = -1);
+
+		/*! \brief		Wstawianie łańcucha.
+		 *  \param [in]	String	Łańcuch do wstawienia
+		 *  \param [in]	Position	Pozycja łańcucha - numerowane od 0, -1 oznacza koniec bierzącego łańcucha.
+		 *  \param [in]	Length	Długość łańcucha do dodania.
+		 *  \return		Aktualna liczba znaków.
+		 *  \warning		Niepoprawna długość łańcucha może przynieść niezamierzone konsekwencje.
+		 *
+		 * Dodaje do łańcucha podany łańcuch. Gdy długość nie zostanie podana to zostanie ona automatycznie obliczona.
+		 *
+		 */
+		int Insert(const char* String,
+				 int Position = -1,
+				 int Length = -1);
 
 		/*! \brief		Usuwanie łańcucha.
 		 *  \param [in]	String	Łańcuch do usunięcia
@@ -295,6 +309,24 @@ class EXPORT KLString
 		 */
 		bool operator!= (const KLString& String) const;
 
+		/*! \brief		Sprawdza czy łańcuchy są jednakowe.
+		 *  \param [in]	String Łańcuch do porównania.
+		 *  \return		`true` jeśli łańcuchy są jednakowe, lub `false` gdy są różne.
+		 *
+		 * Dokonuje porównania łańcuchów i zwraca rezultat operacji.
+		 *
+		 */
+		bool operator== (const char* String) const;
+
+		/*! \brief		Sprawdza czy łańcuchy są różne.
+		 *  \param [in]	String Łańcuch do porównania.
+		 *  \return		`false` jeśli łańcuchy są jednakowe, lub `true` gdy są różne.
+		 *
+		 * Dokonuje porównania łańcuchów i zwraca rezultat operacji.
+		 *
+		 */
+		bool operator!= (const char* String) const;
+
 		/*! \brief		Sprawdza czy łańcuch jest większy od podanego.
 		 *  \param [in]	String Łańcuch do porównania.
 		 *  \return		`true` jeśli łańcuch jest większy od podanego, lub `false` gdy nie.
@@ -322,6 +354,15 @@ class EXPORT KLString
 		 */
 		KLString operator+ (const KLString& String) const;
 
+		/*! \brief		Dodaje łańcuchy.
+		 *  \param [in]	String Łańcuch do dodania.
+		 *  \return		Nowy obiekt reprezentujący sumę łańcuchów.
+		 *
+		 * Tworzy nowy łańcuch jako sumę dwóch łańcuchów.
+		 *
+		 */
+		KLString operator+ (const char* String) const;
+
 		/*! \brief		Operator przypisania.
 		 *  \param [in]	String Łańcuch do przypisania.
 		 *  \return		Referencja do bierzącego obiektu.
@@ -348,6 +389,15 @@ class EXPORT KLString
 		 *
 		 */
 		KLString& operator+= (const KLString& String);
+
+		/*! \brief		Operator przypisania z dodawaniam.
+		 *  \param [in]	String Łańcuch do dodania.
+		 *  \return		Referencja do bierzącego obiektu.
+		 *
+		 * Dodaje podany łańcuch do bierzącego obiektu.
+		 *
+		 */
+		KLString& operator+= (const char* String);
 
 		/*! \brief		Operator konwersji na `const char*`.
 		 *  \return		Stały wskaźnik na dane obiektu.

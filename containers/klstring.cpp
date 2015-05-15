@@ -120,29 +120,36 @@ KLString::~KLString(void)
 
 int KLString::Insert(const KLString& String, int Position)
 {
-	char* Buffer = new char[Capacity + String.Capacity + 1];
+	return Insert(String.Data, Position, String.Capacity);
+}
+
+int KLString::Insert(const char* String, int Position, int Length)
+{
+	const int Strlen = (Length > 0) ? Length : strlen(String);
+
+	char* Buffer = new char[Capacity + Strlen + 1];
 
 	if (!Data)
 	{
-		memcpy(Buffer, String.Data, String.Capacity + 1);
+		memcpy(Buffer, String, Strlen + 1);
 	}
 	else	if (Position < 0 || Position == Capacity)
 	{
 		memcpy(Buffer, Data, Capacity);
-		memcpy(Buffer + Capacity, String.Data, String.Capacity + 1);
+		memcpy(Buffer + Capacity, String, Strlen + 1);
 	}
 	else
 	{
 		memcpy(Buffer, Data, Position);
-		memcpy(Buffer + Position, String.Data, String.Capacity);
-		memcpy(Buffer + Position + String.Capacity, Data + Position, Capacity - Position + 1);
+		memcpy(Buffer + Position, String, Strlen);
+		memcpy(Buffer + Position + Strlen, Data + Position, Capacity - Position + 1);
 	}
 
 	if (Data) delete [] Data;
 
 	Data = Buffer;
 
-	return Capacity += String.Capacity;
+	return Capacity += Strlen;
 }
 
 int KLString::Delete(const KLString& String, bool All)
@@ -230,17 +237,21 @@ int KLString::Replace(const KLString& Old, const KLString& New, bool All)
 
 int KLString::Count(const KLString& String, int Start, int Stop) const
 {
-	Stop = ((Stop && Stop < Capacity) ? Stop : Capacity) - String.Capacity;
-
 	int Counter = 0;
 
-	for (int i = Start; i < Stop; i++)
+	Stop = ((Stop && Stop < Capacity) ? Stop : Capacity) - String.Capacity + 1;
+
+	while (Start < Stop)
 	{
-		if (!strncmp(Data + i, String.Data, String.Capacity))
+		if (!strncmp(Data + Start, String.Data, String.Capacity))
 		{
-			i += String.Capacity;
+			Start += String.Capacity;
 
 			Counter++;
+		}
+		else
+		{
+			Start++;
 		}
 	}
 
@@ -249,7 +260,7 @@ int KLString::Count(const KLString& String, int Start, int Stop) const
 
 int KLString::Find(const KLString& String, int Start, int Stop) const
 {
-	Stop = ((Stop && Stop < Capacity) ? Stop : Capacity) - String.Capacity;
+	Stop = ((Stop && Stop < Capacity) ? Stop : Capacity) - String.Capacity + 1;
 
 	for (int i = Start; i < Stop; i++)
 	{
@@ -342,6 +353,19 @@ bool KLString::operator!= (const KLString& String) const
 		return strcmp(Data, String.Data);
 }
 
+bool KLString::operator== (const char* String) const
+{
+	if (Data == String)
+		return true;
+	else
+		return !strcmp(Data, String);
+}
+
+bool KLString::operator!= (const char* String) const
+{
+	return strcmp(Data, String);
+}
+
 bool KLString::operator> (const KLString& String) const
 {
 	return strcmp(Data, String.Data) < 0;
@@ -358,6 +382,16 @@ KLString KLString::operator+ (const KLString& String) const
 
 	Buffer.Insert(Data);
 	Buffer.Insert(String.Data);
+
+	return Buffer;
+}
+
+KLString KLString::operator+ (const char* String) const
+{
+	KLString Buffer;
+
+	Buffer.Insert(Data);
+	Buffer.Insert(String);
 
 	return Buffer;
 }
@@ -389,6 +423,13 @@ KLString& KLString::operator= (KLString&& String)
 KLString& KLString::operator+= (const KLString& String)
 {
 	Insert(String.Data);
+
+	return *this;
+}
+
+KLString& KLString::operator+= (const char* String)
+{
+	Insert(String);
 
 	return *this;
 }
