@@ -63,6 +63,22 @@ Możliwości:
 
 ## Interpreter skryptów
 
+### KLParser
+Interpreter wyrażeń matematycznych i logicznych.
+
+- Interpretacja wyrażeń matematycznych.
+- Interpretacja wyrażeń logicznych.
+- Wbudowane funkcje trygonometryczne i matematyczne.
+
+Możliwości:
+- [X] Obsługa priorytetu operatorów.
+- [X] Obsługa wyrażeń w nawiasach.
+- [X] Operacje na liczbach zmiennoprzecinkowych i logicznych.
+- [X] Obsługa błędów.
+- [ ] Rozszerzalna lista funkcji.
+- [ ] Automatyczna obsługa zmiennych.
+- [ ] Instrukcje przypisania.
+
 ### KLScript
 Prosty interpreter skryptów.
 
