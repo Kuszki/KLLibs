@@ -34,12 +34,23 @@
 /*! \brief	Lekka interpretacja listy.
  *  \tparam	Data Typ przechowywanych danych.
  *
- * Prosta i lekka interpretacja listy elementów. Lista jednokierunkowa bez wbudowanej obsługi kolejki i stosu.
+ * Prosta i lekka interpretacja listy elementów. Lista jednokierunkowa z wbudowaną obsługą kolejki i stosu.
  *
  */
 template<typename Data>
 class KLList
 {
+
+	/*! \brief		Wyliczenie indeksu listy.
+	 *
+	 * Umożliwia indeksowanie listy z użyciem pierwszego i ostatniego elementu.
+	 *
+	 */
+	public: enum INDEX : int
+	{
+		FIRST = 0,	//!< Pierwszy element.
+		LAST = -1		//!< Ostatni element.
+	};
 
 	/*! \brief		Struktura elementu listy.
 	 *
@@ -159,6 +170,22 @@ class KLList
 		 */
 		int Delete(int ID);
 
+		/*! \brief		Pobranie elementu.
+		 *  \return		Kolejny element.
+		 *
+		 * Pobiera element w trybie kolejki i usuwa go z listy.
+		 *
+		 */
+		Data Dequeue(void);
+
+		/*! \brief		Pobranie elementu.
+		 *  \return		Kolejny element.
+		 *
+		 * Pobiera element w trybie stosu i usuwa go z listy.
+		 *
+		 */
+		Data Pop(void);
+
 		/*! \brief		Sprawdzenie ilości elementów.
 		 *  \return		Aktualna liczba elementów.
 		 *
@@ -194,6 +221,15 @@ class KLList
 		 */
 		const Data& operator[] (int ID) const;
 
+		/*! \brief		Operator wejścia.
+		 *  \param [in]	Item Obiekt do dodania.
+		 *  \return		Referencja do bierzącego obiektu.
+		 *
+		 * Dodaje wybrany element na koniec listy.
+		 *
+		 */
+		KLList<Data>& operator<< (const Data& Item);
+
 		/*! \brief		Operator przypisania.
 		 *  \param [in]	List Obiekt do sklonowania.
 		 *  \return		Referencja do bierzącego obiektu.
@@ -201,7 +237,7 @@ class KLList
 		 * Zwalnia dotychczasowe zasoby i klonuje wybrany obiekt.
 		 *
 		 */
-		KLList& operator= (const KLList<Data>& List);
+		KLList<Data>& operator= (const KLList<Data>& List);
 
 		KLListVarIterator begin(void);
 		KLListVarIterator end(void);

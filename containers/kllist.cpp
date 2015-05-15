@@ -155,9 +155,36 @@ int KLList<Data>::Delete(int ID)
 	else
 		PrevItem->Next = ListItem->Next;
 
+	if (ListItem == Begin) Begin = nullptr;
+	if (ListItem == End) End = PrevItem;
+
 	delete ListItem;
 
 	return --Capacity;
+}
+
+template<typename Data>
+Data KLList<Data>::Dequeue(void)
+{
+	if (!Begin) return Data();
+
+	Data Buffer(*Begin->Record);
+
+	Delete(0);
+
+	return Buffer;
+}
+
+template<typename Data>
+Data KLList<Data>::Pop(void)
+{
+	if (!End) return Data();
+
+	Data Buffer(*End->Record);
+
+	Delete(Capacity - 1);
+
+	return Buffer;
 }
 
 template<typename Data>
@@ -178,7 +205,7 @@ void KLList<Data>::Clean(void)
 		Begin = ListItem;
 	}
 
-	Begin = nullptr;
+	Begin = End = nullptr;
 	Capacity = 0;
 }
 
@@ -209,33 +236,61 @@ typename KLList<Data>::KLListConstIterator KLList<Data>::end(void) const
 template<typename Data>
 Data& KLList<Data>::operator[] (int ID)
 {
-	KLListItem* ListItem = Begin;
-
-	for (int i = 0; i < ID; i++)
+	switch (ID)
 	{
-		if (ListItem)
-			ListItem = ListItem->Next;
-		else
-			return *((Data*) nullptr);
-	}
+		case FIRST:
+			return *Begin->Record;
+		break;
+		case LAST:
+			return *End->Record;
+		break;
+		default:
+			KLListItem* ListItem = Begin;
 
-	return *ListItem->Record;
+			for (int i = 0; i < ID; i++)
+			{
+				if (ListItem)
+					ListItem = ListItem->Next;
+				else
+					return *((Data*) nullptr);
+			}
+
+			return *ListItem->Record;
+	}
 }
 
 template<typename Data>
 const Data& KLList<Data>::operator[] (int ID) const
 {
-	KLListItem* ListItem = Begin;
-
-	for (int i = 0; i < ID; i++)
+	switch (ID)
 	{
-		if (ListItem)
-			ListItem = ListItem->Next;
-		else
-			return *((Data*) nullptr);
-	}
+		case FIRST:
+			return *Begin->Record;
+		break;
+		case LAST:
+			return *End->Record;
+		break;
+		default:
+			KLListItem* ListItem = Begin;
 
-	return *ListItem->Record;
+			for (int i = 0; i < ID; i++)
+			{
+				if (ListItem)
+					ListItem = ListItem->Next;
+				else
+					return *((Data*) nullptr);
+			}
+
+			return *ListItem->Record;
+	}
+}
+
+template<typename Data>
+KLList<Data>& KLList<Data>::operator<< (const Data& Item)
+{
+	Insert(Item);
+
+	return *this;
 }
 
 template<typename Data>
