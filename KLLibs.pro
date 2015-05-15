@@ -20,7 +20,8 @@ SOURCES	+=	main.cpp \
 			containers/klmap.cpp \
 			containers/kllist.cpp \
 			containers/klstring.cpp \
-			containers/kltree.cpp
+			containers/kltree.cpp \
+			script/klparser.cpp
 
 HEADERS	+=	kllibs.hpp \
 			script/klscript.hpp \
@@ -29,7 +30,8 @@ HEADERS	+=	kllibs.hpp \
 			containers/klmap.hpp \
 			containers/kllist.hpp \
 			containers/klstring.hpp \
-			containers/kltree.hpp
+			containers/kltree.hpp \
+			script/klparser.hpp
 
 unix
 {
