@@ -166,6 +166,9 @@ int KLMap<Data, Key>::Delete(const Key& ID)
 		}
 	}
 
+	if (MapItem == Begin) Begin = nullptr;
+	if (MapItem == End) End = PrevItem;
+
 	return -1;
 }
 
@@ -209,6 +212,40 @@ template<typename Data, typename Key>
 int KLMap<Data, Key>::Size(void) const
 {
 	return Capacity;
+}
+
+template<typename Data, typename Key>
+KLList<Data> KLMap<Data, Key>::Values(void) const
+{
+	KLList<Data> Buffer;
+
+	KLMapItem* MapItem = Begin;
+
+	while (MapItem)
+	{
+		Buffer.Insert(MapItem->Record->Value);
+
+		MapItem = MapItem->Next;
+	}
+
+	return Buffer;
+}
+
+template<typename Data, typename Key>
+KLList<Key> KLMap<Data, Key>::Keys(void) const
+{
+	KLList<Key> Buffer;
+
+	KLMapItem* MapItem = Begin;
+
+	while (MapItem)
+	{
+		Buffer.Insert(MapItem->Record->ID);
+
+		MapItem = MapItem->Next;
+	}
+
+	return Buffer;
 }
 
 template<typename Data, typename Key>

@@ -21,6 +21,8 @@
 #ifndef KLMAP_HPP
 #define KLMAP_HPP
 
+#include "containers/kllist.hpp"
+
 /*! \file		klmap.hpp
  *  \brief	Deklaracje dla klasy KLMap i jej składników.
  *
@@ -212,6 +214,22 @@ class KLMap
 		 *
 		 */
 		int Size(void) const;
+
+		/*! \brief		Lista wartości.
+		 *  \return		Aktualna lista elementów.
+		 *
+		 * Zwraca kopie aktualnej listy wartości.
+		 *
+		 */
+		KLList<Data> Values(void) const;
+
+		/*! \brief		Lista kluczy.
+		 *  \return		Aktualna lista kluczy.
+		 *
+		 * Zwraca kopie aktualnej listy kluczy.
+		 *
+		 */
+		KLList<Key> Keys(void) const;
 
 		/*! \brief		Czyszczenie mapy.
 		 *
