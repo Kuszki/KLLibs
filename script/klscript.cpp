@@ -41,7 +41,7 @@ KLScript::OPERATION KLScript::GetToken(const KLString& Code)
 
 	KLString Token = Code.Part(Start, Process++);
 
-	if (Token == "//") return COMMENT;
+	if (Token == "#") return COMMENT;
 	else if (Token == "var") return VAR;
 	else if (Token == "set") return SET;
 	else if (Token == "call") return CALL;

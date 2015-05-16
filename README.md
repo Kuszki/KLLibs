@@ -95,30 +95,28 @@ Możliwości:
 Przykład:
 
 ``` bash
-// komentarz                                      !! ważna spacja po // !!
+var Zmienna;                                      # utworzenie zmiennej
+set Zmienna sin( (2+2)*3 + 10 );                  # przypisanie wartości
 
-var Zmienna;                                      // utworzenie zmiennej
-set Zmienna sin( (2+2)*3 + 10 );                  // przypisanie wartości
+if Zmienna > 100 || Zmienna < 50;                 # instrukcja if
 
-if Zmienna > 100 || Zmienna < 50;                 // instrukcja if
+     call Funkcja sin(Zmienna), 30, Zmienna*2;    # wywołanie funkcji
+     set Zmienna return;                          # przypisanie wyniku funkcji do zmiennej
 
-     call Funkcja sin(Zmienna), 30, Zmienna*2;    // wywołanie funkcji
-     set Zmienna return;                          // przypisanie wyniku funkcji do zmiennej
+else;                                             # instrukcja else
+     var i;                                       # utworzenie zmiennej
 
-else;                                             // instrukcja else
-     var i;                                       // utworzenie zmiennej
-
-     while i < 10;                                // instrukcja while
-          call Procedura Zmienna % i, Zmienna;    // wywołanie funkcji
-          set i i+1;                              // przypisanie
+     while i < 10;                                # instrukcja while
+          call Procedura Zmienna % i, Zmienna;    # wywołanie funkcji
+          set i i+1;                              # przypisanie
 
           if not return;
-               exit;                              // przerwanie skryptu
+               exit;                              # przerwanie skryptu
           fi;
 
-     done;                                        // zakończenie while
+     done;                                        # zakończenie while
 
-fi;                                               // zakończenie if
+fi;                                               # zakończenie if
 ```
 
 ### KLBindings

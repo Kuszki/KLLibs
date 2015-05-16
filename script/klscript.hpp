@@ -67,7 +67,7 @@ class EXPORT KLScript
 	{
 		UNKNOWN,	//!< Nieznana operacja.
 
-		COMMENT,	//!< Komentarz: `// tekst`.
+		COMMENT,	//!< Komentarz: `# tekst`.
 
 		VAR,		//!< Utworzenie zmiennej: `var zmA, zmB, ...`.
 
