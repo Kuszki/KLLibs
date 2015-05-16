@@ -75,16 +75,16 @@ class EXPORT KLVariables
 	 * Definiuje typ zmiennej przechowywanej w organizacji.
 	 *
 	 */
-	private: class KLVariable
+	public: class KLVariable
 	{
 
 		protected:
 
-			void* Pointer;		//!< Wskaźnik na dane.
+			void* const Pointer;	//!< Adres bindu.
+
+			double Variable;		//!< Przechowywane dane.
 
 		public:
-
-			const bool Binded;	//!< Obecność bindu.
 
 			const TYPE Type;	//!< Wyliczenie typu zmiennej.
 
@@ -107,12 +107,29 @@ class EXPORT KLVariables
 			KLVariable(TYPE VarType = NUMBER,
 					 void* Bind = nullptr);
 
-			/*! \brief		Destruktor.
+			/*! \brief		Konstruktor konwertujący z `bool`.
+			 *  \param [in]	Boolean Początkowa wartość.
 			 *
-			 * Niszczy obiekt o ile nie jest on bindem i zwalnia zasoby.
+			 * Tworzy zmienną logiczną o podanej wartości
 			 *
 			 */
-			~KLVariable(void);
+			KLVariable(bool Boolean);
+
+			/*! \brief		Konstruktor konwertujący z `double`.
+			 *  \param [in]	Number Początkowa wartość.
+			 *
+			 * Tworzy zmienną rzeczywistą o podanej wartości
+			 *
+			 */
+			KLVariable(double Number);
+
+			/*! \brief		Konstruktor konwertujący z `int`.
+			 *  \param [in]	Integer Początkowa wartość.
+			 *
+			 * Tworzy zmienną całkowitą o podanej wartości
+			 *
+			 */
+			KLVariable(int Integer);
 
 			/*! \brief		Konwersja na `KLString`.
 			 *  \return		Reprezentacja zmiennej jako `KLString`.
@@ -146,37 +163,22 @@ class EXPORT KLVariables
 			 */
 			int ToBool(void) const;
 
+			/*! \brief		Sprawdzenie bindowania.
+			 *  \return		Stan bindowania.
+			 *
+			 * Sprawdza czy obiekt jest bindem. Jeśli tak, to zwraca `true`, w przeciwnym razie zwraca `false`.
+			 *
+			 */
+			bool Binded(void) const;
+
 			/*! \brief		Zmiana wartość zmiennej.
-			 *  \param [in]	String Łańcuch do przypisania.
+			 *  \tparam		Data		Typ nowej wartości.
+			 *  \param [in]	Value	Nowa wartość.
 			 *
 			 * Przypisuje do obiektu odpowiednią reprezentacje podanego obiektu po dokonaniu konwersji.
 			 *
 			 */
-			void Set(const KLString& String);
-
-			/*! \brief		Zmiana wartość zmiennej.
-			 *  \param [in]	Number Liczba zmiennoprzecinkowa.
-			 *
-			 * Przypisuje do obiektu odpowiednią reprezentacje podanego obiektu po dokonaniu konwersji.
-			 *
-			 */
-			void Set(double Number);
-
-			/*! \brief		Zmiana wartość zmiennej.
-			 *  \param [in]	Integer Liczba całkowita.
-			 *
-			 * Przypisuje do obiektu odpowiednią reprezentacje podanego obiektu po dokonaniu konwersji.
-			 *
-			 */
-			void Set(int Integer);
-
-			/*! \brief		Operator przypisania.
-			 *  \param [in]	Object Obiekt do sklonowania.
-			 *
-			 * Przypisuje do obiektu odpowiednią reprezentacje podanego obiektu po dokonaniu konwersji. Nie zmienia bindów i nie dokonuje bindowania.
-			 *
-			 */
-			KLVariable& operator= (const KLVariable& Object);
+			template<typename Data> KLVariable& operator= (const Data& Value);
 
 	};
 
@@ -224,7 +226,7 @@ class EXPORT KLVariables
 		 *
 		 */
 		bool Add(const KLString& Name,
-			    TYPE Type);
+			    TYPE Type = NUMBER);
 
 		/*! \brief		Tworzenie zmiennej w systemie.
 		 *  \param [in]	Name		Nazwa zmiennej.
@@ -297,7 +299,7 @@ class EXPORT KLVariables
 
 		/*! \brief		Operator wyboru.
 		 *  \param [in]	Name Nazwa zmiennej.
-		 *  \return		Stała eeferencja do obiektu zmiennej.
+		 *  \return		Stała referencja do obiektu zmiennej.
 		 *  \warning		Gdy podana zmienna nie istnieje zostają zastosowane reguły `KLMap::operator[]`.
 		 *
 		 * Wybiera z systemu zmienną o podanej nazwie.

@@ -21,189 +21,90 @@
 #include "klvariables.hpp"
 
 KLVariables::KLVariable::KLVariable(const KLVariable& Object)
-: Binded(Object.Binded), Type(Object.Type)
-{
-	if (!Binded)
-		switch (Type)
-		{
-			case BOOLEAN:
-				Pointer = malloc(sizeof(bool));
-				*((bool*) Pointer) = *((bool*) Object.Pointer);
-			break;
-			case NUMBER:
-				Pointer = malloc(sizeof(double));
-				*((double*) Pointer) = *((double*) Object.Pointer);
-			break;
-			case INTEGER:
-				Pointer = malloc(sizeof(int));
-				*((int*) Pointer) = *((int*) Object.Pointer);
-			break;
-		}
-	else
-		Pointer = Object.Pointer;
-}
+: Pointer(Object.Pointer), Variable(Object.Variable), Type(Object.Type) {}
 
 KLVariables::KLVariable::KLVariable(TYPE VarType, void* Bind)
-: Binded(Bind), Type(VarType)
+: Pointer(Bind), Type(VarType){}
+
+KLVariables::KLVariable::KLVariable(bool Boolean)
+: KLVariable(BOOLEAN)
 {
-	if (!Binded)
-		switch (Type)
-		{
-			case BOOLEAN:
-				Pointer = malloc(sizeof(bool));
-			break;
-			case NUMBER:
-				Pointer = malloc(sizeof(double));
-			break;
-			case INTEGER:
-				Pointer = malloc(sizeof(int));
-			break;
-		}
-	else
-		Pointer = Bind;
+	*this = Boolean;
 }
 
-KLVariables::KLVariable::~KLVariable(void)
+KLVariables::KLVariable::KLVariable(double Number)
+: KLVariable(NUMBER)
 {
-	if (!Binded) free(Pointer);
+	*this = Number;
+}
+
+KLVariables::KLVariable::KLVariable(int Integer)
+: KLVariable(INTEGER)
+{
+	*this = Integer;
 }
 
 KLString KLVariables::KLVariable::ToString(void) const
 {
-	switch (Type)
+	if (Pointer) switch (Type)
 	{
 		case BOOLEAN:
 			return KLString(*((bool*) Pointer));
-		break;
 		case NUMBER:
 			return KLString(*((double*) Pointer));
-		break;
 		case INTEGER:
 			return KLString(*((int*) Pointer));
-		break;
 	}
 
-	return KLString();
+	return KLString(Variable);
 }
 
 double KLVariables::KLVariable::ToNumber(void) const
 {
-	switch (Type)
+	if (Pointer) switch (Type)
 	{
 		case BOOLEAN:
 			return *((bool*) Pointer);
-		break;
 		case NUMBER:
 			return *((double*) Pointer);
-		break;
 		case INTEGER:
 			return *((int*) Pointer);
-		break;
 	}
 
-	return double();
+	return Variable;
 }
 
 int KLVariables::KLVariable::ToInt(void) const
 {
-	switch (Type)
-	{
-		case BOOLEAN:
-			return *((bool*) Pointer);
-		break;
-		case NUMBER:
-			return *((double*) Pointer);
-		break;
-		case INTEGER:
-			return *((int*) Pointer);
-		break;
-	}
-
-	return int();
+	return ToNumber();
 }
 
 int KLVariables::KLVariable::ToBool(void) const
 {
-	switch (Type)
-	{
-		case BOOLEAN:
-			return *((bool*) Pointer);
-		break;
-		case NUMBER:
-			return *((double*) Pointer);
-		break;
-		case INTEGER:
-			return *((int*) Pointer);
-		break;
-	}
-
-	return bool();
+	return ToNumber();
 }
 
-void KLVariables::KLVariable::Set(const KLString& String)
+bool KLVariables::KLVariable::Binded(void) const
 {
-	switch (Type)
-	{
-		case BOOLEAN:
-			*((bool*) Pointer) = String.ToBool();
-		break;
-		case NUMBER:
-			*((double*) Pointer) = String.ToNumber();
-		break;
-		case INTEGER:
-			*((int*) Pointer) = String.ToInt();
-		break;
-	}
+	return Pointer;
 }
 
-void KLVariables::KLVariable::Set(double Number)
+template<typename Data>
+KLVariables::KLVariable& KLVariables::KLVariable::operator= (const Data& Value)
 {
-	switch (Type)
+	if (Pointer) switch (Type)
 	{
 		case BOOLEAN:
-			*((bool*) Pointer) = Number;
+			*((bool*) Pointer) = Value;
 		break;
 		case NUMBER:
-			*((double*) Pointer) = Number;
+			*((double*) Pointer) = Value;
 		break;
 		case INTEGER:
-			*((int*) Pointer) = Number;
+			*((int*) Pointer) = Value;
 		break;
 	}
-}
-
-void KLVariables::KLVariable::Set(int Integer)
-{
-	switch (Type)
-	{
-		case BOOLEAN:
-			*((bool*) Pointer) = Integer;
-		break;
-		case NUMBER:
-			*((double*) Pointer) = Integer;
-		break;
-		case INTEGER:
-			*((int*) Pointer) = Integer;
-		break;
-	}
-}
-
-KLVariables::KLVariable& KLVariables::KLVariable::operator= (const KLVariable& Object)
-{
-	if (this == &Object) return *this;
-
-	switch (Type)
-	{
-		case BOOLEAN:
-			*((bool*) Pointer) = Object.ToBool();
-		break;
-		case NUMBER:
-			*((double*) Pointer) = Object.ToNumber();
-		break;
-		case INTEGER:
-			*((int*) Pointer) = Object.ToInt();
-		break;
-	}
+	else Variable = Value;
 
 	return *this;
 }
