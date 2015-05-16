@@ -125,6 +125,8 @@ int KLString::Insert(const KLString& String, int Position)
 
 int KLString::Insert(const char* String, int Position, int Length)
 {
+	if (!String) return Capacity;
+
 	const int Strlen = (Length > 0) ? Length : strlen(String);
 
 	char* Buffer = new char[Capacity + Strlen + 1];
@@ -237,6 +239,8 @@ int KLString::Replace(const KLString& Old, const KLString& New, bool All)
 
 int KLString::Count(const KLString& String, int Start, int Stop) const
 {
+	if (!Data || !String.Data) return 0;
+
 	int Counter = 0;
 
 	Stop = ((Stop && Stop < Capacity) ? Stop : Capacity) - String.Capacity + 1;
@@ -275,11 +279,11 @@ int KLString::Find(const KLString& String, int Start, int Stop) const
 
 KLString KLString::Part(int Start, int Stop) const
 {
-	if (Start > Stop || Start >= Capacity || Stop >= Capacity) return KLString();
+	if (Start >= Stop || Start > Capacity || Stop > Capacity) return KLString();
 
 	KLString Buffer;
 
-	Buffer.Capacity = Stop - Start + 1;
+	Buffer.Capacity = Stop - Start;
 	Buffer.Data = new char[Buffer.Capacity + 1];
 
 	memcpy(Buffer.Data, Data + Start, Buffer.Capacity);
@@ -307,17 +311,20 @@ void KLString::Clean(void)
 
 int KLString::ToBool(void) const
 {
-	return atoi(Data) || strcmp(Data, "true") == 0 || strcmp(Data, "TRUE");
+	if (Data) return atoi(Data) || strcmp(Data, "true") == 0 || strcmp(Data, "TRUE");
+	else return false;
 }
 
 int KLString::ToInt(void) const
 {
-	return atoi(Data);
+	if (Data) return atoi(Data);
+	else return 0;
 }
 
 double KLString::ToNumber(void) const
 {
-	return atof(Data);
+	if (Data) return atof(Data);
+	else return 0.0;
 }
 
 
@@ -342,7 +349,7 @@ bool KLString::operator== (const KLString& String) const
 	if (this == &String)
 		return true;
 	else
-		return !strcmp(Data, String.Data);
+		return !strcmp(Data ? Data : "", String.Data ? String.Data : "");
 }
 
 bool KLString::operator!= (const KLString& String) const
@@ -350,7 +357,7 @@ bool KLString::operator!= (const KLString& String) const
 	if (this == &String)
 		return false;
 	else
-		return strcmp(Data, String.Data);
+		return strcmp(Data ? Data : "", String.Data ? String.Data : "");
 }
 
 bool KLString::operator== (const char* String) const
@@ -358,22 +365,22 @@ bool KLString::operator== (const char* String) const
 	if (Data == String)
 		return true;
 	else
-		return !strcmp(Data, String);
+		return !strcmp(Data ? Data : "",String);
 }
 
 bool KLString::operator!= (const char* String) const
 {
-	return strcmp(Data, String);
+	return strcmp(Data ? Data : "", String);
 }
 
 bool KLString::operator> (const KLString& String) const
 {
-	return strcmp(Data, String.Data) < 0;
+	return strcmp(Data ? Data : "", String.Data ? String.Data : "") < 0;
 }
 
 bool KLString::operator< (const KLString& String) const
 {
-	return strcmp(Data, String.Data) > 0;
+	return strcmp(Data ? Data : "", String.Data ? String.Data : "") > 0;
 }
 
 KLString KLString::operator+ (const KLString& String) const
@@ -437,4 +444,9 @@ KLString& KLString::operator+= (const char* String)
 KLString::operator const char* (void) const
 {
 	return Data;
+}
+
+KLString::operator bool (void) const
+{
+	return Capacity;
 }

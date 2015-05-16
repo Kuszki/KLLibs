@@ -407,6 +407,14 @@ class EXPORT KLString
 		 */
 		operator const char* (void) const;
 
+		/*! \brief		Operator konwersji na `bool`.
+		 *  \return		Stan łańcucha.
+		 *
+		 * Zwraca `true` gdy łańcuch zawiera znaki lub `false` gdy jest pusty.
+		 *
+		 */
+		explicit operator bool (void) const;
+
 };
 
 #endif // KLSTRING_HPP
