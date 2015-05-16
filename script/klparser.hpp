@@ -27,12 +27,8 @@
 	#define EXPORT
 #endif
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-
-#include "containers/kllist.hpp"
 #include "containers/klstring.hpp"
+#include "containers/kllist.hpp"
 
 #include <ctype.h>
 #include <math.h>
@@ -47,13 +43,12 @@
  *
  */
 
-
 /*! \brief	Lekka interpretacja parsera matematycznego.
  *
  * Prosta i lekka interpretacja matematycznego parsera. Wspiera wbudowane funkcję z biblioteki `math.c`, obsługuję kolejność działań i priorytety operatorów. Umożliwia działania logiczne i matematyczne.
  *
  */
-class KLParser
+class EXPORT KLParser
 {
 
 	/*! \brief		Wyliczenie błędu przetwarzania.
@@ -64,6 +59,8 @@ class KLParser
 	public: enum ERROR
 	{
 		NO_ERROR,				//!< Brak błędu.
+
+		LVALUE_EXPECTED,		//!< Oczekiwano L-wartości.
 
 		UNKNOWN_OPERATOR,		//!< Napotkano nieznany operator.
 		UNKNOWN_FUNCTION,		//!< Napotkano nieznaną funkcję.
@@ -86,7 +83,7 @@ class KLParser
 
 		protected:
 
-			mutable ERROR LastError;	//!< Ostatni napotkany błąd.
+			thread_local static ERROR LastError;	//!< Ostatni napotkany błąd.
 
 		public:
 
@@ -103,14 +100,6 @@ class KLParser
 			 *
 			 */
 			virtual ~KLParserToken(void);
-
-			/*! \brief		Pobranie tokenu.
-			 *  \return		Token w postaci łańcucha.
-			 *
-			 * Zwraca token w postaci łańcucha znaków.
-			 *
-			 */
-			virtual KLString GetToken(void) const = 0;
 
 			/*! \brief		Pobranie priorytetu.
 			 *  \return		Priorytet tokenu.
@@ -129,15 +118,6 @@ class KLParser
 			 */
 			ERROR GetError(void) const;
 
-			/*! \brief		Pobranie ostatniego błędu.
-			 *  \tparam		Klasa obiektu wynikowego.
-			 *  \return		Wskaźnik na obiekt wynikowy lub nullptr w przypadku błędu.
-			 *
-			 * Dynamicznie konwertuje obiekt na zadany typ i zwraca wynik konwersji. Konwersja odbywa się za pomocą operatora `dynamic_cast`.
-			 *
-			 */
-			template<typename Type> Type* Instance(void);
-
 	};
 
 	/*! \brief		Klasa tokenu będocego liczbą.
@@ -150,7 +130,7 @@ class KLParser
 
 		protected:
 
-			double Value;	//!< Wartość liczbowa.
+			double Value;	//!< Wartość zbindowana.
 
 		public:
 
@@ -170,9 +150,12 @@ class KLParser
 			 */
 			KLParserValue(double Token);
 
+			/*! \brief		Destruktor.
+			 *
+			 * Wirtualny destruktor umożliwiający poprawne niszczenie obiektów.
+			 *
+			 */
 			virtual ~KLParserValue(void) override;
-
-			virtual KLString GetToken(void) const override;
 
 			/*! \brief		Pobranie wartości.
 			 *  \return		Przechowywana wartość.
@@ -218,8 +201,6 @@ class KLParser
 			AND,			//!< Iloczyn logiczny: `a && b`.
 			OR,			//!< Suma logiczna: `a || b`.
 
-			NOT,			//!< Negacja logiczna: `!a`.
-
 			L_BRACKET,	//!< Nawias otwierający: `(`.
 			R_BRACKET		//!< Nawias zamykający: `)`.
 		};
@@ -263,11 +244,12 @@ class KLParser
 			 */
 			KLParserOperator(OPERATOR Token);
 
+			/*! \brief		Destruktor.
+			 *
+			 * Wirtualny destruktor umożliwiający poprawne niszczenie obiektów.
+			 *
+			 */
 			virtual ~KLParserOperator(void) override;
-
-			virtual KLString GetToken(void) const override;
-
-			virtual unsigned GetPriority(void) const override;
 
 			/*! \brief		Obliczenie wyniku działania.
 			 *  \param [in,out]	Values Lista dostępnych parametrów.
@@ -286,6 +268,8 @@ class KLParser
 			 *
 			 */
 			OPERATOR GetOperator(void) const;
+
+			virtual unsigned GetPriority(void) const override;
 
 	};
 
@@ -315,7 +299,9 @@ class KLParser
 			EXP,		//!< Liczba `e` do potęgi `x`: `exp(x)`.
 			SQRT,	//!< Pierwiastek: `sqrt(x)`.
 			LOG,		//!< Logarytm dziesiętny: `log(x)`.
-			LN		//!< Logarytm naturalny: `ln(x)`.
+			LN,		//!< Logarytm naturalny: `ln(x)`.
+
+			NOT		//!< Negacja logiczna: `not(x)`.
 		};
 
 		/*! \brief		Struktura danych operatora.
@@ -353,11 +339,14 @@ class KLParser
 			 * Tworzy funkcję na podstawie podanego wyliczenia.
 			 *
 			 */
-			KLParserFunction(const char* Token);
+			KLParserFunction(FUNCTION Token);
 
+			/*! \brief		Destruktor.
+			 *
+			 * Wirtualny destruktor umożliwiający poprawne niszczenie obiektów.
+			 *
+			 */
 			virtual ~KLParserFunction(void) override;
-
-			virtual KLString GetToken(void) const override;
 
 			/*! \brief		Obliczenie wyniku działania.
 			 *  \param [in,out]	Values Lista dostępnych parametrów.
@@ -392,21 +381,11 @@ class KLParser
 		bool GetTokens(KLList<KLParserToken*>& Tokens,
 					const KLString& Code);
 
-		const unsigned short BufferSize;	//!< Stała wielkość używanego bufora na pojedynczy token.
-
 		double LastValue;				//!< Ostatnia poprawnie obliczona wartość wyrażenia.
 
 		ERROR LastError;				//!< Ostatni odnotowany błąd.
 
 	public:
-
-		/*! \brief		Domyślny konstruktor.
-		 *  \param [in]	Buffer Rozmiar bufora tokenów.
-		 *
-		 * Zapamiętuje wybrany rozmiar bufora na token.
-		 *
-		 */
-		KLParser(unsigned short Buffer = 24);
 
 		/*! \brief		Domyślny konstruktor.
 		 *  \param [in]	Code Wyrażenie do obliczenia.
