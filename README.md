@@ -82,7 +82,44 @@ Możliwości:
 ### KLScript
 Prosty interpreter skryptów.
 
-- SID
+- Zarządzanie zmiennymi.
+- Bindowanie zmiennych.
+- Bindowanie i wywoływanie funkcji.
+
+Możliwości:
+- [X] Obsługa zmiennych.
+- [X] Wywoływanie funkcji.
+- [X] Konstrukcja `if () ... else ...`.
+- [X] Konstrukcja `while () ...`.
+
+Przykład:
+
+``` bash
+// komentarz                                      !! ważna spacja po // !!
+
+var Zmienna;                                      // utworzenie zmiennej
+set Zmienna sin( (2+2)*3 + 10 );                  // przypisanie wartości
+
+if Zmienna > 100 || Zmienna < 50;                 // instrukcja if
+
+     call Funkcja sin(Zmienna), 30, Zmienna*2;    // wywołanie funkcji
+     set Zmienna return;                          // przypisanie wyniku funkcji do zmiennej
+
+else;                                             // instrukcja else
+     var i;                                       // utworzenie zmiennej
+
+     while i < 10;                                // instrukcja while
+          call Procedura Zmienna % i, Zmienna;    // wywołanie funkcji
+          set i i+1;                              // przypisanie
+
+          if not return;
+               exit;                              // przerwanie skryptu
+          fi;
+
+     done;                                        // zakończenie while
+
+fi;                                               // zakończenie if
+```
 
 ### KLBindings
 Bindy funkcji dostępne z poziomu skryptu.
