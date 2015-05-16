@@ -21,6 +21,15 @@
 #ifndef KLVARIABLES_HPP
 #define KLVARIABLES_HPP
 
+#ifdef QT_VERSION
+	#include "../kllibs.hpp"
+#else
+	#define EXPORT
+#endif
+
+#include "../containers/klmap.hpp"
+#include "../containers/klstring.hpp"
+
 /*! \file		klvariables.hpp
  *  \brief	Deklaracje dla klasy KLVariables i jej składników.
  *
@@ -30,21 +39,6 @@
  *  \brief	Implementacja klasy KLVariables i jej składników.
  *
  */
-
-#ifdef QT_VERSION
-	#include "kllibs.hpp"
-#else
-	#define EXPORT
-#endif
-
-#include "containers/klmap.hpp"
-#include "containers/klstring.hpp"
-
-#ifndef size_t
-	typedef unsigned int size;
-#else
-	typedef size_t size;
-#endif
 
 /*! \brief	System zarządzania zmiennymi dla skryptu.
  *

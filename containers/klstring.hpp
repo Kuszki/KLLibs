@@ -22,7 +22,7 @@
 #define KLSTRING_HPP
 
 #ifdef QT_VERSION
-	#include "kllibs.hpp"
+	#include "../kllibs.hpp"
 #else
 	#define EXPORT
 #endif

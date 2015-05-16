@@ -20,8 +20,6 @@
 
 #include "klparser.hpp"
 
-#include <QDebug>
-
 thread_local KLParser::ERROR KLParser::KLParserToken::LastError = NO_ERROR;
 
 const KLParser::KLParserOperator::KLParserOperatorData KLParser::KLParserOperator::Operators[] =
@@ -124,7 +122,9 @@ double KLParser::KLParserOperator::GetValue(KLList<double>& Values) const
 		double ParamB = Values.Pop();
 		double ParamA = Values.Pop();
 
-		switch (Operator)
+		if (Operator == DIV && Operator == MOD &&
+		    ParamB == 0.0) LastError = DIVISION_BY_ZERO;
+		else switch (Operator)
 		{
 			case ADD:
 			return ParamA + ParamB;

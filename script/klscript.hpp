@@ -1,7 +1,7 @@
 /***********************************************************************
  *
- * {description}
- * Copyright (C) {year}  {fullname}
+ * Lightweight Script Engine interpretation for KLLibs
+ * Copyright (C) 2015  Łukasz "Kuszki" Dróżdż
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,16 +22,16 @@
 #define KLSCRIPT_HPP
 
 #ifdef QT_VERSION
-	#include "kllibs.hpp"
+	#include "../kllibs.hpp"
 #else
 	#define EXPORT
 #endif
 
-#include "containers/klstring.hpp"
+#include "../containers/klstring.hpp"
 
-#include "script/klvariables.hpp"
-#include "script/klbindings.hpp"
-#include "script/klparser.hpp"
+#include "klvariables.hpp"
+#include "klbindings.hpp"
+#include "klparser.hpp"
 
 #include <ctype.h>
 
@@ -73,6 +73,7 @@ class EXPORT KLScript
 
 		SET,		//!< Przypisanie do zmiennej: `set ZM wyrażenie`.
 		CALL,	//!< Wywołanie zbindowanej funkcji: `call FN paramA, paramB, ...`.
+		EXP,		//!< Eksportuje zmienną: `export zmA, zmB, ...`.
 
 		T_IF,	//!< Konstrukcja warunkowa: `if wyrażenie`.
 		T_ELSE,	//!< Konstrukcja warunkowa: `else`.
@@ -129,13 +130,15 @@ class EXPORT KLScript
 		KLString GetParam(const KLString& Code);
 
 		/*! \brief		Pobranie wartości liczbowej.
-		 *  \param [in]	Code Przetwarzany kod.
+		 *  \param [in]	Code		Przetwarzany kod.
+		 *  \param [in]	Scoope	Zakres zmiennych.
 		 *  \return		Wartośc wyrażenia.
 		 *
 		 * Oblicza wartość kolejnego napotkanego wyrażenia matematycznego.
 		 *
 		 */
-		bool GetValue(const KLString& Code);
+		bool GetValue(const KLString& Code,
+				    KLVariables& Scoope);
 
 		ERROR LastError;	//!< Wyliczenie ostatniego błędu.
 

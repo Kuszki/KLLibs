@@ -1,7 +1,7 @@
 /***********************************************************************
  *
- * {description}
- * Copyright (C) {year}  {fullname}
+ * Lightweight Script Engine interpretation for KLLibs
+ * Copyright (C) 2015  Łukasz "Kuszki" Dróżdż
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,10 +20,10 @@
 
 #include "klscript.hpp"
 
-#include <QDebug>
-
 KLScript::KLScript(void)
 {
+	setlocale(LC_NUMERIC, "POSIX");
+
 	Variables.Add("return");
 }
 
@@ -32,6 +32,7 @@ KLScript::OPERATION KLScript::GetToken(const KLString& Code)
 	while (isspace(Code[Process])) Process++;
 
 	if (!Code[Process]) return CODE_END;
+	else if (Code[Process] == '#') return COMMENT;
 
 	int Start = Process;
 
@@ -45,6 +46,7 @@ KLScript::OPERATION KLScript::GetToken(const KLString& Code)
 	else if (Token == "var") return VAR;
 	else if (Token == "set") return SET;
 	else if (Token == "call") return CALL;
+	else if (Token == "export") return EXP;
 	else if (Token == "if") return T_IF;
 	else if (Token == "else") return T_ELSE;
 	else if (Token == "fi") return T_ENDIF;
@@ -71,7 +73,7 @@ KLString KLScript::GetParam(const KLString& Code)
 	return Code.Part(Start, Process++);
 }
 
-bool KLScript::GetValue(const KLString& Code)
+bool KLScript::GetValue(const KLString& Code, KLVariables& Scoope)
 {
 	while (isspace(Code[Process])) Process++;
 
@@ -83,7 +85,16 @@ bool KLScript::GetValue(const KLString& Code)
 
 	KLString Equation = Code.Part(Start, Process++);
 
-	for (auto& Var: Variables) Equation.Replace(Var.ID, Var.Value.ToString(), true);
+	for (auto& Var: Scoope) Equation.Replace(Var.ID, Var.Value.ToString(), true);
+
+	KLVariables* Upper = Scoope.Parent;
+
+	while (Upper)
+	{
+		for (auto& Var: *Upper) Equation.Replace(Var.ID, Var.Value.ToString(), true);
+
+		Upper = Upper->Parent;
+	}
 
 	if (!Parser.Evaluate(Equation)) LastError = WRONG_EVALUATION;
 
@@ -138,7 +149,7 @@ bool KLScript::Evaluate(const KLString& Code)
 				KLString Var = GetParam(Code);
 
 				if (!LocalVars.Exists(Var)) LastError = UNDEFINED_VARIABLE;
-				else if (GetValue(Code)) LocalVars[Var] = Parser.GetValue();
+				else if (GetValue(Code, LocalVars)) LocalVars[Var] = Parser.GetValue();
 			}
 			break;
 			case CALL:
@@ -154,7 +165,7 @@ bool KLScript::Evaluate(const KLString& Code)
 
 					while (Code[Process - 1] != ';' && LastError == NO_ERROR)
 					{
-						if (GetValue(Code))
+						if (GetValue(Code, LocalVars))
 						{
 							KLString ID(Number++);
 
@@ -170,12 +181,35 @@ bool KLScript::Evaluate(const KLString& Code)
 				}
 			}
 			break;
+			case EXP:
+			{
+				unsigned Count = 0;
+
+				while (Code[Process - 1] != ';' && LastError == NO_ERROR)
+				{
+					if (KLString Name = GetParam(Code))
+					{
+						if (LocalVars.Exists(Name))
+						{
+							Variables.Add(Name, LocalVars[Name]);
+
+							LocalVars.Delete(Name);
+						}
+						else Variables.Add(Name);
+
+						Count++;
+					}
+				}
+
+				if (!Count) LastError = MISSING_PARAMETERS;
+			}
+			break;
 			case T_IF:
 			{
 				int LastProcess = Process;
 				int Counter = 1;
 
-				int Then = 0, Else = 0, Endif = 0;
+				int Else = 0, Endif = 0;
 
 				do
 				{
@@ -203,18 +237,14 @@ bool KLScript::Evaluate(const KLString& Code)
 					Endif = Process;
 					Process = LastProcess;
 
-					if (GetValue(Code))
+					if (GetValue(Code, LocalVars))
 					{
 						bool Boolean = Parser.GetValue();
-
-						Then = Process;
 
 						if (Else)
 						{
 							if (Boolean)
 							{
-								Process = Then;
-
 								Jumps.Insert({Else, Endif});
 							}
 							else
@@ -224,11 +254,7 @@ bool KLScript::Evaluate(const KLString& Code)
 						}
 						else
 						{
-							if (Boolean)
-							{
-								Process = Then;
-							}
-							else
+							if (!Boolean)
 							{
 								Process = Endif;
 							}
@@ -267,7 +293,7 @@ bool KLScript::Evaluate(const KLString& Code)
 					Done = Process;
 					Process = LastProcess;
 
-					if (GetValue(Code))
+					if (GetValue(Code, LocalVars))
 					{
 						bool Boolean = Parser.GetValue();
 

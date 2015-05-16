@@ -21,7 +21,7 @@
 #ifndef KLMAP_HPP
 #define KLMAP_HPP
 
-#include "containers/kllist.hpp"
+#include "kllist.hpp"
 
 /*! \file		klmap.hpp
  *  \brief	Deklaracje dla klasy KLMap i jej składników.

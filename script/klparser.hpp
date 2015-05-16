@@ -22,16 +22,17 @@
 #define KLPARSER_HPP
 
 #ifdef QT_VERSION
-	#include "kllibs.hpp"
+	#include "../kllibs.hpp"
 #else
 	#define EXPORT
 #endif
 
-#include "containers/klstring.hpp"
-#include "containers/kllist.hpp"
+#include "../containers/klstring.hpp"
+#include "../containers/kllist.hpp"
 
 #include <ctype.h>
 #include <math.h>
+#include <locale.h>
 
 /*! \file		klparser.hpp
  *  \brief	Deklaracje dla klasy KLParser i jej składników.
@@ -70,7 +71,9 @@ class EXPORT KLParser
 		NOT_ENOUGH_PARAMETERS,	//!< Napotkano zbyt mało parametrów.
 		TOO_MANY_PARAMETERS,	//!< Napotkano zbyt wiele parametrów.
 
-		BRACKETS_NOT_EQUAL		//!< Niepoprawna ilość nawiasów.
+		BRACKETS_NOT_EQUAL,		//!< Niepoprawna ilość nawiasów.
+
+		DIVISION_BY_ZERO		//!< Dzielenie przez zero.
 	};
 
 	/*! \brief		Klasa bazowa dla tokenu.

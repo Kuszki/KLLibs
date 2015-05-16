@@ -225,9 +225,10 @@ int KLString::Replace(const KLString& Old, const KLString& New, bool All)
 
 		delete [] Data;
 
-		Data = Buffer;
-
 		Capacity -= Old.Capacity - New.Capacity;
+
+		Data = Buffer;
+		Data[Capacity] = 0;
 
 		Counter++;
 

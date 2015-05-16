@@ -7,14 +7,13 @@
 QT		-=	gui
 
 TARGET	=	KLLibs
-TEMPLATE	=	app
+TEMPLATE	=	lib
 
 CONFIG	+=	c++11
 
 DEFINES	+=	KLLIBS_LIBRARY
 
-SOURCES	+=	main.cpp \
-			script/klscript.cpp \
+SOURCES	+=	script/klscript.cpp \
 			script/klvariables.cpp \
 			script/klbindings.cpp \
 			containers/klmap.cpp \
@@ -23,7 +22,7 @@ SOURCES	+=	main.cpp \
 			containers/kltree.cpp \
 			script/klparser.cpp
 
-HEADERS	+=	kllibs.hpp \
+HEADERS	+=	KLLibs.hpp \
 			script/klscript.hpp \
 			script/klvariables.hpp \
 			script/klbindings.hpp \
@@ -32,6 +31,8 @@ HEADERS	+=	kllibs.hpp \
 			containers/klstring.hpp \
 			containers/kltree.hpp \
 			script/klparser.hpp
+
+QMAKE_CXXFLAGS	+=	-s -fomit-frame-pointer -march=native
 
 unix
 {

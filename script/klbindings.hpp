@@ -21,6 +21,17 @@
 #ifndef KLBINDINGS_HPP
 #define KLBINDINGS_HPP
 
+#ifdef QT_VERSION
+	#include "../kllibs.hpp"
+#else
+	#define EXPORT
+#endif
+
+#include "../containers/klmap.hpp"
+#include "../containers/klstring.hpp"
+
+#include "klvariables.hpp"
+
 /*! \file		klbindings.hpp
  *  \brief	Deklaracje dla klasy KLBindings i jej składników.
  *
@@ -30,17 +41,6 @@
  *  \brief	Implementacja klasy KLBindings i jej składników.
  *
  */
-
-#ifdef QT_VERSION
-	#include "kllibs.hpp"
-#else
-	#define EXPORT
-#endif
-
-#include "containers/klmap.hpp"
-#include "containers/klstring.hpp"
-
-#include "script/klvariables.hpp"
 
 /*! \brief	System bindowania funkcji dla skryptu.
  *

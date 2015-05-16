@@ -53,4 +53,14 @@
 	#define EXPORT Q_DECL_IMPORT
 #endif
 
+#include "containers/kllist.hpp"
+#include "containers/klmap.hpp"
+#include "containers/klstring.hpp"
+#include "containers/kltree.hpp"
+
+#include "script/klbindings.hpp"
+#include "script/klparser.hpp"
+#include "script/klscript.hpp"
+#include "script/klvariables.hpp"
+
 #endif // KLLIBS_GLOBAL_HPP

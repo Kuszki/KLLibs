@@ -1,7 +1,7 @@
 /***********************************************************************
  *
- * {description}
- * Copyright (C) {year}  {fullname}
+ * Variables management system interpretation for KLLibs
+ * Copyright (C) 2015  Łukasz "Kuszki" Dróżdż
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ KLVariables::KLVariable::KLVariable(const KLVariable& Object)
 : Pointer(Object.Pointer), Variable(Object.Variable), Type(Object.Type) {}
 
 KLVariables::KLVariable::KLVariable(TYPE VarType, void* Bind)
-: Pointer(Bind), Type(VarType){}
+: Pointer(Bind), Variable(0.0), Type(VarType) {}
 
 KLVariables::KLVariable::KLVariable(bool Boolean)
 : KLVariable(BOOLEAN)
@@ -193,3 +193,7 @@ KLMap<KLVariables::KLVariable, KLString>::KLMapConstIterator KLVariables::end(vo
 {
 	return Variables.end();
 }
+
+template KLVariables::KLVariable& KLVariables::KLVariable::operator= (const double&);
+template KLVariables::KLVariable& KLVariables::KLVariable::operator= (const int&);
+template KLVariables::KLVariable& KLVariables::KLVariable::operator= (const bool&);

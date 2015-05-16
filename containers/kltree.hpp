@@ -39,7 +39,6 @@
  *
  */
 
-
 /*! \brief	Lekka interpretacja drzewa.
  *  \tparam	Data Typ przechowywanych danych.
  *
