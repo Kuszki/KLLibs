@@ -20,6 +20,22 @@
 
 #include "klbindings.hpp"
 
+KLBindings::KLBinding::KLBinding(const KLBinding& Binding)
+: Pointer(Binding.Pointer) {}
+
+KLBindings::KLBinding::KLBinding(KLSENTRY Entry)
+: Pointer(Entry) {}
+
+void KLBindings::KLBinding::Update(KLSENTRY Entry)
+{
+	Pointer = Entry;
+}
+
+double KLBindings::KLBinding::operator() (KLVariables& Variables)
+{
+	return Pointer(Variables);
+}
+
 bool KLBindings::Add(const KLString& Name, KLSENTRY Entry)
 {
 	if (!Entry) return false;
@@ -32,25 +48,42 @@ bool KLBindings::Delete(const KLString& Name)
 	return Bindings.Delete(Name) != -1;
 }
 
-bool KLBindings::Call(const KLString& Name, KLVariables& Scoope)
-{
-	if (!Bindings.Exists(Name)) return false;
-
-	Bindings[Name](Scoope);
-
-	return true;
-}
-
-bool KLBindings::Update(const KLString& Name, KLSENTRY Entry)
-{
-	if (!Bindings.Exists(Name)) return false;
-
-	Bindings[Name] = Entry;
-
-	return true;
-}
-
 bool KLBindings::Exists(const KLString& Name) const
 {
 	return Bindings.Exists(Name);
+}
+
+int KLBindings::Size(void) const
+{
+	return Bindings.Size();
+}
+
+KLBindings::KLBinding& KLBindings::operator[] (const KLString& Name)
+{
+	return Bindings[Name];
+}
+
+const KLBindings::KLBinding& KLBindings::operator[] (const KLString& Name) const
+{
+	return Bindings[Name];
+}
+
+KLMap<KLBindings::KLBinding, KLString>::KLMapVarIterator KLBindings::begin(void)
+{
+	return Bindings.begin();
+}
+
+KLMap<KLBindings::KLBinding, KLString>::KLMapVarIterator KLBindings::end(void)
+{
+	return Bindings.end();
+}
+
+KLMap<KLBindings::KLBinding, KLString>::KLMapConstIterator KLBindings::begin(void) const
+{
+	return Bindings.begin();
+}
+
+KLMap<KLBindings::KLBinding, KLString>::KLMapConstIterator KLBindings::end(void) const
+{
+	return Bindings.end();
 }

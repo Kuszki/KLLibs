@@ -50,11 +50,55 @@
 class KLBindings
 {
 
+	protected: using KLSENTRY = double (*)(KLVariables&);	//!< Prototyp funkcji skryptowej.
+
+	public: class KLBinding
+	{
+
+		protected:
+
+			KLSENTRY Pointer;	//!< Adres zbindowanej funkcji.
+
+		public:
+
+			/*! \brief		Konstruktor kopiujący.
+			 *  \param [in]	Binding Obiekt do skopiowania.
+			 *
+			 * Tworzy obiekt na bazie istniejącego.
+			 *
+			 */
+			KLBinding(const KLBinding& Binding);
+
+			/*! \brief		Operator konwersji z `KLSENTRY`.
+			 *  \param [in]	Entry Adres funkcji do przypisania.
+			 *
+			 * Przypisuje podany adres do funkcji.
+			 *
+			 */
+			KLBinding(KLSENTRY Entry);
+
+			/*! \brief		Aktualizacja przypisania.
+			 *  \param [in]	Entry Adres funkcji do przypisania.
+			 *
+			 * Przypisuje nowy adres do funkcji.
+			 *
+			 */
+			void Update(KLSENTRY Entry);
+
+			/*! \brief		Wywołanie funkcji.
+			 *  \param [in]	Variables System zmiennych.
+			 *  \return		Zwrócona wartość.
+			 *
+			 * Wywołuje funkcję z podanymi parametrami.
+			 *
+			 */
+			double operator() (KLVariables& Variables);
+
+	};
+
 	protected:
 
-		using KLSENTRY = void (*)(KLVariables&);	//!< Prototyp funkcji skryptowej.
-
-		KLMap<KLSENTRY, KLString> Bindings;		//!< Kontener na przypisania.
+		KLMap<KLBinding, KLString> Bindings;	//!< Kontener na przypisania.
 
 	public:
 
@@ -78,28 +122,6 @@ class KLBindings
 		 */
 		bool Delete(const KLString& Name);
 
-		/*! \brief		Aktualizacja przypisania.
-		 *  \param [in]	Name		Nazwa przypisania.
-		 *  \param [in]	Entry	Adres funkcji do przypisania.
-		 *  \return		Powodzenie operacji.
-		 *
-		 * Przypisuje nowy adres do podanej funkcji.
-		 *
-		 */
-		bool Update(const KLString& Name,
-				  KLSENTRY Entry);
-
-		/*! \brief		Wywołanie funkcji.
-		 *  \param [in]	Name		Nazwa przypisania.
-		 *  \param [in]	Scoope	System zmiennych.
-		 *  \return		Powodzenie operacji.
-		 *
-		 * Wywołuje funkcje o podanej nazwie.
-		 *
-		 */
-		bool Call(const KLString& Name,
-				KLVariables& Scoope);
-
 		/*! \brief		Test obecności przypisania.
 		 *  \param [in]	Name Nazwa przypisania.
 		 *  \return		Obecność przypisania w systemie.
@@ -108,6 +130,40 @@ class KLBindings
 		 *
 		 */
 		bool Exists(const KLString& Name) const;
+
+		/*! \brief		Pobranie ilości przypisań.
+		 *  \return		Ilośc przypisań.
+		 *
+		 * Sprawdza ile przypisań istnieje w systemie.
+		 *
+		 */
+		int Size(void) const;
+
+		/*! \brief		Operator wyboru.
+		 *  \param [in]	Name Nazwa przypisania.
+		 *  \return		Referencja do obiektu przypisania.
+		 *  \warning		Gdy podane przypisanie nie istnieje zostają zastosowane reguły `KLMap::operator[]`.
+		 *
+		 * Wybiera z systemu przypisanie o podanej nazwie.
+		 *
+		 */
+		KLBinding& operator[] (const KLString& Name);
+
+		/*! \brief		Operator wyboru.
+		 *  \param [in]	Name Nazwa przypisania.
+		 *  \return		Stała referencja do obiektu przypisania.
+		 *  \warning		Gdy podane przypisanie nie istnieje zostają zastosowane reguły `KLMap::operator[]`.
+		 *
+		 * Wybiera z systemu przypisanie o podanej nazwie.
+		 *
+		 */
+		const KLBinding& operator[] (const KLString& Name) const;
+
+		KLMap<KLBinding, KLString>::KLMapVarIterator begin(void);
+		KLMap<KLBinding, KLString>::KLMapVarIterator end(void);
+
+		KLMap<KLBinding, KLString>::KLMapConstIterator begin(void) const;
+		KLMap<KLBinding, KLString>::KLMapConstIterator end(void) const;
 
 };
 
