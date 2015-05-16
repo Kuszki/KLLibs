@@ -1,4 +1,4 @@
-# KLLibs {#mainpage}
+# KLLibs
 Lekki zestaw bibliotek napisany w C++ przeznaczony do współpracy z kontrolerem AVR lub innym dowolnym procesorem.
 
 Biblioteki używają minimalnej ilości wbudowanych funkcji C/C++ i są zaimplementowane z użyciem mechanizmów dostarczanych przez C++11.
@@ -95,28 +95,46 @@ Możliwości:
 Przykład:
 
 ``` bash
-var Zmienna;                                      # utworzenie zmiennej
-set Zmienna sin( (2+2)*3 + 10 );                  # przypisanie wartości
 
-if Zmienna > 100 || Zmienna < 50;                 # instrukcja if
+     # utworzenie zmiennej
+     var Zmienna;
 
-     call Funkcja sin(Zmienna), 30, Zmienna*2;    # wywołanie funkcji
-     set Zmienna return;                          # przypisanie wyniku funkcji do zmiennej
+     # przypisanie wartości
+     set Zmienna sin( (2+2)*3 + 10 );
 
-else;                                             # instrukcja else
-     var i;                                       # utworzenie zmiennej
+     # instrukcja if
+     if Zmienna 100 || Zmienna < 50;
 
-     while i < 10;                                # instrukcja while
-          call Procedura Zmienna % i, Zmienna;    # wywołanie funkcji
-          set i i+1;                              # przypisanie
+          # wywołanie funkcji
+          call Funkcja sin(Zmienna), 30, Zmienna*2;
 
-          if not return;
-               exit;                              # przerwanie skryptu
-          fi;
+          # przypisanie wyniku funkcji do zmiennej
+          set Zmienna return;
 
-     done;                                        # zakończenie while
+     # instrukcja else
+     else;
 
-fi;                                               # zakończenie if
+          var i;
+
+          # instrukcja while
+          while i < 10;
+
+               call Procedura Zmienna % i, Zmienna;
+               set i i+1;
+
+               if not return;
+
+                    # przerwanie skryptu
+                    exit;
+
+               fi;
+
+          # zakończenie while
+          done;
+
+     # zakończenie if
+     fi;
+
 ```
 
 ### KLBindings
