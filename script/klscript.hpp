@@ -31,78 +31,147 @@
 
 #include "script/klvariables.hpp"
 #include "script/klbindings.hpp"
+#include "script/klparser.hpp"
 
+#include <ctype.h>
+
+/*! \file		klscript.hpp
+ *  \brief	Deklaracje dla klasy KLScript i jej składników.
+ *
+ */
+
+/*! \file		klscript.cpp
+ *  \brief	Implementacja klasy KLScript i jej składników.
+ *
+ */
+
+/*! \brief	Lekka interpretacja języka skryptowego.
+ *  \warning	Nie zawsze sprawdzanie poprawności zapisu i składni odbywa się dokładnie tak, jak powinno. W przypadku złamania reguł składni może okazać się, że wychwycony zostanie inny błąd, lub z jakiś przyczyn parser uzna wyrażenie za poprawne. Należy dbać zatem by wyrażenia były poprawne.
+ *
+ * Prosta i lekka interpretacja języka skryptowego podobnego częściowo do basha. Do przetwarzania wyrażeń używa parsera `KLParser`, obsługuje bindowania zmiennych `KLVariables`, bindowanie funkcji `KLBindings`, tworzenie zmiennych i strukturę `if else`.
+ *
+ * Utworzone zmienne są niszczone po zakończeniu skryptu. Do funkcji przekazywane są zmienne ze stosu w osobnym zakresie, wraz z dołączeniem zasięgu całego skryptu.
+ *
+ * Po każdym wyrażeniu (instrukcji) musi zostać umieszczony terminator `;`. Dotyczy to także konstrukcji `if`, `else`, `endif`, `while`, `done` itd. Taka restrykcja wpraszcza parser do minimalnego stopnia skomplikowania.
+ *
+ */
 class EXPORT KLScript
 {
 
-	protected: enum KLScrpitOperation
+	/*! \brief		Wyliczenie operacji.
+	 *
+	 * Umożliwia sprawdzenie jaką operację należy przetworzyć.
+	 *
+	 */
+	protected: enum OPERATION
 	{
-		DEFAULT,
+		UNKNOWN,	//!< Nieznana operacja.
 
-		ASSIGMENT,
-		CALLING,
+		COMMENT,	//!< Komentarz: `// tekst`.
 
-		IF_STATEMENT,
-		ELSE_STATEMENT,
-		ELSEIF_STATEMENT,
-		ENDIF_STATEMENT
+		VAR,		//!< Utworzenie zmiennej: `var zmA, zmB, ...`.
+
+		SET,		//!< Przypisanie do zmiennej: `set ZM wyrażenie`.
+		CALL,	//!< Wywołanie zbindowanej funkcji: `call FN paramA, paramB, ...`.
+
+		T_IF,	//!< Konstrukcja warunkowa: `if wyrażenie`.
+		T_ELSE,	//!< Konstrukcja warunkowa: `else`.
+		T_ENDIF,	//!< Konstrukcja warunkowa: `fi`.
+
+		T_WHILE,	//!< Konstrukcja warunkowa: `while`.
+		T_DONE,	//!< Konstrukcja warunkowa: `done`.
+
+		T_EXIT,	//!< Zakończenie skryptu: `exit`.
+
+		CODE_END	//!< Koniec skryptu: znak `'\0'`.
 	};
 
-	public: enum KLScrpitErrorCode
+	/*! \brief		Wyliczenie błędu.
+	 *
+	 * Umożliwia sprawdzenie jaki błąd przerwał działanie skryptu.
+	 *
+	 */
+	public: enum ERROR
 	{
-		NO_ERROR,
+		NO_ERROR,			//!< Brak błędu.
 
-		UNDEFINED_VARIABLE,
-		UNDEFINED_FUNCTION,
+		UNDEFINED_VARIABLE,	//!< Niezdefiniowana zmienna.
+		UNDEFINED_FUNCTION,	//!< Niezdefiniowana funkcja.
 
-		UNKNOWN_EXPRESSION,
+		MISSING_PARAMETERS,	//!< Brakujące parametry.
 
-		QUOTEMARK_EXPECTED,
-		BRACKET_EXPECTED,
+		EXPECTED_ENDIF_TOK,	//!< Brak oczekiwanego `endif`.
+		EXPECTED_DONE_TOK,	//!< Brak oczekiwanego `done`.
 
-		UNEXPECTED_SYMBOL
-	};
+		UNKNOWN_EXPRESSION,	//!< Nieznane wyrażenie.
 
-	protected: struct KLScrpitState
-	{
-		KLScrpitOperation Expected;
-
-		unsigned LineStart;
-		unsigned LineStop;
-
-		unsigned ExprStart;
-		unsigned ExprStop;
-	};
-
-	public: struct KLScrpitError
-	{
-		KLScrpitErrorCode Code;
-
-		unsigned Row;
-		unsigned Col;
+		WRONG_EVALUATION	//!< Błąd w wyrażeniu matematycznym.
 	};
 
 	protected:
 
-		KLScrpitError LastError;
+		/*! \brief		Pobranie numeru operacji.
+		 *  \param [in]	Code Przetwarzany kod.
+		 *  \return		Numer wyrażenia.
+		 *
+		 * Pobiera numer wyrażenia do przetworzenia.
+		 *
+		 */
+		OPERATION GetToken(const KLString& Code);
 
-		KLScrpitState Status;
+		/*! \brief		Pobranie parametru operacji.
+		 *  \param [in]	Code Przetwarzany kod.
+		 *  \return		Parametr wyrażenia.
+		 *
+		 * Pobiera parametr przetwarzanego wyrażenia.
+		 *
+		 */
+		KLString GetParam(const KLString& Code);
 
-		KLScrpitOperation GetOperation(const KLString& Line) const;
+		/*! \brief		Pobranie wartości liczbowej.
+		 *  \param [in]	Code Przetwarzany kod.
+		 *  \return		Wartośc wyrażenia.
+		 *
+		 * Oblicza wartość kolejnego napotkanego wyrażenia matematycznego.
+		 *
+		 */
+		bool GetValue(const KLString& Code);
 
-		KLString GetLine(KLString& Code);
+		ERROR LastError;	//!< Wyliczenie ostatniego błędu.
 
-		KLString GetExpr(KLString& Code);
+		int Process;		//!< Aktualny krok przetwarzania.
 
 	public:
 
-		KLVariables	Variables;
+		KLVariables	Variables;	//!< Zmienne i ich bindy.
 
-		KLBindings	Bindings;
+		KLBindings	Bindings;		//!< Bindy lokalnych funkcji.
 
-		bool Run(KLString Code);
+		KLParser		Parser;		//!< Parser matematyczny.
 
-		KLScrpitError GetLastError(void) const;
+		/*! \brief		Domyślny konstruktor.
+		 *
+		 * Inicjuje obiekt i tworzy specjalną zmienną `return` do przechowywania wyników funkcji.
+		 *
+		 */
+		KLScript(void);
+
+		/*! \brief		Wykonanie kodu.
+		 *  \param [in]	Code do wykonania.
+		 *  \return		Powodzenie operacji.
+		 *
+		 * Przetwarza wybrany kod i zwraca powodzenie operacji.
+		 *
+		 */
+		bool Evaluate(const KLString& Code);
+
+		/*! \brief		Pobranie ostatniego błędu.
+		 *  \return		Ostatni błąd.
+		 *
+		 * Zwraca ostatni napotkany błąd.
+		 *
+		 */
+		ERROR GetError(void) const;
 
 };
 
