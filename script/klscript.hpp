@@ -22,10 +22,19 @@
 #define KLSCRIPT_HPP
 
 #ifdef QT_VERSION
-	#include "../kllibs.hpp"
+	#include "../KLLibs.hpp"
 #else
 	#define EXPORT
 #endif
+
+#define IF_Notterminated	if(Code[Process] != ';')
+#define IF_Terminator	if(Code[Process] == ';')
+#define IF_Separator	if(Code[Process] == ',')
+
+#define IS_NoError		(LastError == NO_ERROR)
+#define IS_NextParam	((Code[Process] == ',' && LastError == NO_ERROR) ? Process++ : false)
+
+#define ReturnError(error) { LastError = error; return false; }
 
 #include "../containers/klstring.hpp"
 
@@ -66,13 +75,12 @@ class EXPORT KLScript
 	protected: enum OPERATION
 	{
 		UNKNOWN,	//!< Nieznana operacja.
-
-		COMMENT,	//!< Komentarz: `# tekst`.
-
-		VAR,		//!< Utworzenie zmiennej: `var zmA, zmB, ...`.
+		EMPTY,	//!< Pusta operacja.
 
 		SET,		//!< Przypisanie do zmiennej: `set ZM wyrażenie`.
 		CALL,	//!< Wywołanie zbindowanej funkcji: `call FN paramA, paramB, ...`.
+
+		VAR,		//!< Utworzenie zmiennej: `var zmA, zmB, ...`.
 		EXP,		//!< Eksportuje zmienną: `export zmA, zmB, ...`.
 
 		T_IF,	//!< Konstrukcja warunkowa: `if wyrażenie`.
@@ -83,8 +91,6 @@ class EXPORT KLScript
 		T_DONE,	//!< Konstrukcja warunkowa: `done`.
 
 		T_EXIT,	//!< Zakończenie skryptu: `exit`.
-
-		CODE_END	//!< Koniec skryptu: znak `'\0'`.
 	};
 
 	/*! \brief		Wyliczenie błędu.
@@ -94,51 +100,73 @@ class EXPORT KLScript
 	 */
 	public: enum ERROR
 	{
-		NO_ERROR,			//!< Brak błędu.
+		NO_ERROR,				//!< Brak błędu.
 
-		UNDEFINED_VARIABLE,	//!< Niezdefiniowana zmienna.
-		UNDEFINED_FUNCTION,	//!< Niezdefiniowana funkcja.
+		UNDEFINED_VARIABLE,		//!< Niezdefiniowana zmienna.
+		UNDEFINED_FUNCTION,		//!< Niezdefiniowana funkcja.
 
-		MISSING_PARAMETERS,	//!< Brakujące parametry.
+		EXPECTED_ENDIF_TOK,		//!< Brak oczekiwanego `endif`.
+		EXPECTED_DONE_TOK,		//!< Brak oczekiwanego `done`.
+		EXPECTED_TERMINATOR,	//!< Oczekiwano terminatora `;`.
 
-		EXPECTED_ENDIF_TOK,	//!< Brak oczekiwanego `endif`.
-		EXPECTED_DONE_TOK,	//!< Brak oczekiwanego `done`.
+		EMPTY_EXPRESSION,		//!< Puste wyrażenie; np `;;`.
+		UNKNOWN_EXPRESSION,		//!< Nieznane wyrażenie.
 
-		UNKNOWN_EXPRESSION,	//!< Nieznane wyrażenie.
-
-		WRONG_EVALUATION	//!< Błąd w wyrażeniu matematycznym.
+		WRONG_SCRIPTCODE,		//!< Niepoprawny lub pusty skrypt.
+		WRONG_PARAMETERS,		//!< Brakujące lub błędne parametry.
+		WRONG_EVALUATION		//!< Błąd w wyrażeniu matematycznym.
 	};
 
 	protected:
 
 		/*! \brief		Pobranie numeru operacji.
-		 *  \param [in]	Code Przetwarzany kod.
+		 *  \param [in]	Script Przetwarzany kod.
 		 *  \return		Numer wyrażenia.
 		 *
 		 * Pobiera numer wyrażenia do przetworzenia.
 		 *
 		 */
-		OPERATION GetToken(const KLString& Code);
+		OPERATION GetToken(const KLString& Script);
 
 		/*! \brief		Pobranie parametru operacji.
-		 *  \param [in]	Code Przetwarzany kod.
+		 *  \param [in]	Script Przetwarzany kod.
 		 *  \return		Parametr wyrażenia.
 		 *
 		 * Pobiera parametr przetwarzanego wyrażenia.
 		 *
 		 */
-		KLString GetParam(const KLString& Code);
+		KLString GetParam(const KLString& Script);
+
+		/*! \brief		Pobranie nazwy obiektu.
+		 *  \param [in]	Script Przetwarzany kod.
+		 *  \return		Parametr wyrażenia.
+		 *
+		 * Pobiera nazwę zmiennej lub innego obiektu.
+		 *
+		 */
+		KLString GetName(const KLString& Script);
 
 		/*! \brief		Pobranie wartości liczbowej.
-		 *  \param [in]	Code		Przetwarzany kod.
+		 *  \param [in]	Script	Przetwarzany kod.
 		 *  \param [in]	Scoope	Zakres zmiennych.
 		 *  \return		Wartośc wyrażenia.
 		 *
 		 * Oblicza wartość kolejnego napotkanego wyrażenia matematycznego.
 		 *
 		 */
-		bool GetValue(const KLString& Code,
+		bool GetValue(const KLString& Script,
 				    KLVariables& Scoope);
+
+		/*! \brief		Pominięcie komentarza.
+		 *  \param [in]	Script Przetwarzany kod.
+		 *  \return		Bierzący punkt w skrypcie.
+		 *
+		 * Ignoruje treść komantarza aż do napotkania nowej linii.
+		 *
+		 */
+		int SkipComment(const KLString& Script);
+
+		KLString Code;		//!< Skrypt do przetworzenia.
 
 		ERROR LastError;	//!< Wyliczenie ostatniego błędu.
 
@@ -157,16 +185,24 @@ class EXPORT KLScript
 		 * Inicjuje obiekt i tworzy specjalną zmienną `return` do przechowywania wyników funkcji.
 		 *
 		 */
-		KLScript(void);
+		KLScript(const KLString& Script = KLString());
+
+		/*! \brief		Sprawdzenie skryptu.
+		 *  \param [in]	Script Skrypt do sprawdzenia.
+		 *  \return		Powodzenie operacji.
+		 *
+		 * Przetwarza wybrany kod i zwraca poprawność jego składni.
+		 *
+		 */
+		bool Validate(const KLString& Script);
 
 		/*! \brief		Wykonanie kodu.
-		 *  \param [in]	Code do wykonania.
 		 *  \return		Powodzenie operacji.
 		 *
 		 * Przetwarza wybrany kod i zwraca powodzenie operacji.
 		 *
 		 */
-		bool Evaluate(const KLString& Code);
+		bool Evaluate(void);
 
 		/*! \brief		Pobranie ostatniego błędu.
 		 *  \return		Ostatni błąd.
@@ -175,6 +211,16 @@ class EXPORT KLScript
 		 *
 		 */
 		ERROR GetError(void) const;
+
+		/*! \brief		Ustawienie skryptu.
+		 *  \param [in]	Script Skrypt do wykonania.
+		 *  \return		Powodzenie operacji.
+		 *  \see			Evaluate().
+		 *
+		 * Przetwarza wybrany kod i zwraca powodzenie operacji, gdy operacja się powiedzie to wybrany kod zostanie zapisany w pamięci.
+		 *
+		 */
+		bool SetCode(const KLString& Script);
 
 };
 

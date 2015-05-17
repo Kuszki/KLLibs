@@ -19,199 +19,196 @@
  **********************************************************************/
 
 #include "klscript.hpp"
+#include <QDebug>
 
-KLScript::KLScript(void)
+KLScript::KLScript(const KLString& Script)
+: Code(Script)
 {
 	setlocale(LC_NUMERIC, "POSIX");
 
 	Variables.Add("return");
+
+	//if (!Validate(Code)) Code.Clean();
 }
 
-KLScript::OPERATION KLScript::GetToken(const KLString& Code)
+KLScript::OPERATION KLScript::GetToken(const KLString& Script)
 {
-	while (isspace(Code[Process])) Process++;
+	KLString Token = GetName(Script);
 
-	if (!Code[Process]) return CODE_END;
-	else if (Code[Process] == '#') return COMMENT;
+	qDebug() << "EXPR:" << Token;
 
-	int Start = Process;
+	if (!Token)				return T_EXIT;
 
-	while (isalpha(Code[Process]) &&
-		  Code[Process] != '\0' &&
-		  Code[Process] != ';') Process++;
+	else if (Token == "set")		return SET;
+	else if (Token == "call")	return CALL;
+	else if (Token == "var")		return VAR;
+	else if (Token == "export")	return EXP;
+	else if (Token == "if")		return T_IF;
+	else if (Token == "else")	return T_ELSE;
+	else if (Token == "fi")		return T_ENDIF;
+	else if (Token == "while")	return T_WHILE;
+	else if (Token == "done")	return T_DONE;
+	else if (Token == "exit")	return T_EXIT;
 
-	KLString Token = Code.Part(Start, Process++);
-
-	if (Token == "#") return COMMENT;
-	else if (Token == "var") return VAR;
-	else if (Token == "set") return SET;
-	else if (Token == "call") return CALL;
-	else if (Token == "export") return EXP;
-	else if (Token == "if") return T_IF;
-	else if (Token == "else") return T_ELSE;
-	else if (Token == "fi") return T_ENDIF;
-	else if (Token == "while") return T_WHILE;
-	else if (Token == "done") return T_DONE;
-	else if (Token == "exit") return T_EXIT;
-
-	LastError = UNKNOWN_EXPRESSION;
-
-	return UNKNOWN;
+	else						return UNKNOWN;
 }
 
-KLString KLScript::GetParam(const KLString& Code)
+KLString KLScript::GetParam(const KLString& Script)
 {
-	while (isspace(Code[Process])) Process++;
+	int Start = SkipComment(Script);
 
-	int Start = Process;
+	while (Script[Process] != ';' &&
+		  Script[Process] != '#' &&
+		  Script[Process] != ',' &&
+		  Script[Process] != '\0') Process++;
 
-	while (!isspace(Code[Process]) &&
-		  Code[Process] != '\0' &&
-		  Code[Process] != ';' &&
-		  Code[Process] != ',') Process++;
+	KLString Param = Script.Part(Start, Process);
 
-	return Code.Part(Start, Process++);
+	if (Script[Process] == '#') return Param + GetParam(Script);
+
+	while (isspace(Script[Process])) Process++;
+
+	return Param;
 }
 
-bool KLScript::GetValue(const KLString& Code, KLVariables& Scoope)
+KLString KLScript::GetName(const KLString& Script)
 {
-	while (isspace(Code[Process])) Process++;
+	int Start = SkipComment(Script);
 
-	int Start = Process;
+	while (isalpha(Script[Process])) Process++;
 
-	while (Code[Process] != '\0' &&
-		  Code[Process] != ';' &&
-		  Code[Process] != ',') Process++;
+	int Stop = Process;
 
-	KLString Equation = Code.Part(Start, Process++);
-
-	for (auto& Var: Scoope) Equation.Replace(Var.ID, Var.Value.ToString(), true);
-
-	KLVariables* Upper = Scoope.Parent;
-
-	while (Upper)
+	if (Script[Process] != ';' &&
+	    Script[Process] != ',')
 	{
-		for (auto& Var: *Upper) Equation.Replace(Var.ID, Var.Value.ToString(), true);
-
-		Upper = Upper->Parent;
+		while (isspace(Script[Process])) Process++;
 	}
+
+	return Script.Part(Start, Stop);
+}
+
+
+bool KLScript::GetValue(const KLString& Script, KLVariables& Scoope)
+{
+	KLString Equation = GetParam(Script);
+
+	for (KLVariables* Vars = &Scoope; Vars; Vars = Vars->Parent)
+		for (auto& Var: *Vars) Equation.Replace(Var.ID, Var.Value.ToString(), true);
 
 	if (!Parser.Evaluate(Equation)) LastError = WRONG_EVALUATION;
 
-	return LastError == NO_ERROR;
+	qDebug() << Equation;
+
+	return IS_NoError;
 }
 
-bool KLScript::Evaluate(const KLString& Code)
+int KLScript::SkipComment(const KLString& Script)
 {
-	KLVariables LocalVars(&Variables);
+	while (isspace(Script[Process])) Process++;
 
-	struct JUMP
+	if (Script[Process] == '#')
 	{
-		int When;
-		int Where;
-	};
+		while (Script[Process] && Script[Process] != '\n') Process++;
 
+		SkipComment(Script);
+	}
+
+	return Process;
+}
+
+bool KLScript::Evaluate(void)
+{
+	if (!Code) ReturnError(WRONG_SCRIPTCODE);
+
+	struct JUMP { int When; int Where; };
+
+	KLVariables LocalVars(&Variables);
 	KLList<JUMP> Jumps;
 
 	LastError = NO_ERROR;
 	Process = 0;
 
-	while (Process <= Code.Size() && LastError == NO_ERROR)
+	while (Process < Code.Size() && IS_NoError)
 	{
 		if (Jumps.Size()) if (Jumps[-1].When == Process) Process = Jumps.Pop().Where;
 
-		int Start = Process;
+		int Start = SkipComment(Code);
 
-		switch (GetToken(Code))
+		switch (OPERATION ID = GetToken(Code))
 		{
-			case COMMENT:
-				while (Code[Process] && Code[Process] != '\n') Process++;
-			break;
-			case VAR:
-			{
-				unsigned Count = 0;
-
-				while (Code[Process - 1] != ';' && LastError == NO_ERROR)
-				{
-					if (KLString Name = GetParam(Code))
-					{
-						LocalVars.Add(Name);
-
-						Count++;
-					}
-				}
-
-				if (!Count) LastError = MISSING_PARAMETERS;
-			}
-			break;
 			case SET:
 			{
-				KLString Var = GetParam(Code);
+				IF_Terminator ReturnError(WRONG_PARAMETERS);
 
-				if (!LocalVars.Exists(Var)) LastError = UNDEFINED_VARIABLE;
-				else if (GetValue(Code, LocalVars)) LocalVars[Var] = Parser.GetValue();
+				KLString Var = GetName(Code);
+
+				if (!LocalVars.Exists(Var))
+					LastError = UNDEFINED_VARIABLE;
+				else if (GetValue(Code, LocalVars))
+					LocalVars[Var] = Parser.GetValue();
 			}
 			break;
 			case CALL:
 			{
-				KLString Proc = GetParam(Code);
+				IF_Terminator ReturnError(WRONG_PARAMETERS);
 
-				if (!Bindings.Exists(Proc)) LastError = UNDEFINED_FUNCTION;
-				else
+				const KLString Proc = GetName(Code);
+
+				if (!Bindings.Exists(Proc)) ReturnError(UNDEFINED_FUNCTION);
+
+				KLVariables Params(&LocalVars);
+				int ParamID = 0;
+
+				do if (GetValue(Code, LocalVars))
 				{
-					KLVariables Params(&LocalVars);
+					KLString ID(ParamID++);
 
-					int Number = 0;
+					Params.Add(ID);
 
-					while (Code[Process - 1] != ';' && LastError == NO_ERROR)
-					{
-						if (GetValue(Code, LocalVars))
-						{
-							KLString ID(Number++);
-
-							Params.Add(ID);
-
-							Params[ID] = Parser.GetValue();
-						}
-
-						Process++;
-					}
-
-					if (LastError == NO_ERROR) Variables["return"] = Bindings[Proc](Params);
+					Params[ID] = Parser.GetValue();
 				}
+				while (IS_NextParam);
+
+				if (!IS_NoError) Variables["return"] = Bindings[Proc](Params);
 			}
 			break;
+			case VAR:
 			case EXP:
 			{
-				unsigned Count = 0;
+				IF_Terminator ReturnError(WRONG_PARAMETERS);
 
-				while (Code[Process - 1] != ';' && LastError == NO_ERROR)
+				do
 				{
-					if (KLString Name = GetParam(Code))
+					if (KLString Name = GetName(Code))
 					{
-						if (LocalVars.Exists(Name))
+						qDebug() << "ADD:" << Name;
+
+						if (ID == VAR) LocalVars.Add(Name);
+						else
 						{
-							Variables.Add(Name, LocalVars[Name]);
-
-							LocalVars.Delete(Name);
+							if (LocalVars.Exists(Name))
+								Variables.Add(Name, LocalVars[Name]);
+							else
+								Variables.Add(Name);
 						}
-						else Variables.Add(Name);
-
-						Count++;
 					}
+					else ReturnError(EMPTY_EXPRESSION);
 				}
-
-				if (!Count) LastError = MISSING_PARAMETERS;
+				while (IS_NextParam);
 			}
 			break;
 			case T_IF:
 			{
-				int LastProcess = Process;
+				IF_Terminator ReturnError(WRONG_PARAMETERS);
+
+				if (!GetValue(Code, LocalVars)) ReturnError(WRONG_EVALUATION);
+
 				int Counter = 1;
+				int Then = Process;
+				int Else = 0;
 
-				int Else = 0, Endif = 0;
-
-				do
+				while (Counter && Process != -1)
 				{
 					Process = Code.Find(';', Process) + 1;
 
@@ -229,48 +226,28 @@ bool KLScript::Evaluate(const KLString& Code)
 						default: break;
 					}
 				}
-				while (Counter && Process != -1);
 
-				if (Counter) LastError = EXPECTED_ENDIF_TOK;
-				else
+				if (Counter) ReturnError(EXPECTED_ENDIF_TOK);
+
+				if (Parser.GetValue())
 				{
-					Endif = Process;
-					Process = LastProcess;
+					if (Else) Jumps.Insert({Else, Process});
 
-					if (GetValue(Code, LocalVars))
-					{
-						bool Boolean = Parser.GetValue();
-
-						if (Else)
-						{
-							if (Boolean)
-							{
-								Jumps.Insert({Else, Endif});
-							}
-							else
-							{
-								Process = Else;
-							}
-						}
-						else
-						{
-							if (!Boolean)
-							{
-								Process = Endif;
-							}
-						}
-					}
+					Process = Then;
 				}
+				else if (Else) Process = Else;
 			}
 			break;
 			case T_WHILE:
 			{
-				int LastProcess = Process;
+				IF_Terminator ReturnError(WRONG_PARAMETERS);
+
+				if (!GetValue(Code, LocalVars)) ReturnError(WRONG_EVALUATION);
+
 				int Counter = 1;
+				int Then = Process;
 
-				int Done = 0;
-
-				do
+				while (Counter && Process != -1)
 				{
 					Process = Code.Find(';', Process) + 1;
 
@@ -285,44 +262,43 @@ bool KLScript::Evaluate(const KLString& Code)
 						default: break;
 					}
 				}
-				while (Counter && Process != -1);
 
-				if (Counter) LastError = EXPECTED_DONE_TOK;
-				else
+				if (Counter) ReturnError(EXPECTED_DONE_TOK);
+
+				if (Parser.GetValue())
 				{
-					Done = Process;
-					Process = LastProcess;
+					Jumps.Insert({Process, Start});
 
-					if (GetValue(Code, LocalVars))
-					{
-						bool Boolean = Parser.GetValue();
-
-						if (Boolean)
-						{
-							Jumps.Insert({Done, Start});
-						}
-						else
-						{
-							Process = Done;
-						}
-					}
+					Process = Then;
 				}
 			}
 			break;
-			case T_EXIT:
-			case CODE_END:
-				return true;
-			case UNKNOWN:
-				return false;
 
-			default: break;
+			case UNKNOWN: ReturnError(UNKNOWN_EXPRESSION);
+
+			case T_EXIT: return IS_NoError;
+
+			default: continue;
 		}
+
+		qDebug() << Code[Process];
+
+		if (Code[Process] == ';') Process++;
+		else ReturnError(EXPECTED_TERMINATOR);
+
 	}
 
-	return LastError == NO_ERROR;
+	return IS_NoError;
 }
 
 KLScript::ERROR KLScript::GetError(void) const
 {
 	return LastError;
+}
+
+bool KLScript::SetCode(const KLString& Script)
+{
+	Code = Script;
+
+	return true;
 }
