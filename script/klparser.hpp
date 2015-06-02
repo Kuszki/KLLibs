@@ -32,7 +32,6 @@
 
 #include <ctype.h>
 #include <math.h>
-#include <locale.h>
 
 /*! \file		klparser.hpp
  *  \brief	Deklaracje dla klasy KLParser i jej składników.

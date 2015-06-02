@@ -19,25 +19,22 @@
  **********************************************************************/
 
 #include "klscript.hpp"
-#include <QDebug>
 
 KLScript::KLScript(const KLString& Script)
 : Code(Script)
 {
-	setlocale(LC_NUMERIC, "POSIX");
-
 	Variables.Add("return");
 
-	//if (!Validate(Code)) Code.Clean();
+	if (Code) if (!Validate(Code)) Code.Clean();
 }
 
 KLScript::OPERATION KLScript::GetToken(const KLString& Script)
 {
 	KLString Token = GetName(Script);
 
-	qDebug() << "EXPR:" << Token;
+	// qDebug() << "EXPR:" << Token;
 
-	if (!Token)				return T_EXIT;
+	if (!Token)				return END;
 
 	else if (Token == "set")		return SET;
 	else if (Token == "call")	return CALL;
@@ -48,7 +45,7 @@ KLScript::OPERATION KLScript::GetToken(const KLString& Script)
 	else if (Token == "fi")		return T_ENDIF;
 	else if (Token == "while")	return T_WHILE;
 	else if (Token == "done")	return T_DONE;
-	else if (Token == "exit")	return T_EXIT;
+	else if (Token == "exit")	return EXIT;
 
 	else						return UNKNOWN;
 }
@@ -96,11 +93,7 @@ bool KLScript::GetValue(const KLString& Script, KLVariables& Scoope)
 	for (KLVariables* Vars = &Scoope; Vars; Vars = Vars->Parent)
 		for (auto& Var: *Vars) Equation.Replace(Var.ID, Var.Value.ToString(), true);
 
-	if (!Parser.Evaluate(Equation)) LastError = WRONG_EVALUATION;
-
-	qDebug() << Equation;
-
-	return IS_NoError;
+	return Parser.Evaluate(Equation);
 }
 
 int KLScript::SkipComment(const KLString& Script)
@@ -115,6 +108,123 @@ int KLScript::SkipComment(const KLString& Script)
 	}
 
 	return Process;
+}
+
+bool KLScript::Validate(const KLString& Script)
+{
+	KLVariables LocalVars;
+
+	LastError = NO_ERROR;
+	Process = 0;
+
+	while (Process < Script.Size() && IS_NoError)
+	{
+		switch (GetToken(Script))
+		{
+			case SET:
+			{
+				IF_Terminator ReturnError(WRONG_PARAMETERS);
+
+				KLString Var = GetName(Script);
+
+				if (!LocalVars.Exists(Var)) ReturnError(UNDEFINED_VARIABLE);
+				if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
+			}
+			break;
+			case CALL:
+			{
+				IF_Terminator ReturnError(WRONG_PARAMETERS);
+
+				GetName(Script);
+
+				do (GetValue(Script, LocalVars));
+				while (IS_NextParam);
+			}
+			break;
+			case VAR:
+			case EXP:
+			{
+				IF_Terminator ReturnError(WRONG_PARAMETERS);
+
+				do
+				{
+					if (KLString Name = GetName(Script))
+					{
+						LocalVars.Add(Name);
+					}
+					else ReturnError(EMPTY_EXPRESSION);
+				}
+				while (IS_NextParam);
+			}
+			break;
+			case T_IF:
+			{
+				IF_Terminator ReturnError(WRONG_PARAMETERS);
+
+				if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
+
+				int Counter = 1;
+
+				while (Counter && Process != -1)
+				{
+					Process = Script.Find(';', Process) + 1;
+
+					switch (GetToken(Script))
+					{
+						case T_IF:
+							Counter++;
+						break;
+						case T_ENDIF:
+							Counter--;
+						break;
+						default: break;
+					}
+				}
+
+				if (Counter) ReturnError(EXPECTED_ENDIF_TOK);
+			}
+			break;
+			case T_WHILE:
+			{
+				IF_Terminator ReturnError(WRONG_PARAMETERS);
+
+				if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
+
+				int Counter = 1;
+
+				while (Counter && Process != -1)
+				{
+					Process = Script.Find(';', Process) + 1;
+
+					switch (GetToken(Script))
+					{
+						case T_WHILE:
+							Counter++;
+						break;
+						case T_DONE:
+							Counter--;
+						break;
+						default: break;
+					}
+				}
+
+				if (Counter) ReturnError(EXPECTED_DONE_TOK);
+			}
+			break;
+
+			case UNKNOWN: ReturnError(UNKNOWN_EXPRESSION);
+
+			case END: return IS_NoError;
+
+			default: continue;
+		}
+
+		if (Script[Process] == ';') Process++;
+		else ReturnError(EXPECTED_TERMINATOR);
+
+	}
+
+	return IS_NoError;
 }
 
 bool KLScript::Evaluate(void)
@@ -182,8 +292,6 @@ bool KLScript::Evaluate(void)
 				{
 					if (KLString Name = GetName(Code))
 					{
-						qDebug() << "ADD:" << Name;
-
 						if (ID == VAR) LocalVars.Add(Name);
 						else
 						{
@@ -276,12 +384,14 @@ bool KLScript::Evaluate(void)
 
 			case UNKNOWN: ReturnError(UNKNOWN_EXPRESSION);
 
-			case T_EXIT: return IS_NoError;
+			case EXIT:
+			case END:
+				return IS_NoError;
 
 			default: continue;
 		}
 
-		qDebug() << Code[Process];
+		// qDebug() << Code[Process];
 
 		if (Code[Process] == ';') Process++;
 		else ReturnError(EXPECTED_TERMINATOR);
@@ -298,7 +408,8 @@ KLScript::ERROR KLScript::GetError(void) const
 
 bool KLScript::SetCode(const KLString& Script)
 {
-	Code = Script;
+	if (Validate(Script)) Code = Script;
+	else return false;
 
 	return true;
 }

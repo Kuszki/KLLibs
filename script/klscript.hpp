@@ -76,6 +76,7 @@ class EXPORT KLScript
 	{
 		UNKNOWN,	//!< Nieznana operacja.
 		EMPTY,	//!< Pusta operacja.
+		END,		//!< Naturalny koniec skryptu.
 
 		SET,		//!< Przypisanie do zmiennej: `set ZM wyrażenie`.
 		CALL,	//!< Wywołanie zbindowanej funkcji: `call FN paramA, paramB, ...`.
@@ -90,7 +91,7 @@ class EXPORT KLScript
 		T_WHILE,	//!< Konstrukcja warunkowa: `while`.
 		T_DONE,	//!< Konstrukcja warunkowa: `done`.
 
-		T_EXIT,	//!< Zakończenie skryptu: `exit`.
+		EXIT,	//!< Zakończenie skryptu: `exit`.
 	};
 
 	/*! \brief		Wyliczenie błędu.
