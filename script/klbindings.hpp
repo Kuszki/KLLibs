@@ -21,11 +21,7 @@
 #ifndef KLBINDINGS_HPP
 #define KLBINDINGS_HPP
 
-#ifdef QT_VERSION
-	#include "../KLLibs.hpp"
-#else
-	#define EXPORT
-#endif
+#include "../libbuild.hpp"
 
 #include "../containers/klmap.hpp"
 #include "../containers/klstring.hpp"
@@ -47,7 +43,7 @@
  * System zarządzania bindowaniem funkcji umożliwiający przypisywanie etykiety funkcją o podanym prototypie i wywoływanie ich w skrypcie.
  *
  */
-class KLBindings
+class EXPORT KLBindings
 {
 
 	protected: using KLSENTRY = double (*)(KLVariables&);	//!< Prototyp funkcji skryptowej.

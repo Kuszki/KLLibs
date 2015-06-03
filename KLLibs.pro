@@ -22,7 +22,7 @@ SOURCES	+=	script/klscript.cpp \
 			containers/kltree.cpp \
 			script/klparser.cpp
 
-HEADERS	+=	KLLibs.hpp \
+HEADERS	+=	KLLibs.hpp libbuild.hpp \
 			script/klscript.hpp \
 			script/klvariables.hpp \
 			script/klbindings.hpp \
@@ -30,7 +30,7 @@ HEADERS	+=	KLLibs.hpp \
 			containers/kllist.hpp \
 			containers/klstring.hpp \
 			containers/kltree.hpp \
-			script/klparser.hpp
+			script/klparser.hpp \
 
 QMAKE_CXXFLAGS	+=	-s -fomit-frame-pointer -march=native
 

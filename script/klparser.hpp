@@ -21,11 +21,7 @@
 #ifndef KLPARSER_HPP
 #define KLPARSER_HPP
 
-#ifdef QT_VERSION
-	#include "../KLLibs.hpp"
-#else
-	#define EXPORT
-#endif
+#include "../libbuild.hpp"
 
 #include "../containers/klstring.hpp"
 #include "../containers/kllist.hpp"

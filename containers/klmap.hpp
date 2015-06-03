@@ -21,6 +21,8 @@
 #ifndef KLMAP_HPP
 #define KLMAP_HPP
 
+#include "../libbuild.hpp"
+
 #include "kllist.hpp"
 
 /*! \file		klmap.hpp

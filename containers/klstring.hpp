@@ -21,11 +21,7 @@
 #ifndef KLSTRING_HPP
 #define KLSTRING_HPP
 
-#ifdef QT_VERSION
-	#include "../KLLibs.hpp"
-#else
-	#define EXPORT
-#endif
+#include "../libbuild.hpp"
 
 #include <string.h>
 #include <stdlib.h>

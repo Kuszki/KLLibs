@@ -21,11 +21,7 @@
 #ifndef KLVARIABLES_HPP
 #define KLVARIABLES_HPP
 
-#ifdef QT_VERSION
-	#include "../KLLibs.hpp"
-#else
-	#define EXPORT
-#endif
+#include "../libbuild.hpp"
 
 #include "../containers/klmap.hpp"
 #include "../containers/klstring.hpp"

@@ -21,13 +21,6 @@
 #ifndef KLSCRIPT_HPP
 #define KLSCRIPT_HPP
 
-#ifdef QT_VERSION
-	#include "../KLLibs.hpp"
-	#include <locale.h>
-#else
-	#define EXPORT
-#endif
-
 #define IF_Notterminated	if(Code[Process] != ';')
 #define IF_Terminator	if(Code[Process] == ';')
 #define IF_Separator	if(Code[Process] == ',')
@@ -36,6 +29,8 @@
 #define IS_NextParam	((Code[Process] == ',' && LastError == NO_ERROR) ? Process++ : false)
 
 #define ReturnError(error) { LastError = error; return false; }
+
+#include "../libbuild.hpp"
 
 #include "../containers/klstring.hpp"
 

@@ -18,44 +18,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  **********************************************************************/
 
-/*! \file		kllibs.hpp
- *  \brief	Pomocnicze deklaracje.
+#ifndef LIBBUILD_HPP
+#define LIBBUILD_HPP
+
+/*! \file		libbuild.hpp
+ *  \brief	Pomocnicze deklaracje do budowania biblioteki.
  *
- * Dołącza cały projekt przy pomocy jednego pliku.
+ * Zawiera pomocnicze deklaracje mark używanych przy budowaniu biblioteki.
  *
  */
 
-/*! \page		links Linki
- *
- *  \section	source Kod źródłowy
- *
- * - [Projekt w serwisie GitHub](https://github.com/Kuszki/KLLibs)
- *
- *  \section	license Licencja
- *
- * - [GNU GPL v2 angielski](http://www.gnu.org/licenses/gpl-2.0.html)
- * - [GNU GPL v2 polski](http://gnu.org.pl/text/licencja-gnu.html)
- *
- *  \section	author Autor
- *
- * - [Profil GitHub](https://github.com/Kuszki)
- * - [e-mail](l.drozdz@o2.pl)
- *
- */
+#if defined(KLLIBS_LIBRARY)
+	#include <QtCore/qglobal.h>
+	#define EXPORT Q_DECL_EXPORT
+#else
+	#define EXPORT Q_DECL_IMPORT
+#endif
 
-#ifndef KLLIBS_GLOBAL_HPP
-#define KLLIBS_GLOBAL_HPP
-
-#include "libbuild.hpp"
-
-#include "containers/kllist.hpp"
-#include "containers/klmap.hpp"
-#include "containers/klstring.hpp"
-#include "containers/kltree.hpp"
-
-#include "script/klbindings.hpp"
-#include "script/klparser.hpp"
-#include "script/klscript.hpp"
-#include "script/klvariables.hpp"
-
-#endif // KLLIBS_GLOBAL_HPP
+#endif // LIBBUILD_HPP

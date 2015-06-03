@@ -21,6 +21,8 @@
 #ifndef KLTREE_HPP
 #define KLTREE_HPP
 
+#include "../libbuild.hpp"
+
 /*! \file		kltree.hpp
  *  \brief	Deklaracje dla klasy KLTree i jej składników.
  *

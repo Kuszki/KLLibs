@@ -25,10 +25,6 @@
 KLScript::KLScript(const KLString& Script)
 : Code(Script)
 {
-	#ifdef QT_VERSION
-		setlocale(LC_NUMERIC, "POSIX");
-	#endif
-
 	Variables.Add("return");
 
 	//if (Code) if (!Validate(Code)) Code.Clean();

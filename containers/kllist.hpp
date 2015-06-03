@@ -18,6 +18,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  **********************************************************************/
 
+#ifndef KLLIST_HPP
+#define KLLIST_HPP
+
+#include "../libbuild.hpp"
+
 /*! \file		kllist.hpp
  *  \brief	Deklaracje dla klasy KLList i jej składników.
  *
@@ -27,9 +32,6 @@
  *  \brief	Implementacja klasy KLList i jej składników.
  *
  */
-
-#ifndef KLLIST_HPP
-#define KLLIST_HPP
 
 /*! \brief	Lekka interpretacja listy.
  *  \tparam	Data Typ przechowywanych danych.
