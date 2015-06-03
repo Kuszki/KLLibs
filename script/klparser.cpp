@@ -20,6 +20,8 @@
 
 #include "klparser.hpp"
 
+#include <QDebug>
+
 thread_local KLParser::ERROR KLParser::KLParserToken::LastError = NO_ERROR;
 
 const KLParser::KLParserOperator::KLParserOperatorData KLParser::KLParserOperator::Operators[] =
@@ -367,6 +369,8 @@ bool KLParser::Evaluate(const KLString& Code)
 	}
 
 	for (auto& Token: Tokens) delete Token;
+
+	qDebug() << "last parser error:" << LastError;
 
 	return LastError == NO_ERROR;
 }

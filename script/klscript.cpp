@@ -20,19 +20,25 @@
 
 #include "klscript.hpp"
 
+#include <QDebug>
+
 KLScript::KLScript(const KLString& Script)
 : Code(Script)
 {
+	#ifdef QT_VERSION
+		setlocale(LC_NUMERIC, "POSIX");
+	#endif
+
 	Variables.Add("return");
 
-	if (Code) if (!Validate(Code)) Code.Clean();
+	//if (Code) if (!Validate(Code)) Code.Clean();
 }
 
 KLScript::OPERATION KLScript::GetToken(const KLString& Script)
 {
 	KLString Token = GetName(Script);
 
-	// qDebug() << "EXPR:" << Token;
+	qDebug() << "EXPR:" << Token;
 
 	if (!Token)				return END;
 
@@ -92,6 +98,8 @@ bool KLScript::GetValue(const KLString& Script, KLVariables& Scoope)
 
 	for (KLVariables* Vars = &Scoope; Vars; Vars = Vars->Parent)
 		for (auto& Var: *Vars) Equation.Replace(Var.ID, Var.Value.ToString(), true);
+
+	qDebug() << Equation;
 
 	return Parser.Evaluate(Equation);
 }
@@ -254,9 +262,10 @@ bool KLScript::Evaluate(void)
 				KLString Var = GetName(Code);
 
 				if (!LocalVars.Exists(Var))
-					LastError = UNDEFINED_VARIABLE;
-				else if (GetValue(Code, LocalVars))
-					LocalVars[Var] = Parser.GetValue();
+					ReturnError(UNDEFINED_VARIABLE)
+				else if (!GetValue(Code, LocalVars))
+					ReturnError(WRONG_EVALUATION)
+				else LocalVars[Var] = Parser.GetValue();
 			}
 			break;
 			case CALL:
@@ -391,7 +400,7 @@ bool KLScript::Evaluate(void)
 			default: continue;
 		}
 
-		// qDebug() << Code[Process];
+		qDebug() << Code[Process];
 
 		if (Code[Process] == ';') Process++;
 		else ReturnError(EXPECTED_TERMINATOR);
@@ -408,8 +417,10 @@ KLScript::ERROR KLScript::GetError(void) const
 
 bool KLScript::SetCode(const KLString& Script)
 {
-	if (Validate(Script)) Code = Script;
-	else return false;
+	//if (Validate(Script)) Code = Script;
+	//else return false;
+
+	Code = Script;
 
 	return true;
 }

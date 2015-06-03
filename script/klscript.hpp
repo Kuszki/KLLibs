@@ -23,6 +23,7 @@
 
 #ifdef QT_VERSION
 	#include "../KLLibs.hpp"
+	#include <locale.h>
 #else
 	#define EXPORT
 #endif
