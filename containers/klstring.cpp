@@ -24,7 +24,11 @@ KLString::KLString(double Value)
 {
 	char Buffer[32];
 
+#ifndef F_CPU
 	snprintf(Buffer, 32, "%f", Value);
+#else
+	dtostrf(Value, 0, 5, Buffer);
+#endif
 
 	Capacity = strlen(Buffer);
 
@@ -37,7 +41,11 @@ KLString::KLString(int Value)
 {
 	char Buffer[32];
 
+#ifndef F_CPU
 	snprintf(Buffer, 32, "%i", Value);
+#else
+	itoa(Value, Buffer, 10);
+#endif
 
 	Capacity = strlen(Buffer);
 
@@ -59,9 +67,13 @@ KLString::KLString(bool Bool)
 
 KLString::KLString(const void* Value)
 {
-	char Buffer[32];
+	char Buffer[17];
 
-	snprintf(Buffer, 32, "%p", Value);
+#ifndef F_CPU
+	snprintf(Buffer, 17, "%p", Value);
+#else
+	utoa((unsigned) Value, Buffer, 16);
+#endif
 
 	Capacity = strlen(Buffer);
 
