@@ -167,8 +167,8 @@ Możliwości:
 - [X] Informacja o typie.
 - [X] Informacja o bindzie.
 - [X] Iteracja po zakresie (zgodnie z `KLMap`).
-- [ ] Iteracja po zakresie lub wybór zmiennej bez znajomości jej nazwy (TODO).
-- [ ] Automatyczna kontrola typu przy poeracjach wyłuskania.
+- [X] Iteracja po zakresie lub wybór zmiennej bez znajomości jej nazwy.
+- [ ] Automatyczna kontrola typu przy operacjach wyłuskania.
 - [ ] Słabe typowanie.
 - [ ] Dynamiczna zmiana typu.
 
