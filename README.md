@@ -135,6 +135,9 @@ Przykład:
      # zakończenie if
      fi;
 
+     # zapisanie zwróconej wartości
+     return 0;
+
 ```
 
 ### KLBindings
