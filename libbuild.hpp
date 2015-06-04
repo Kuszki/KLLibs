@@ -28,11 +28,19 @@
  *
  */
 
-#if defined(KLLIBS_LIBRARY)
-	#include <QtCore/qglobal.h>
-	#define EXPORT Q_DECL_EXPORT
+#if defined(QT_VERSION)
+
+	#if defined(KLLIBS_LIBRARY)
+		#include <QtCore/qglobal.h>
+		#define EXPORT Q_DECL_EXPORT
+	#else
+		#define EXPORT Q_DECL_IMPORT
+	#endif
+
 #else
-	#define EXPORT Q_DECL_IMPORT
+
+	#define EXPORT
+
 #endif
 
 #endif // LIBBUILD_HPP
