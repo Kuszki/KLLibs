@@ -21,12 +21,12 @@
 #ifndef KLSCRIPT_HPP
 #define KLSCRIPT_HPP
 
-#define IF_Notterminated	if(Code[Process] != ';')
-#define IF_Terminator	if(Code[Process] == ';')
-#define IF_Separator	if(Code[Process] == ',')
+#define IF_Notterminated	if(Script[Process] != ';')
+#define IF_Terminator	if(Script[Process] == ';')
+#define IF_Separator	if(Script[Process] == ',')
 
 #define IS_NoError		(LastError == NO_ERROR)
-#define IS_NextParam	((Code[Process] == ',' && LastError == NO_ERROR) ? Process++ : false)
+#define IS_NextParam	((Script[Process] == ',' && LastError == NO_ERROR) ? Process++ : false)
 
 #define ReturnError(error) { LastError = error; return false; }
 
@@ -86,6 +86,8 @@ class EXPORT KLScript
 
 		T_WHILE,	//!< Konstrukcja warunkowa: `while`.
 		T_DONE,	//!< Konstrukcja warunkowa: `done`.
+
+		T_RETURN,	//!< Zakończenie skryptu i zwrócenie wartości: `return wyrażenie`.
 
 		EXIT,	//!< Zakończenie skryptu: `exit`.
 	};
@@ -163,8 +165,6 @@ class EXPORT KLScript
 		 */
 		int SkipComment(const KLString& Script);
 
-		KLString Code;		//!< Skrypt do przetworzenia.
-
 		ERROR LastError;	//!< Wyliczenie ostatniego błędu.
 
 		int Process;		//!< Aktualny krok przetwarzania.
@@ -182,16 +182,7 @@ class EXPORT KLScript
 		 * Inicjuje obiekt i tworzy specjalną zmienną `return` do przechowywania wyników funkcji.
 		 *
 		 */
-		KLScript(const KLString& Script = KLString());
-
-		/*! \brief		Sprawdzenie skryptu.
-		 *  \param [in]	Script Skrypt do sprawdzenia.
-		 *  \return		Powodzenie operacji.
-		 *
-		 * Przetwarza wybrany kod i zwraca poprawność jego składni.
-		 *
-		 */
-		bool Validate(const KLString& Script);
+		KLScript(void);
 
 		/*! \brief		Wykonanie kodu.
 		 *  \return		Powodzenie operacji.
@@ -199,7 +190,7 @@ class EXPORT KLScript
 		 * Przetwarza wybrany kod i zwraca powodzenie operacji.
 		 *
 		 */
-		bool Evaluate(void);
+		bool Evaluate(const KLString& Code);
 
 		/*! \brief		Pobranie ostatniego błędu.
 		 *  \return		Ostatni błąd.
@@ -208,16 +199,6 @@ class EXPORT KLScript
 		 *
 		 */
 		ERROR GetError(void) const;
-
-		/*! \brief		Ustawienie skryptu.
-		 *  \param [in]	Script Skrypt do wykonania.
-		 *  \return		Powodzenie operacji.
-		 *  \see			Evaluate().
-		 *
-		 * Przetwarza wybrany kod i zwraca powodzenie operacji, gdy operacja się powiedzie to wybrany kod zostanie zapisany w pamięci.
-		 *
-		 */
-		bool SetCode(const KLString& Script);
 
 };
 
