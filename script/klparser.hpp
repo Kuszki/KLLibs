@@ -21,6 +21,8 @@
 #ifndef KLPARSER_HPP
 #define KLPARSER_HPP
 
+#define ReturnError(error) { LastError = error; return false; }
+
 #include "../libbuild.hpp"
 
 #include "../containers/klstring.hpp"
@@ -56,7 +58,7 @@ class EXPORT KLParser
 	{
 		NO_ERROR,				//!< Brak błędu.
 
-		LVALUE_EXPECTED,		//!< Oczekiwano L-wartości.
+		UNEXPECTED_OPERATOR,	//!< Nieoczekiwany operator.
 
 		UNKNOWN_OPERATOR,		//!< Napotkano nieznany operator.
 		UNKNOWN_FUNCTION,		//!< Napotkano nieznaną funkcję.
@@ -79,106 +81,24 @@ class EXPORT KLParser
 	protected: class KLParserToken
 	{
 
-		protected:
-
-			thread_local static ERROR LastError;	//!< Ostatni napotkany błąd.
-
-		public:
-
-			/*! \brief		Konstruktor domyślny.
-			 *
-			 * Inicjuje wszystkie pola obiektu.
-			 *
-			 */
-			KLParserToken(void);
-
-			/*! \brief		Destruktor.
-			 *
-			 * Wirtualny destruktor umożliwiający poprawne niszczenie obiektów.
-			 *
-			 */
-			virtual ~KLParserToken(void);
-
-			/*! \brief		Pobranie priorytetu.
-			 *  \return		Priorytet tokenu.
-			 *  \note			Nie wszystkie tokeny mają znaczący priorytet.
-			 *
-			 * Zwraca priorytet tokenu w postaci liczby całkowitej.
-			 *
-			 */
-			virtual unsigned GetPriority(void) const;
-
-			/*! \brief		Pobranie ostatniego błędu.
-			 *  \return		Token w postaci łańcucha.
-			 *
-			 * Zwraca wyliczenie ostatniego błędu.
-			 *
-			 */
-			ERROR GetError(void) const;
-
-	};
-
-	/*! \brief		Klasa tokenu będocego liczbą.
-	 *
-	 * Obsługuje tokeny będące liczbami.
-	 *
-	 */
-	protected: class KLParserValue final : public KLParserToken
-	{
-
-		protected:
-
-			double Value;	//!< Wartość zbindowana.
-
-		public:
-
-			/*! \brief		Konstruktor konwertujący z `const char*`.
-			 *  \param [in]	Token Wybrany token.
-			 *
-			 * Konwertuje wybrany napis na liczbę.
-			 *
-			 */
-			KLParserValue(const char* Token);
-
-			/*! \brief		Konstruktor konwertujący z `double`.
-			 *  \param [in]	Token Wybrany token.
-			 *
-			 * Konwertuje wybrany napis na liczbę.
-			 *
-			 */
-			KLParserValue(double Token);
-
-			/*! \brief		Destruktor.
-			 *
-			 * Wirtualny destruktor umożliwiający poprawne niszczenie obiektów.
-			 *
-			 */
-			virtual ~KLParserValue(void) override;
-
-			/*! \brief		Pobranie wartości.
-			 *  \return		Przechowywana wartość.
-			 *
-			 * Zwraca wartość liczby którą reprezentuje token.
-			 *
-			 */
-			double GetValue(void) const;
-
-	};
-
-	/*! \brief		Klasa tokenu będocego operatorem.
-	 *
-	 * Obsługuje tokeny będące operatorami.
-	 *
-	 */
-	protected: class KLParserOperator final : public KLParserToken
-	{
+		/*! \brief		Wyliczenie typu tokenu.
+		 *
+		 * Określa z jaki typ ma bieżący token. Rozwiązanie to pozwala uniknąć stosowania polimorfizmu i operatora dynamic_cast.
+		 *
+		 */
+		public: enum class CLASS
+		{
+			VALUE,	//!< Wartość liczbowa.
+			OPERATOR,	//!< Operator.
+			FUNCTION	//!< Funkcja.
+		};
 
 		/*! \brief		Wyliczenie znaczenia operatora.
 		 *
 		 * Pozwala ograniczyć operatory do wybranego zakresu i przyspiesza wykonywanie działań.
 		 *
 		 */
-		public: enum OPERATOR
+		public: enum class OPERATOR
 		{
 			UNKNOWN,		//!< Nieznany operator.
 
@@ -203,6 +123,31 @@ class EXPORT KLParser
 			R_BRACKET		//!< Nawias zamykający: `)`.
 		};
 
+		/*! \brief		Wyliczenie znaczenia funkcji.
+		 *
+		 * Pozwala ograniczyć funkcje do wybranego zakresu i przyspiesza wykonywanie działań.
+		 *
+		 */
+		public: enum class FUNCTION
+		{
+			UNKNOWN,	//!< Nieznana funkcja.
+
+			SIN,		//!< Sunus: `sin(x)`.
+			COS,		//!< Cosinus: `cos(x)`.
+			TAN,		//!< Tangens: `tan(x)`.
+
+			ABS,		//!< Wartość bezwzględna: `abs(x)`.
+
+			EXP,		//!< Liczba `e` do potęgi `x`: `exp(x)`.
+			SQRT,	//!< Pierwiastek: `sqrt(x)`.
+			LOG,		//!< Logarytm dziesiętny: `log(x)`.
+			LN,		//!< Logarytm naturalny: `ln(x)`.
+
+			NOT,		//!< Negacja logiczna: `not(x)`.
+
+			MINUS	//!< Przeciwieństwo liczby: `-x`.
+		};
+
 		/*! \brief		Struktura danych operatora.
 		 *  \warning		Numer operatora musi być zgodny z pozycją operatora w tabeli.
 		 *
@@ -218,90 +163,6 @@ class EXPORT KLParser
 			unsigned Priority;	//!< Priorytet operatora.
 		};
 
-		protected:
-
-			static const KLParserOperatorData Operators[];	//!< Tabela dostępnych operatorów.
-
-			OPERATOR Operator;							//!< Symbol operatora.
-
-		public:
-
-			/*! \brief		Konstruktor konwertujący z `const char*`.
-			 *  \param [in]	Token Wybrany token.
-			 *
-			 * Konwertuje wybrany napis na operator.
-			 *
-			 */
-			KLParserOperator(const char* Token);
-
-			/*! \brief		Konstruktor konwertujący z wyliczenia `OPERATOR`.
-			 *  \param [in]	Token Wybrany token.
-			 *
-			 * Tworzy operator o wybranym symbolu.
-			 *
-			 */
-			KLParserOperator(OPERATOR Token);
-
-			/*! \brief		Destruktor.
-			 *
-			 * Wirtualny destruktor umożliwiający poprawne niszczenie obiektów.
-			 *
-			 */
-			virtual ~KLParserOperator(void) override;
-
-			/*! \brief		Obliczenie wyniku działania.
-			 *  \param [in,out]	Values Lista dostępnych parametrów.
-			 *  \return		Wynik wyrażenia.
-			 *  \see			GetError().
-			 *
-			 * Pobiera ze stosu wymaganą liczbę parametrów i na podstawie danych operatora wylicza odpowiednią wartość wyrażenia. W przypadku niepowodzenia zapamiętuje ostatni błąd.
-			 *
-			 */
-			double GetValue(KLList<double>& Values) const;
-
-			/*! \brief		Pobranie numeru operatora.
-			 *  \return		Wynik wyrażenia.
-			 *
-			 * Zwraca identyfikator bierzącego operatora.
-			 *
-			 */
-			OPERATOR GetOperator(void) const;
-
-			virtual unsigned GetPriority(void) const override;
-
-	};
-
-	/*! \brief		Klasa tokenu będocego funkcją.
-	 *
-	 * Obsługuje tokeny będące funkcjami.
-	 *
-	 */
-	protected: class KLParserFunction final : public KLParserToken
-	{
-
-		/*! \brief		Wyliczenie znaczenia funkcji.
-		 *
-		 * Pozwala ograniczyć funkcje do wybranego zakresu i przyspiesza wykonywanie działań.
-		 *
-		 */
-		public: enum FUNCTION
-		{
-			UNKNOWN,	//!< Nieznana funkcja.
-
-			SIN,		//!< Sunus: `sin(x)`.
-			COS,		//!< Cosinus: `cos(x)`.
-			TAN,		//!< Tangens: `tan(x)`.
-
-			ABS,		//!< Wartość bezwzględna: `abs(x)`.
-
-			EXP,		//!< Liczba `e` do potęgi `x`: `exp(x)`.
-			SQRT,	//!< Pierwiastek: `sqrt(x)`.
-			LOG,		//!< Logarytm dziesiętny: `log(x)`.
-			LN,		//!< Logarytm naturalny: `ln(x)`.
-
-			NOT		//!< Negacja logiczna: `not(x)`.
-		};
-
 		/*! \brief		Struktura danych operatora.
 		 *  \warning		Numer operatora musi być zgodny z pozycją operatora w tabeli.
 		 *
@@ -315,54 +176,108 @@ class EXPORT KLParser
 			const char* Token;	//!< Nazwa funkcji.
 		};
 
+		/*! \brief		Unia danych tokenu.
+		 *
+		 * Zawiera wybrane informacje o danym tokenie.
+		 *
+		 */
+		public: union TOKEN
+		{
+			double Value;		//!< Wartość liczbowa (o ile token jest liczbą).
+
+			OPERATOR Operator;	//!< ID operatora (o ile token jest operatorem).
+
+			FUNCTION Function;	//!< ID funkcji (o ile token jest funkcją).
+		};
+
 		protected:
+
+			static const KLParserOperatorData Operators[];	//!< Tabela dostępnych operatorów.
 
 			static const KLParserFunctionData Functions[];	//!< Tablica znanych funkcji.
 
-			FUNCTION Function;							//!< Indeks funkcji.
+			thread_local static ERROR LastError;			//!< Ostatni napotkany błąd.
+			TOKEN Data;								//!< Dane tokenu.
 
 		public:
 
-			/*! \brief		Konstruktor konwertujący z `const char*`.
-			 *  \param [in]	Token Wybrany token.
+			const CLASS Class;							//!< Klasa tokenu.
+
+			/*! \brief		Konstruktor domyślny.
+			 *  \param [in]	Token		Token w formie łańcucha znaków.
+			 *  \param [in]	TokenClass	Klasa tokenu.
 			 *
-			 * Konwertuje wybrany napis na operator.
+			 * Na podstawie podanego typu tokena wybiera odpowiednie informacje z tabeli.
 			 *
 			 */
-			KLParserFunction(const char* Token);
+			KLParserToken(const char* Token,
+					    CLASS TokenClass);
 
-			/*! \brief		Konstruktor konwertujący z wyliczenia `FUNCTION`.
-			 *  \param [in]	Token Wybrany token.
+			/*! \brief		Konstruktor konwertujący z `double`.
+			 *  \param [in]	Value Wartość liczbowa.
 			 *
-			 * Tworzy funkcję na podstawie podanego wyliczenia.
+			 *Tworzy token na podstawie wartości liczbowej.
 			 *
 			 */
-			KLParserFunction(FUNCTION Token);
+			KLParserToken(double Value);
 
-			/*! \brief		Destruktor.
+			/*! \brief		Konstruktor konwertujący z `OPERATOR`.
+			 *  \param [in]	Operator ID operatora.
 			 *
-			 * Wirtualny destruktor umożliwiający poprawne niszczenie obiektów.
+			 *Tworzy token na podstawie ID operatora.
 			 *
 			 */
-			virtual ~KLParserFunction(void) override;
+			KLParserToken(OPERATOR Operator);
 
-			/*! \brief		Obliczenie wyniku działania.
-			 *  \param [in,out]	Values Lista dostępnych parametrów.
-			 *  \return		Wynik wyrażenia.
-			 *  \see			GetError().
+			/*! \brief		Konstruktor konwertujący z `FUNCTION`.
+			 *  \param [in]	Function ID funkcji.
 			 *
-			 * Pobiera ze stosu wymaganą liczbę parametrów i na podstawie danych funkcji wylicza odpowiednią wartość wyrażenia. W przypadku niepowodzenia zapamiętuje ostatni błąd.
+			 *Tworzy token na podstawie ID funkcji.
 			 *
 			 */
-			double GetValue(KLList<double>& Values) const;
+			KLParserToken(FUNCTION Function);
 
-			/*! \brief		Pobranie numeru funkcji.
-			 *  \return		Wynik wyrażenia.
+			/*! \brief		Pobranie priorytetu.
+			 *  \return		Priorytet tokenu.
+			 *  \note			Nie wszystkie tokeny mają znaczący priorytet.
 			 *
-			 * Zwraca identyfikator bierzącej funkcji.
+			 * Zwraca priorytet tokenu w postaci liczby całkowitej.
+			 *
+			 */
+			unsigned GetPriority(void) const;
+
+			/*! \brief		Pobranie priorytetu.
+			 *  \param [in]	Values Stos wartości parametrów.
+			 *  \return		Wartość obliczeń lub liczby.
+			 *
+			 * Zwraca wartość liczbową obliczoną na podstawie tokenu i pobranych ze stosu parametrów.
+			 *
+			 */
+			double GetValue(KLList<double>* Values = nullptr) const;
+
+			/*! \brief		Pobranie ID operatora.
+			 *  \return		ID operatora.
+			 *
+			 * Zwraca ID operatora jeśli token jest operatorem.
+			 *
+			 */
+			OPERATOR GetOperator(void) const;
+
+			/*! \brief		Pobranie ID funkcji.
+			 *  \return		ID funkcji.
+			 *
+			 * Zwraca ID funkcji jeśli token jest funkcją.
 			 *
 			 */
 			FUNCTION GetFunction(void) const;
+
+			/*! \brief		Pobranie ostatniego błędu.
+			 *  \return		Token w postaci łańcucha.
+			 *
+			 * Zwraca wyliczenie ostatniego błędu.
+			 *
+			 */
+			ERROR GetError(void) const;
 
 	};
 

@@ -20,70 +20,244 @@
 
 #include "klparser.hpp"
 
-#include <QDebug>
-
 thread_local KLParser::ERROR KLParser::KLParserToken::LastError = NO_ERROR;
 
-const KLParser::KLParserOperator::KLParserOperatorData KLParser::KLParserOperator::Operators[] =
+const KLParser::KLParserToken::KLParserOperatorData KLParser::KLParserToken::Operators[] =
 {
-	{KLParser::KLParserOperator::UNKNOWN,	"",		00},
+	{KLParser::KLParserToken::OPERATOR::UNKNOWN,		"",		00},
 
-	{KLParser::KLParserOperator::ADD,		"+",		30},
-	{KLParser::KLParserOperator::SUB,		"-",		30},
-	{KLParser::KLParserOperator::MUL,		"*",		31},
-	{KLParser::KLParserOperator::DIV,		"/",		31},
-	{KLParser::KLParserOperator::MOD,		"%",		31},
-	{KLParser::KLParserOperator::POW,		"^",		32},
+	{KLParser::KLParserToken::OPERATOR::ADD,		"+",		30},
+	{KLParser::KLParserToken::OPERATOR::SUB,		"-",		30},
+	{KLParser::KLParserToken::OPERATOR::MUL,		"*",		31},
+	{KLParser::KLParserToken::OPERATOR::DIV,		"/",		31},
+	{KLParser::KLParserToken::OPERATOR::MOD,		"%",		31},
+	{KLParser::KLParserToken::OPERATOR::POW,		"^",		32},
 
-	{KLParser::KLParserOperator::EQ,		"==",	20},
-	{KLParser::KLParserOperator::NEQ,		"!=",	20},
-	{KLParser::KLParserOperator::GT,		">",		21},
-	{KLParser::KLParserOperator::LT,		"<",		21},
-	{KLParser::KLParserOperator::GE,		">=",	21},
-	{KLParser::KLParserOperator::LE,		"<=",	21},
+	{KLParser::KLParserToken::OPERATOR::EQ,			"==",	20},
+	{KLParser::KLParserToken::OPERATOR::NEQ,		"!=",	20},
+	{KLParser::KLParserToken::OPERATOR::GT,			">",		21},
+	{KLParser::KLParserToken::OPERATOR::LT,			"<",		21},
+	{KLParser::KLParserToken::OPERATOR::GE,			">=",	21},
+	{KLParser::KLParserToken::OPERATOR::LE,			"<=",	21},
 
-	{KLParser::KLParserOperator::AND,		"&&",	10},
-	{KLParser::KLParserOperator::OR,		"||",	11},
+	{KLParser::KLParserToken::OPERATOR::AND,		"&&",	10},
+	{KLParser::KLParserToken::OPERATOR::OR,			"||",	11},
 
-	{KLParser::KLParserOperator::L_BRACKET,	"(",		01},
-	{KLParser::KLParserOperator::R_BRACKET,	")",		01}
+	{KLParser::KLParserToken::OPERATOR::L_BRACKET,	"(",		01},
+	{KLParser::KLParserToken::OPERATOR::R_BRACKET,	")",		01}
 };
 
-const KLParser::KLParserFunction::KLParserFunctionData KLParser::KLParserFunction::Functions[] =
+const KLParser::KLParserToken::KLParserFunctionData KLParser::KLParserToken::Functions[] =
 {
-	{KLParser::KLParserFunction::UNKNOWN,	""},
+	{KLParser::KLParserToken::FUNCTION::UNKNOWN,		""},
 
-	{KLParser::KLParserFunction::SIN,		"sin"},
-	{KLParser::KLParserFunction::COS,		"cos"},
-	{KLParser::KLParserFunction::TAN,		"tan"},
+	{KLParser::KLParserToken::FUNCTION::SIN,		"sin"},
+	{KLParser::KLParserToken::FUNCTION::COS,		"cos"},
+	{KLParser::KLParserToken::FUNCTION::TAN,		"tan"},
 
-	{KLParser::KLParserFunction::ABS,		"abs"},
+	{KLParser::KLParserToken::FUNCTION::ABS,		"abs"},
 
-	{KLParser::KLParserFunction::EXP,		"exp"},
-	{KLParser::KLParserFunction::SQRT,		"sqrt"},
-	{KLParser::KLParserFunction::LOG,		"log"},
-	{KLParser::KLParserFunction::LN,		"ln"},
+	{KLParser::KLParserToken::FUNCTION::EXP,		"exp"},
+	{KLParser::KLParserToken::FUNCTION::SQRT,		"sqrt"},
+	{KLParser::KLParserToken::FUNCTION::LOG,		"log"},
+	{KLParser::KLParserToken::FUNCTION::LN,			"ln"},
 
-	{KLParser::KLParserFunction::NOT,		"not"}
+	{KLParser::KLParserToken::FUNCTION::NOT,		"not"},
+	{KLParser::KLParserToken::FUNCTION::MINUS,		"minus"}
 };
 
-KLParser::KLParserToken::KLParserToken(void) {}
-
-KLParser::KLParserToken::~KLParserToken(void) {}
-
-KLParser::KLParserValue::KLParserValue(const char* Token)
+KLParser::KLParserToken::KLParserToken(const char* Token, CLASS TokenClass)
+: Class(TokenClass)
 {
-	Value = atof(Token);
+	switch (Class)
+	{
+		case CLASS::VALUE:
+			Data.Value = atof(Token);
+		break;
+		case CLASS::OPERATOR:
+			Data.Operator = OPERATOR::UNKNOWN;
+
+			for (const auto& Symbol: Operators)
+			{
+				if (!strcmp(Token, Symbol.Token))
+				{
+					Data.Operator = Symbol.Operator; break;
+				}
+			}
+
+			if (Data.Operator == OPERATOR::UNKNOWN) LastError = UNKNOWN_OPERATOR;
+		break;
+		case CLASS::FUNCTION:
+			Data.Function = FUNCTION::UNKNOWN;
+
+			for (const auto& Symbol: Functions)
+			{
+				if (!strcmp(Token, Symbol.Token))
+				{
+					Data.Function = Symbol.Function; break;
+				}
+			}
+
+			if (Data.Function == FUNCTION::UNKNOWN) LastError = UNKNOWN_FUNCTION;
+		break;
+	}
 }
 
-KLParser::KLParserValue::KLParserValue(double Token)
-: Value(Token) {}
+KLParser::KLParserToken::KLParserToken(double Value)
+: Class(CLASS::VALUE)
+{
+	Data.Value = Value;
+}
 
-KLParser::KLParserValue::~KLParserValue(void) {}
+KLParser::KLParserToken::KLParserToken(OPERATOR Operator)
+: Class(CLASS::OPERATOR)
+{
+	Data.Operator = Operator;
+}
+
+KLParser::KLParserToken::KLParserToken(FUNCTION Function)
+: Class(CLASS::FUNCTION)
+{
+	Data.Function = Function;
+}
 
 unsigned KLParser::KLParserToken::GetPriority(void) const
 {
-	return 100;
+	switch (Class)
+	{
+		case CLASS::OPERATOR:
+			return Operators[(unsigned) Data.Operator].Priority;
+
+		default:
+			return 100;
+	}
+
+	return 0;
+}
+
+double KLParser::KLParserToken::GetValue(KLList<double>* Values) const
+{
+	LastError = NO_ERROR;
+
+	switch (Class)
+	{
+		case CLASS::OPERATOR:
+			if (!Values) LastError = NOT_ENOUGH_PARAMETERS;
+			if (Values->Size() < 2) LastError = NOT_ENOUGH_PARAMETERS;
+			else
+			{
+				double ParamB = Values->Pop();
+				double ParamA = Values->Pop();
+
+				if ((Data.Operator == OPERATOR::DIV ||
+					Data.Operator == OPERATOR::MOD) &&
+				    ParamB == 0.0) LastError = DIVISION_BY_ZERO;
+				else switch (Data.Operator)
+				{
+					case OPERATOR::ADD:
+					return ParamA + ParamB;
+					case OPERATOR::SUB:
+					return ParamA - ParamB;
+					case OPERATOR::MUL:
+					return ParamA * ParamB;
+					case OPERATOR::DIV:
+					return ParamA / ParamB;
+					case OPERATOR::MOD:
+					return (int) ParamA % (int) ParamB;
+					case OPERATOR::POW:
+					return pow(ParamA, ParamB);
+
+					case OPERATOR::EQ:
+					return ParamA == ParamB;
+					case OPERATOR::NEQ:
+					return ParamA != ParamB;
+					case OPERATOR::GT:
+					return ParamA > ParamB;
+					case OPERATOR::LT:
+					return ParamA < ParamB;
+					case OPERATOR::GE:
+					return ParamA >= ParamB;
+					case OPERATOR::LE:
+					return ParamA <= ParamB;
+
+					case OPERATOR::AND:
+					return ParamA && ParamB;
+					case OPERATOR::OR:
+					return ParamA || ParamB;
+
+					default: break;
+				}
+
+			}
+		break;
+		case CLASS::FUNCTION:
+			if (!Values) LastError = NOT_ENOUGH_PARAMETERS;
+			else if (Values->Size() < 1) LastError = NOT_ENOUGH_PARAMETERS;
+			else
+			{
+				double ParamA = Values->Pop();
+
+				switch (Data.Function)
+				{
+					case FUNCTION::SIN:
+					return sin(ParamA);
+					case FUNCTION::COS:
+					return cos(ParamA);
+					case FUNCTION::TAN:
+					return tan(ParamA);
+
+					case FUNCTION::ABS:
+					return abs(ParamA);
+
+					case FUNCTION::EXP:
+					return exp(ParamA);
+					case FUNCTION::SQRT:
+					return sqrt(ParamA);
+					case FUNCTION::LOG:
+					return log10(ParamA);
+					case FUNCTION::LN:
+					return log(ParamA);
+
+					case FUNCTION::NOT:
+					return !ParamA;
+
+					case FUNCTION::MINUS:
+					return -ParamA;
+
+					default:
+						LastError = UNKNOWN_FUNCTION;
+				}
+			}
+		break;
+		default:
+			return Data.Value;
+	}
+
+	return 0;
+}
+
+KLParser::KLParserToken::OPERATOR KLParser::KLParserToken::GetOperator(void) const
+{
+	switch (Class)
+	{
+		case CLASS::OPERATOR:
+			return Data.Operator;
+
+		default:
+			return OPERATOR::UNKNOWN;
+	}
+}
+
+KLParser::KLParserToken::FUNCTION KLParser::KLParserToken::GetFunction(void) const
+{
+	switch (Class)
+	{
+		case CLASS::FUNCTION:
+			return Data.Function;
+
+		default:
+			return FUNCTION::UNKNOWN;
+	}
 }
 
 KLParser::ERROR KLParser::KLParserToken::GetError(void) const
@@ -91,162 +265,14 @@ KLParser::ERROR KLParser::KLParserToken::GetError(void) const
 	return LastError;
 }
 
-double KLParser::KLParserValue::GetValue(void) const
-{
-	return Value;
-}
-
-KLParser::KLParserOperator::KLParserOperator(const char* Token)
-: Operator(UNKNOWN)
-{
-	for (const auto& Symbol: Operators)
-	{
-		if (!strcmp(Token, Symbol.Token)) Operator = Symbol.Operator;
-	}
-
-	if (Operator == UNKNOWN) LastError = UNKNOWN_OPERATOR;
-}
-
-
-KLParser::KLParserOperator::KLParserOperator(OPERATOR Token)
-: Operator(Token) {}
-
-KLParser::KLParserOperator::~KLParserOperator(void) {}
-
-double KLParser::KLParserOperator::GetValue(KLList<double>& Values) const
-{
-	LastError = NO_ERROR;
-
-	if (Values.Size() < 1) LastError = NOT_ENOUGH_PARAMETERS;
-	else
-	{
-
-		double ParamB = Values.Pop();
-		double ParamA = Values.Pop();
-
-		if (Operator == DIV && Operator == MOD &&
-		    ParamB == 0.0) LastError = DIVISION_BY_ZERO;
-		else switch (Operator)
-		{
-			case ADD:
-			return ParamA + ParamB;
-			case SUB:
-			return ParamA - ParamB;
-			case MUL:
-			return ParamA * ParamB;
-			case DIV:
-			return ParamA / ParamB;
-			case MOD:
-			return (int) ParamA % (int) ParamB;
-			case POW:
-			return pow(ParamA, ParamB);
-
-			case EQ:
-			return ParamA == ParamB;
-			case NEQ:
-			return ParamA != ParamB;
-			case GT:
-			return ParamA > ParamB;
-			case LT:
-			return ParamA < ParamB;
-			case GE:
-			return ParamA >= ParamB;
-			case LE:
-			return ParamA <= ParamB;
-
-			case AND:
-			return ParamA && ParamB;
-			case OR:
-			return ParamA || ParamB;
-
-			default:
-				LastError = UNKNOWN_OPERATOR;
-		}
-
-	}
-
-	return 0;
-}
-
-KLParser::KLParserOperator::OPERATOR KLParser::KLParserOperator::GetOperator(void) const
-{
-	return Operator;
-}
-
-unsigned KLParser::KLParserOperator::GetPriority(void) const
-{
-	return Operators[Operator].Priority;
-}
-
-KLParser::KLParserFunction::KLParserFunction(const char* Token)
-: Function(UNKNOWN)
-{
-	for (const auto& Symbol: Functions)
-	{
-		if (!strcmp(Token, Symbol.Token)) Function = Symbol.Function;
-	}
-
-	if (Function == UNKNOWN) LastError = UNKNOWN_FUNCTION;
-}
-
-KLParser::KLParserFunction::~KLParserFunction(void) {}
-
-double KLParser::KLParserFunction::GetValue(KLList<double>& Values) const
-{
-	LastError = NO_ERROR;
-
-	if (Values.Size() < 1) LastError = NOT_ENOUGH_PARAMETERS;
-	else
-	{
-
-		double ParamA = Values.Pop();
-
-		switch (Function)
-		{
-			case SIN:
-			return sin(ParamA);
-			case COS:
-			return cos(ParamA);
-			case TAN:
-			return tan(ParamA);
-
-			case ABS:
-			return abs(ParamA);
-
-			case EXP:
-			return exp(ParamA);
-			case SQRT:
-			return sqrt(ParamA);
-			case LOG:
-			return log10(ParamA);
-			case LN:
-			return log(ParamA);
-
-			default:
-				LastError = UNKNOWN_FUNCTION;
-		}
-
-	}
-
-	return 0;
-}
-
-KLParser::KLParserFunction::FUNCTION KLParser::KLParserFunction::GetFunction(void) const
-{
-	return Function;
-}
-
 bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code)
 {
-	if (Code.Count('(') != Code.Count(')'))
-	{
-		LastError = BRACKETS_NOT_EQUAL;
-
-		return false;
-	}
+	if (Code.Count('(') != Code.Count(')')) ReturnError(BRACKETS_NOT_EQUAL);
 
 	KLList<KLParserToken*> Operators;
+	KLParserToken* Operator = nullptr;
 
+	bool isLastTokenOperator = true;
 	int Start = 0, Pos = 0;
 
 	while (Pos < Code.Size() && LastError == NO_ERROR)
@@ -260,49 +286,66 @@ bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code)
 		{
 			while (isdigit(Code[Pos]) || Code[Pos] == '.') Pos++;
 
-			Tokens << new KLParserValue(Code.Part(Start, Pos));
+			Tokens << new KLParserToken(Code.Part(Start, Pos),
+								   KLParserToken::CLASS::VALUE);
+
+			isLastTokenOperator = false;
 		}
 		else if (isalpha(Code[Pos]))
 		{
 			while (isalpha(Code[Pos])) Pos++;
 
-			Operators << new KLParserFunction(Code.Part(Start, Pos));
+			Operators << new KLParserToken(Code.Part(Start, Pos),
+									 KLParserToken::CLASS::FUNCTION);
+
+			isLastTokenOperator = true;
 		}
 		else
 		{
 			switch (Code[Pos])
 			{
-				case '(':
-					Operators << new KLParserOperator(KLParserOperator::L_BRACKET);
-
-					Pos++;
-				break;
 				case ')':
-				{
-					bool Continue = true;
-
-					while (Continue)
+					do
 					{
-						KLParserToken* Token = Operators.Pop();
+						Operator = Operators.Pop();
 
-						if (KLParserOperator* Operator =
-						    dynamic_cast<KLParserOperator*>(Token))
+						if (Operator->GetOperator() ==
+						    KLParserToken::OPERATOR::L_BRACKET)
 						{
-							if (Operator->GetOperator() ==
-							    KLParserOperator::L_BRACKET)
-							{
-								delete Operator;
+							delete Operator;
 
-								Continue = false;
-								Token = nullptr;
-							}
+							Operator = nullptr;
 						}
-
-						if (Token) Tokens << Token;
+						else
+						{
+							Tokens << Operator;
+						}
 					}
-
-					Pos++;
-				}
+					while (Operator);
+				break;
+				case '(':
+					Operators << new KLParserToken(KLParserToken::OPERATOR::L_BRACKET);
+				break;
+				case '+':
+					Operator = new KLParserToken(KLParserToken::OPERATOR::ADD);
+				break;
+				case '-':
+					if (isLastTokenOperator)
+						Operator = new KLParserToken(KLParserToken::FUNCTION::MINUS);
+					else
+						Operator = new KLParserToken(KLParserToken::OPERATOR::SUB);
+				break;
+				case '*':
+					Operator = new KLParserToken(KLParserToken::OPERATOR::MUL);
+				break;
+				case '/':
+					Operator = new KLParserToken(KLParserToken::OPERATOR::DIV);
+				break;
+				case '%':
+					Operator = new KLParserToken(KLParserToken::OPERATOR::MOD);
+				break;
+				case '^':
+					Operator = new KLParserToken(KLParserToken::OPERATOR::POW);
 				break;
 				default:
 				{
@@ -313,19 +356,27 @@ bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code)
 						  Code[Pos] != '(' &&
 						  Code[Pos] != ')') Pos++;
 
-					KLParserToken* Operator =
-							new KLParserOperator(Code.Part(Start, Pos));
-
-					while (Operators.Size() &&
-						  (Operator->GetPriority() <=
-						   Operators[-1]->GetPriority()))
-					{
-						Tokens << Operators.Pop();
-					}
-
-					Operators << Operator;
+					Operator = new KLParserToken(Code.Part(Start, Pos--),
+										    KLParserToken::CLASS::OPERATOR);
 				}
 			}
+
+			if (Operator)
+			{
+				while (Operators.Size() &&
+					  (Operator->GetPriority() <=
+					   Operators[-1]->GetPriority()))
+				{
+					Tokens << Operators.Pop();
+				}
+
+				Operators << Operator;
+
+				isLastTokenOperator = true;
+				Operator = nullptr;
+			}
+
+			Pos++;
 		}
 	}
 
@@ -346,18 +397,7 @@ bool KLParser::Evaluate(const KLString& Code)
 
 	for (auto& Token: Tokens)
 	{
-		if (KLParserValue* Operation = dynamic_cast<KLParserValue*>(Token))
-		{
-			Values << Operation->GetValue();
-		}
-		else if (KLParserOperator* Operation = dynamic_cast<KLParserOperator*>(Token))
-		{
-			Values << Operation->GetValue(Values);
-		}
-		else if (KLParserFunction* Operation = dynamic_cast<KLParserFunction*>(Token))
-		{
-			Values << Operation->GetValue(Values);
-		}
+		Values << Token->GetValue(&Values);
 
 		if ((LastError = Token->GetError()) != NO_ERROR) break;
 	}
@@ -369,8 +409,6 @@ bool KLParser::Evaluate(const KLString& Code)
 	}
 
 	for (auto& Token: Tokens) delete Token;
-
-	qDebug() << "last parser error:" << LastError;
 
 	return LastError == NO_ERROR;
 }
