@@ -1,7 +1,7 @@
 /***********************************************************************
  *
- * {description}
- * Copyright (C) {year}  {fullname}
+ * KLLibs - Lightweight C++ multiplatform libs
+ * Copyright (C) Łukasz "Kuszki" Dróżdż  2015
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  **********************************************************************/
 
-/*! \file		kllibs.hpp
+/*! \file		KLLibs.hpp
  *  \brief	Pomocnicze deklaracje.
  *
  * Dołącza cały projekt przy pomocy jednego pliku.
