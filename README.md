@@ -103,13 +103,16 @@ Przykład:
      set Zmienna sin( (2+2)*3 + 10 );
 
      # instrukcja if
-     if Zmienna 100 || Zmienna < 50;
+     if Zmienna != 100 || Zmienna < 50;
 
-          # wywołanie funkcji
+          # wywołanie funkcji (kolejne parametry po przecinku)
           call Funkcja sin(Zmienna), 30, Zmienna*2;
 
           # przypisanie wyniku funkcji do zmiennej
           set Zmienna return;
+
+          # eksport zmiennej do zmiennych globalnych
+          export zmienna;
 
      # instrukcja else
      else;
