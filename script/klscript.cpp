@@ -128,7 +128,7 @@ bool KLScript::Evaluate(const KLString& Script)
 		{
 			case SET:
 			{
-				IF_Terminator ReturnError(WRONG_PARAMETERS);
+				IF_Terminated ReturnError(WRONG_PARAMETERS);
 
 				KLString Var = GetName(Script);
 
@@ -143,7 +143,7 @@ bool KLScript::Evaluate(const KLString& Script)
 			break;
 			case CALL:
 			{
-				IF_Terminator ReturnError(WRONG_PARAMETERS);
+				IF_Terminated ReturnError(WRONG_PARAMETERS);
 
 				const KLString Proc = GetName(Script);
 
@@ -153,8 +153,11 @@ bool KLScript::Evaluate(const KLString& Script)
 				KLVariables Params(&LocalVars);
 				int ParamID = 0;
 
-				do if (GetValue(Script, LocalVars))
+				if (!Terminated) do
 				{
+					if (!GetValue(Script, LocalVars))
+						ReturnError(WRONG_EVALUATION);
+
 					KLString ID(ParamID++);
 
 					Params.Add(ID);
@@ -163,13 +166,13 @@ bool KLScript::Evaluate(const KLString& Script)
 				}
 				while (IS_NextParam);
 
-				if (!IS_NoError) Variables["return"] = Bindings[Proc](Params);
+				if (IS_NoError) Variables["return"] = Bindings[Proc](Params);
 			}
 			break;
 			case VAR:
 			case EXP:
 			{
-				IF_Terminator ReturnError(WRONG_PARAMETERS);
+				IF_Terminated ReturnError(WRONG_PARAMETERS);
 
 				do
 				{
@@ -193,7 +196,7 @@ bool KLScript::Evaluate(const KLString& Script)
 			break;
 			case T_IF:
 			{
-				IF_Terminator ReturnError(WRONG_PARAMETERS);
+				IF_Terminated ReturnError(WRONG_PARAMETERS);
 
 				if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
 
@@ -233,7 +236,7 @@ bool KLScript::Evaluate(const KLString& Script)
 			break;
 			case T_WHILE:
 			{
-				IF_Terminator ReturnError(WRONG_PARAMETERS);
+				IF_Terminated ReturnError(WRONG_PARAMETERS);
 
 				if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
 
@@ -269,7 +272,7 @@ bool KLScript::Evaluate(const KLString& Script)
 
 			case T_RETURN:
 			{
-				IF_Terminator ReturnError(WRONG_PARAMETERS);
+				IF_Terminated ReturnError(WRONG_PARAMETERS);
 
 				if (!GetValue(Script, LocalVars))
 					ReturnError(WRONG_EVALUATION);
@@ -288,7 +291,7 @@ bool KLScript::Evaluate(const KLString& Script)
 			default: continue;
 		}
 
-		if (Script[Process] == ';') Process++;
+		if (Terminated) Process++;
 		else ReturnError(EXPECTED_TERMINATOR);
 
 	}
