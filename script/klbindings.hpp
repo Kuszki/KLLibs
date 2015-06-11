@@ -48,6 +48,11 @@ class EXPORT KLBindings
 
 	protected: using KLSENTRY = double (*)(KLVariables&);	//!< Prototyp funkcji skryptowej.
 
+	/*! \brief		Reprezentacja pojedynczego bindu.
+	 *
+	 * Definiuje bind przechowywany w organizacji.
+	 *
+	 */
 	public: class KLBinding
 	{
 
