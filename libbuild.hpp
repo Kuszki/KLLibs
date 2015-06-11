@@ -1,7 +1,7 @@
 /***********************************************************************
  *
- * {description}
- * Copyright (C) {year}  {fullname}
+ * Lib porting and building helpers for KLLibs
+ * Copyright (C) Łukasz "Kuszki" Dróżdż  2015
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
