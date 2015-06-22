@@ -61,7 +61,7 @@ class EXPORT KLString
 		 * Tworzy obiekt konwertując liczbę do postaci łańcucha znaków.
 		 *
 		 */
-		explicit KLString(double Value);
+		KLString(double Value);
 
 		/*! \brief		Konstruktor konwertujący z typu `int`.
 		 *  \param [in]	Value Wybrana liczba.
@@ -69,7 +69,7 @@ class EXPORT KLString
 		 * Tworzy obiekt konwertując liczbę do postaci łańcucha znaków.
 		 *
 		 */
-		explicit KLString(int Value);
+		KLString(int Value);
 
 		/*! \brief		Konstruktor konwertujący z `bool`.
 		 *  \param [in]	Bool Wartość logiczna.
@@ -77,7 +77,7 @@ class EXPORT KLString
 		 * Tworzy obiekt na podstawie wartości logicznej.
 		 *
 		 */
-		explicit KLString(bool Bool);
+		KLString(bool Bool);
 
 		/*! \brief		Konstruktor konwertujący z typu `const void*`.
 		 *  \param [in]	Value Wybrany adres.
@@ -85,7 +85,7 @@ class EXPORT KLString
 		 * Tworzy obiekt konwertując liczbę do postaci łańcucha znaków.
 		 *
 		 */
-		explicit KLString(const void* Value);
+		KLString(const void* Value);
 
 		/*! \brief		Konstruktor konwertujący z `char`.
 		 *  \param [in]	Char Wybrany znak.
