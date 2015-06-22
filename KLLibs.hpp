@@ -58,4 +58,8 @@
 #include "script/klscript.hpp"
 #include "script/klvariables.hpp"
 
+#if defined(QT_VERSION)
+#include "qt/klhighlighter.hpp"
+#endif
+
 #endif // KLLIBS_GLOBAL_HPP

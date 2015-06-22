@@ -4,8 +4,6 @@
 #
 #-------------------------------------------------
 
-QT		-=	gui
-
 TARGET	=	KLLibs
 TEMPLATE	=	lib
 
@@ -20,7 +18,7 @@ SOURCES	+=	script/klscript.cpp \
 			containers/kllist.cpp \
 			containers/klstring.cpp \
 			containers/kltree.cpp \
-			script/klparser.cpp
+			script/klparser.cpp \
 
 HEADERS	+=	KLLibs.hpp libbuild.hpp \
 			script/klscript.hpp \
@@ -34,8 +32,15 @@ HEADERS	+=	KLLibs.hpp libbuild.hpp \
 
 QMAKE_CXXFLAGS	+=	-s -fomit-frame-pointer -march=native
 
-unix
-{
+addons {
+	QT		+=	widgets
+	SOURCES	+=	qt/klhighlighter.cpp
+	HEADERS	+=	qt/klhighlighter.hpp
+} else {
+	QT		-=	gui core
+}
+
+unix {
 	target.path = /usr/lib
 	INSTALLS += target
 }
