@@ -18,7 +18,7 @@ SOURCES	+=	script/klscript.cpp \
 			containers/kllist.cpp \
 			containers/klstring.cpp \
 			containers/kltree.cpp \
-			script/klparser.cpp \
+			script/klparser.cpp
 
 HEADERS	+=	KLLibs.hpp libbuild.hpp \
 			script/klscript.hpp \
@@ -28,19 +28,29 @@ HEADERS	+=	KLLibs.hpp libbuild.hpp \
 			containers/kllist.hpp \
 			containers/klstring.hpp \
 			containers/kltree.hpp \
-			script/klparser.hpp \
+			script/klparser.hpp
 
 QMAKE_CXXFLAGS	+=	-s -fomit-frame-pointer -march=native
 
 addons {
+
 	QT		+=	widgets
-	SOURCES	+=	qt/klhighlighter.cpp
-	HEADERS	+=	qt/klhighlighter.hpp
+
+	SOURCES	+=	qt/klhighlighter.cpp \
+				qt/klscripteditor.cpp
+
+	HEADERS	+=	qt/klhighlighter.hpp \
+				qt/klscripteditor.hpp
+
 } else {
+
 	QT		-=	gui core
+
 }
 
 unix {
+
 	target.path = /usr/lib
 	INSTALLS += target
+
 }
