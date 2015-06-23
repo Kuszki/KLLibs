@@ -7,6 +7,8 @@ Biblioteki używają minimalnej ilości wbudowanych funkcji C/C++ i są zaimplem
 
 ## Kontenery
 
+KLLibs posiada zestaw wbudowanych kontenerów używanych w innych modułach projektu. Kontenery zaprojektowano pod kątem oszczędności pamięci i wydajności obliczeń tak, aby mogły one być wykorzystane nawet na słabych platformach sprzętowych.
+
 ### KLList
 Kontener reprezentujący liste obiektów.
 
@@ -62,6 +64,8 @@ Możliwości:
 - [X] Przełączanie się pomiędzy gałęziami.
 
 ## Interpreter skryptów
+
+Interpreter skryptów zawiera parser matematyczny i system bindowania zmiennych i funkcji. Cały mechanizm da się uruchomić na platformie 8-bitowej z minimum 18 kB pamięci programu i około 1 kB pamięci RAM (ilość pamięci zależy od przeprowadzanych operacji). Przy wykonywaniu skryptu interpreter nie potrzebuje alokować dużych obszarów pamięci więć zwykle jeśli skrypt zdoła zostać umieszczony w pamięci oraz zostanie zainicjowany interpreter, to skrypt ten zostanie poprawnie wykonany.
 
 ### KLParser
 Interpreter wyrażeń matematycznych i logicznych.
@@ -174,6 +178,28 @@ Możliwości:
 - [ ] Automatyczna kontrola typu przy operacjach wyłuskania.
 - [ ] Słabe typowanie.
 - [ ] Dynamiczna zmiana typu.
+
+## Dodatki do Qt
+
+KLLibs zawiera kilka dodatków do biblioteki Qt ułatwiających edycje kodu skryptu w GUI. Aby zbudować biblioteke z tymi dodatkami należy w argumentach qmake dodać następujący wpis: `CONFIG+=addons`. Domyślnie biblioteka budowana jest bez tych dodatków.
+
+### KLHighlighter
+Mechanizm podświetlania składni języka `KLScript`
+
+- do użycia wraz z obiektem `QTextDocument`
+- podświetlanie składni i elementów języka
+
+Możliwości:
+- [X] Edycja styli podświetlania.
+
+### KLScripteditor
+Rozszerzenie `QPlainTextEdit` umożliwiające podświetlanie składni i numerowanie linii przy edycji kodu `KLScript`.
+
+Możliwości:
+- [X] Numeracja wierszy.
+- [X] Podświetlanie aktywnej linii.
+- [X] Automatyczne wyróżnianie składni (`KLHighlighter`).
+- [ ] Zmiana kolorów w widgecie.
 
 # Licencja
 
