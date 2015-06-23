@@ -4,9 +4,9 @@ Lekki zestaw bibliotek napisany w C++ przeznaczony do współpracy z kontrolerem
 Biblioteki używają minimalnej ilości wbudowanych funkcji C/C++ i są zaimplementowane z użyciem mechanizmów dostarczanych przez C++11.
 
 # Składniki
+KLLibs zawiera kilka głównych modułów takich jak kontenery, czy mechanizmy języka skryptowego. Niektóre komponenty wymagają dołączenia do projektu innych modułów KLLibs.
 
 ## Kontenery
-
 KLLibs posiada zestaw wbudowanych kontenerów używanych w innych modułach projektu. Kontenery zaprojektowano pod kątem oszczędności pamięci i wydajności obliczeń tak, aby mogły one być wykorzystane nawet na słabych platformach sprzętowych.
 
 ### KLList
@@ -64,7 +64,6 @@ Możliwości:
 - [X] Przełączanie się pomiędzy gałęziami.
 
 ## Interpreter skryptów
-
 Interpreter skryptów zawiera parser matematyczny i system bindowania zmiennych i funkcji. Cały mechanizm da się uruchomić na platformie 8-bitowej z minimum 18 kB pamięci programu i około 1 kB pamięci RAM (ilość pamięci zależy od przeprowadzanych operacji). Przy wykonywaniu skryptu interpreter nie potrzebuje alokować dużych obszarów pamięci więć zwykle jeśli skrypt zdoła zostać umieszczony w pamięci oraz zostanie zainicjowany interpreter, to skrypt ten zostanie poprawnie wykonany.
 
 ### KLParser
@@ -180,7 +179,6 @@ Możliwości:
 - [ ] Dynamiczna zmiana typu.
 
 ## Dodatki do Qt
-
 KLLibs zawiera kilka dodatków do biblioteki Qt ułatwiających edycje kodu skryptu w GUI. Aby zbudować biblioteke z tymi dodatkami należy w argumentach qmake dodać następujący wpis: `CONFIG+=addons`. Domyślnie biblioteka budowana jest bez tych dodatków.
 
 ### KLHighlighter
@@ -202,7 +200,6 @@ Możliwości:
 - [ ] Zmiana kolorów w widgecie.
 
 # Licencja
-
 KLLibs - Zbiór lekkich bibliotek. Copyright (C) 2015 Łukasz "Kuszki" Dróżdż.
 
 Niniejszy program jest wolnym oprogramowaniem; możesz go rozprowadzać dalej i/lub modyfikować na warunkach Powszechnej Licencji Publicznej GNU, wydanej przez Fundację Wolnego Oprogramowania - według wersji 2-giej tej Licencji lub którejś z późniejszych wersji.
