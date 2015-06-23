@@ -422,3 +422,35 @@ KLParser::ERROR KLParser::GetError(void) const
 {
 	return LastError;
 }
+
+const char* KLParser::GetMessage(void) const
+{
+	switch (LastError)
+	{
+		case UNEXPECTED_OPERATOR:
+			return "Nieoczekiwany operator";
+
+		case UNKNOWN_OPERATOR:
+			return "Nieznany operator";
+
+		case UNKNOWN_FUNCTION:
+			return "Nieznana funkcja";
+
+		case EXPECTED_BRACKET:
+			return "Oczekiwano nawiasu";
+
+		case NOT_ENOUGH_PARAMETERS:
+			return "Oczekiwano na parametry";
+
+		case TOO_MANY_PARAMETERS:
+			return "Oczekiwano na operator";
+
+		case BRACKETS_NOT_EQUAL:
+			return "Niepoprawne nawiasy";
+
+		case DIVISION_BY_ZERO:
+			return "Dzielenie przez zero";
+
+		default: return "Skrypt jest poprawny";
+	}
+}

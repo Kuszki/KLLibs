@@ -328,6 +328,15 @@ class EXPORT KLParser
 		 */
 		ERROR GetError(void) const;
 
+		/*! \brief		Pobranie opisu ostatniego błędu.
+		 *  \return		Opis ostatniego błędu.
+		 *  \see			GetError().
+		 *
+		 * Zwraca czytelny dla człowieka opis napotkanego błędu.
+		 *
+		 */
+		const char* GetMessage(void) const;
+
 };
 
 #endif // KLPARSER_HPP
