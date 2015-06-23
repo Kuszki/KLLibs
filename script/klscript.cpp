@@ -29,7 +29,7 @@ KLScript::OPERATION KLScript::GetToken(const KLString& Script)
 {
 	KLString Token = GetName(Script);
 
-	if (!Token)				return EXIT;
+	if (!Token)				return END;
 
 	else if (Token == "set")		return SET;
 	else if (Token == "call")	return CALL;
@@ -53,13 +53,13 @@ KLString KLScript::GetParam(const KLString& Script)
 	while (Script[Process] != ';' &&
 		  Script[Process] != '#' &&
 		  Script[Process] != ',' &&
-		  Script[Process] != '\0') Process++;
+		  Script[Process] != '\0') ++Process;
 
 	KLString Param = Script.Part(Start, Process);
 
 	if (Script[Process] == '#') return Param + GetParam(Script);
 
-	while (isspace(Script[Process])) Process++;
+	while (isspace(Script[Process])) ++Process;
 
 	return Param;
 }
@@ -68,14 +68,14 @@ KLString KLScript::GetName(const KLString& Script)
 {
 	int Start = SkipComment(Script);
 
-	while (isalpha(Script[Process])) Process++;
+	while (isalpha(Script[Process])) ++Process;
 
 	int Stop = Process;
 
 	if (Script[Process] != ';' &&
 	    Script[Process] != ',')
 	{
-		while (isspace(Script[Process])) Process++;
+		while (isspace(Script[Process])) ++Process;
 	}
 
 	return Script.Part(Start, Stop);
@@ -94,11 +94,11 @@ bool KLScript::GetValue(const KLString& Script, KLVariables& Scoope)
 
 int KLScript::SkipComment(const KLString& Script)
 {
-	while (isspace(Script[Process])) Process++;
+	while (isspace(Script[Process])) ++Process;
 
 	if (Script[Process] == '#')
 	{
-		while (Script[Process] && Script[Process] != '\n') Process++;
+		while (Script[Process] && Script[Process] != '\n') ++Process;
 
 		SkipComment(Script);
 	}
@@ -130,13 +130,11 @@ bool KLScript::Evaluate(const KLString& Script)
 			{
 				IF_Terminated ReturnError(WRONG_PARAMETERS);
 
-				KLString Var = GetName(Script);
+				const KLString Var = GetName(Script);
 
-				if (!LocalVars.Exists(Var))
-					ReturnError(UNDEFINED_VARIABLE);
+				if (!LocalVars.Exists(Var)) ReturnError(UNDEFINED_VARIABLE);
 
-				if (!GetValue(Script, LocalVars))
-					ReturnError(WRONG_EVALUATION);
+				if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
 
 				LocalVars[Var] = Parser.GetValue();
 			}
@@ -147,16 +145,14 @@ bool KLScript::Evaluate(const KLString& Script)
 
 				const KLString Proc = GetName(Script);
 
-				if (!Bindings.Exists(Proc))
-					ReturnError(UNDEFINED_FUNCTION);
+				if (!Bindings.Exists(Proc)) ReturnError(UNDEFINED_FUNCTION);
 
 				KLVariables Params(&LocalVars);
 				int ParamID = 0;
 
 				if (!Terminated) do
 				{
-					if (!GetValue(Script, LocalVars))
-						ReturnError(WRONG_EVALUATION);
+					if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
 
 					KLString ID(ParamID++);
 
@@ -211,13 +207,13 @@ bool KLScript::Evaluate(const KLString& Script)
 					switch (GetToken(Script))
 					{
 						case T_IF:
-							Counter++;
+							++Counter;
 						break;
 						case T_ELSE:
 							if (Counter == 1) Else = Process;
 						break;
 						case T_ENDIF:
-							Counter--;
+							--Counter;
 						break;
 						default: break;
 					}
@@ -250,10 +246,10 @@ bool KLScript::Evaluate(const KLString& Script)
 					switch (GetToken(Script))
 					{
 						case T_WHILE:
-							Counter++;
+							++Counter;
 						break;
 						case T_DONE:
-							Counter--;
+							--Counter;
 						break;
 						default: break;
 					}
@@ -274,8 +270,7 @@ bool KLScript::Evaluate(const KLString& Script)
 			{
 				IF_Terminated ReturnError(WRONG_PARAMETERS);
 
-				if (!GetValue(Script, LocalVars))
-					ReturnError(WRONG_EVALUATION);
+				if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
 
 				Variables["return"] = Parser.GetValue();
 
@@ -284,12 +279,150 @@ bool KLScript::Evaluate(const KLString& Script)
 
 			case UNKNOWN: ReturnError(UNKNOWN_EXPRESSION);
 
-			case EXIT: return IS_NoError;
+			case EXIT:
+			case END:
+				return IS_NoError;
 
 			default: break;
 		}
 
-		if (Terminated) Process++;
+		if (Terminated) ++Process;
+		else ReturnError(EXPECTED_TERMINATOR);
+
+	}
+
+	return IS_NoError;
+}
+
+bool KLScript::Validate(const KLString& Script)
+{
+	if (!Script) ReturnError(WRONG_SCRIPTCODE);
+
+	KLVariables LocalVars(&Variables);
+
+	LastError = NO_ERROR;
+	Process = 0;
+
+	while (Process < Script.Size() && IS_NoError)
+	{
+		SkipComment(Script);
+
+		switch (GetToken(Script))
+		{
+			case SET:
+			{
+				IF_Terminated ReturnError(WRONG_PARAMETERS);
+
+				if (!LocalVars.Exists(GetName(Script))) ReturnError(UNDEFINED_VARIABLE);
+
+				if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
+			}
+			break;
+			case CALL:
+			{
+				IF_Terminated ReturnError(WRONG_PARAMETERS);
+
+				if (!Bindings.Exists(GetName(Script))) ReturnError(UNDEFINED_FUNCTION);
+
+				if (!Terminated) do
+				{
+					if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
+				}
+				while (IS_NextParam);
+			}
+			break;
+			case VAR:
+			case EXP:
+			{
+				IF_Terminated ReturnError(WRONG_PARAMETERS);
+
+				do
+				{
+					if (KLString Name = GetName(Script))
+					{
+						LocalVars.Add(Name);
+					}
+					else ReturnError(EMPTY_EXPRESSION);
+				}
+				while (IS_NextParam);
+			}
+			break;
+			case T_IF:
+			{
+				IF_Terminated ReturnError(WRONG_PARAMETERS);
+
+				if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
+
+				int Counter = 1;
+				int Then = Process;
+
+				while (Counter && Process != -1)
+				{
+					Process = Script.Find(';', Process) + 1;
+
+					switch (GetToken(Script))
+					{
+						case T_IF:
+							++Counter;
+						break;
+						case T_ENDIF:
+							--Counter;
+						break;
+						default: break;
+					}
+				}
+
+				if (Counter) ReturnError(EXPECTED_ENDIF_TOK);
+
+				Process = Then;
+			}
+			break;
+			case T_WHILE:
+			{
+				IF_Terminated ReturnError(WRONG_PARAMETERS);
+
+				if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
+
+				int Counter = 1;
+				int Then = Process;
+
+				while (Counter && Process != -1)
+				{
+					Process = Script.Find(';', Process) + 1;
+
+					switch (GetToken(Script))
+					{
+						case T_WHILE:
+							++Counter;
+						break;
+						case T_DONE:
+							--Counter;
+						break;
+						default: break;
+					}
+				}
+
+				if (Counter) ReturnError(EXPECTED_DONE_TOK);
+
+				Process = Then;
+			}
+			break;
+
+			case T_RETURN:
+			{
+				IF_Terminated ReturnError(WRONG_PARAMETERS);
+
+				if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
+			}
+
+			case UNKNOWN: ReturnError(UNKNOWN_EXPRESSION);
+
+			case END: return IS_NoError;
+
+			default: break;
+		}
+
+		if (Terminated) ++Process;
 		else ReturnError(EXPECTED_TERMINATOR);
 
 	}
@@ -300,4 +433,52 @@ bool KLScript::Evaluate(const KLString& Script)
 KLScript::ERROR KLScript::GetError(void) const
 {
 	return LastError;
+}
+
+const char* KLScript::GetMessage(void) const
+{
+	switch (LastError)
+	{
+		case UNDEFINED_VARIABLE:
+			return "Niezdefiniowana zmienna";
+
+		case UNDEFINED_FUNCTION:
+			return "Niezdefiniowana funkcja";
+
+		case EXPECTED_ENDIF_TOK:
+			return "Oczekiwano znacznika `fi`";
+
+		case EXPECTED_DONE_TOK:
+			return "Oczekiwano znacznika `done`";
+
+		case EXPECTED_TERMINATOR:
+			return "Oczekiwano terminatora `;`";
+
+		case EMPTY_EXPRESSION:
+			return "Napotkano puste polecenie";
+
+		case UNKNOWN_EXPRESSION:
+			return "Napotkano nieznane polecenie";
+
+		case WRONG_SCRIPTCODE:
+			return "Niepoprawny lub pusty skrypt";
+
+		case WRONG_PARAMETERS:
+			return "Niepoprawne parametry polecenia";
+
+		case WRONG_EVALUATION:
+			return "Niepoprawny skrypt matematyczny";
+
+		default: return "Skrypt jest poprawny";
+	}
+}
+
+int KLScript::GetLine(const KLString& Script) const
+{
+	int Line = 1;
+
+	for (int i = 0; i < Process && i < Script.Size(); i++)
+		if (Script[i] == '\n') ++Line;
+
+	return Line;
 }

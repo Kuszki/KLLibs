@@ -106,7 +106,7 @@ class EXPORT KLScript
 		UNDEFINED_VARIABLE,		//!< Niezdefiniowana zmienna.
 		UNDEFINED_FUNCTION,		//!< Niezdefiniowana funkcja.
 
-		EXPECTED_ENDIF_TOK,		//!< Brak oczekiwanego `endif`.
+		EXPECTED_ENDIF_TOK,		//!< Brak oczekiwanego `fi`.
 		EXPECTED_DONE_TOK,		//!< Brak oczekiwanego `done`.
 		EXPECTED_TERMINATOR,	//!< Oczekiwano terminatora `;`.
 
@@ -187,20 +187,49 @@ class EXPORT KLScript
 		KLScript(void);
 
 		/*! \brief		Wykonanie kodu.
+		 *  \param [in]	Script Skrypt do przetworzenia.
 		 *  \return		Powodzenie operacji.
 		 *
 		 * Przetwarza wybrany kod i zwraca powodzenie operacji.
 		 *
 		 */
-		bool Evaluate(const KLString& Code);
+		bool Evaluate(const KLString& Script);
+
+		/*! \brief		Sprawdzenie kodu.
+		 *  \param [in]	Script Skrypt do przetworzenia.
+		 *  \return		Powodzenie operacji.
+		 *
+		 * Przetwarza wybrany kod pod kątem błędów składni i zwraca powodzenie operacji.
+		 *
+		 */
+		bool Validate(const KLString& Script);
 
 		/*! \brief		Pobranie ostatniego błędu.
 		 *  \return		Ostatni błąd.
+		 *  \see			Evaluate(const KLString&), Validate(const KLString&).
 		 *
 		 * Zwraca ostatni napotkany błąd.
 		 *
 		 */
 		ERROR GetError(void) const;
+
+		/*! \brief		Pobranie opisu ostatniego błędu.
+		 *  \return		Opis ostatniego błędu.
+		 *  \see			GetError().
+		 *
+		 * Zwraca czytelny dla człowieka opis napotkanego błędu.
+		 *
+		 */
+		const char* GetMessage(void) const;
+
+		/*! \brief		Obliczenie numeru linii ostatniego błędu.
+		 *  \param [in]	Code Ostatni skrypt.
+		 *  \return		Numer linii ostatniego błędu.
+		 *
+		 * Oblicza i zwraca numer linii w której ostatnio wystąpił błąd.
+		 *
+		 */
+		int GetLine(const KLString& Script) const;
 
 };
 
