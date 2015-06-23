@@ -21,17 +21,99 @@
 #ifndef KLSCRIPTEDITOR_HPP
 #define KLSCRIPTEDITOR_HPP
 
+#include "../libbuild.hpp"
+
+#include "klhighlighter.hpp"
+
 #include <QPlainTextEdit>
+#include <QTextBlock>
+#include <QPainter>
+#include <QObject>
 
-class KLScripteditor : public QPlainTextEdit
+/*! \file		klscripteditor.hpp
+ *  \brief	Deklaracje dla klasy KLScripteditor i jej składników.
+ *
+ */
+
+/*! \file		klscripteditor.cpp
+ *  \brief	Implementacja klasy KLScripteditor i jej składników.
+ *
+ */
+
+/*! \brief	Pole tekstowe do edycji skryptu `KLScript`.
+ *
+ * Klasa stanowi pole tekstowe rozszerzające `QPlainTextEdit` z automatycznym podświetlaniem składni, aktywnej linii i z wbudowanym numerowaniem linii.
+ *
+ */
+class EXPORT KLScripteditor : public QPlainTextEdit
 {
+
 		Q_OBJECT
+
+	protected: class KLScripteditorNumberarea final : public QWidget
+	{
+
+		protected:
+
+			virtual void paintEvent(QPaintEvent* Event) override;
+
+		public:
+
+			explicit KLScripteditorNumberarea(KLScripteditor* Editor);
+
+			QSize sizeHint(void) const override;
+
+	};
+
+	protected:
+
+		KLScripteditorNumberarea* NumberArea;	//!< Widget numeracji wierszy.
+
+		KLHighlighter* SyntaxHighlighter;		//!< Mechanizm podświetlania składni.
+
+		virtual void resizeEvent(QResizeEvent *Event) override;
+
 	public:
-		explicit KLScripteditor(QWidget *parent = 0);
 
-	signals:
+		/*! \brief		Konstruktor domyślny.
+		 *  \param [in]	Parent Rodzic widgetu.
+		 *
+		 * Inicjuje pole rodzica i łączy potrzebne sygnały ze slotami.
+		 *
+		 */
+		explicit KLScripteditor(QWidget* Parent = nullptr);
 
-	public slots:
+		/*! \brief		Destruktor.
+		 *
+		 * Zwalnia wszystkie użyte zasoby.
+		 *
+		 */
+		virtual ~KLScripteditor(void) override;
+
+		/*! \brief		Szerokość pola numeracji.
+		 *  \return		Szerokość kolumny z numerami wierszy w pikselach.
+		 *
+		 * Oblicza i zwraca aktualną potrzebną szerokość dla kolumny z numerami wierszy.
+		 *
+		 */
+		int numberareaWidth(void) const;
+
+		/*! \brief		Mechanizm podświetlania tekstu.
+		 *  \return		Instancja używanego mechanizmu podświetlania.
+		 *
+		 * Zwraca referencje mechanizmu używanego do podświetlania składni.
+		 *
+		 */
+		KLHighlighter& Highlighter(void);
+
+	private slots:
+
+		void numberareaPaintEvent(QPaintEvent *event);
+
+		void updateNumberareaWidth(int newBlockCount);
+		void updateNumberareaView(const QRect& Rect, int dY);
+
+		void highlightCurrentLine(void);
 
 };
 
