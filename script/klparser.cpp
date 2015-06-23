@@ -277,14 +277,14 @@ bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code)
 
 	while (Pos < Code.Size() && LastError == NO_ERROR)
 	{
-		while (Pos < Code.Size() && isspace(Code[Pos])) Pos++;
+		while (Pos < Code.Size() && isspace(Code[Pos])) ++Pos;
 
 		if (!Code[Pos]) break;
 		else Start = Pos;
 
 		if (isdigit(Code[Pos]))
 		{
-			while (isdigit(Code[Pos]) || Code[Pos] == '.') Pos++;
+			while (isdigit(Code[Pos]) || Code[Pos] == '.') ++Pos;
 
 			Tokens << new KLParserToken(Code.Part(Start, Pos),
 								   KLParserToken::CLASS::VALUE);
@@ -293,7 +293,7 @@ bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code)
 		}
 		else if (isalpha(Code[Pos]))
 		{
-			while (isalpha(Code[Pos])) Pos++;
+			while (isalpha(Code[Pos])) ++Pos;
 
 			Operators << new KLParserToken(Code.Part(Start, Pos),
 									 KLParserToken::CLASS::FUNCTION);
@@ -354,7 +354,7 @@ bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code)
 						  !isdigit(Code[Pos]) &&
 						  !isalpha(Code[Pos]) &&
 						  Code[Pos] != '(' &&
-						  Code[Pos] != ')') Pos++;
+						  Code[Pos] != ')') ++Pos;
 
 					Operator = new KLParserToken(Code.Part(Start, Pos--),
 										    KLParserToken::CLASS::OPERATOR);
@@ -376,7 +376,7 @@ bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code)
 				Operator = nullptr;
 			}
 
-			Pos++;
+			++Pos;
 		}
 	}
 
