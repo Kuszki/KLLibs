@@ -20,58 +20,53 @@
 
 #include "klhighlighter.hpp"
 
-QVector<KLHighlighter::KLHighlighterRule> KLHighlighter::Rules = QVector<KLHighlighter::KLHighlighterRule>();
-
 KLHighlighter::KLHighlighter(QTextDocument* Parent)
 : QSyntaxHighlighter(Parent)
 {
-	if (Rules.isEmpty())
-	{
-		KLHighlighterRule Rule;
+	KLHighlighterRule Rule;
 
-		Rule.Format.setForeground(Qt::darkMagenta);
-		Rule.Format.setFontWeight(QFont::Normal);
+	Rule.Format.setForeground(Qt::darkMagenta);
+	Rule.Format.setFontWeight(QFont::Normal);
 
-		Rule.Expresion = QRegExp("\\b[0-9]+\\b");
+	Rule.Expresion = QRegExp("\\b[0-9]+\\b");
 
-		Rules.append(Rule);
+	Rules.insert(NUMBERS, Rule);
 
-		Rule.Format.setForeground(Qt::darkBlue);
-		Rule.Format.setFontWeight(QFont::Bold);
+	Rule.Format.setForeground(Qt::darkBlue);
+	Rule.Format.setFontWeight(QFont::Bold);
 
-		Rule.Expresion = QRegExp("\\b(set|call|var|export|if|else|fi|while|done)\\b");
+	Rule.Expresion = QRegExp("\\b(set|call|var|export|if|else|fi|while|done)\\b");
 
-		Rules.append(Rule);
+	Rules.insert(KEYWORDS, Rule);
 
-		Rule.Format.setForeground(Qt::darkBlue);
-		Rule.Format.setFontWeight(QFont::Bold);
+	Rule.Format.setForeground(Qt::darkBlue);
+	Rule.Format.setFontWeight(QFont::Bold);
 
-		Rule.Expresion = QRegExp("(\\+|\\-|\\*|\\/|\\%|\\^|\\=\\=|\\!\\=|\\>|\\<|\\>\\=|\\<\\=|\\&\\&|\\|\\||\\(|\\)|\\;|\\,)");
+	Rule.Expresion = QRegExp("(\\+|\\-|\\*|\\/|\\%|\\^|\\=\\=|\\!\\=|\\>|\\<|\\>\\=|\\<\\=|\\&\\&|\\|\\||\\(|\\)|\\;|\\,)");
 
-		Rules.append(Rule);
+	Rules.insert(OPERATORS, Rule);
 
-		Rule.Format.setForeground(Qt::darkRed);
-		Rule.Format.setFontWeight(QFont::Bold);
+	Rule.Format.setForeground(Qt::darkRed);
+	Rule.Format.setFontWeight(QFont::Bold);
 
-		Rule.Expresion = QRegExp("\\b(return|exit)\\b");
+	Rule.Expresion = QRegExp("\\b(return|exit)\\b");
 
-		Rules.append(Rule);
+	Rules.insert(BREAKS, Rule);
 
-		Rule.Format.setForeground(Qt::darkCyan);
-		Rule.Format.setFontWeight(QFont::Bold);
+	Rule.Format.setForeground(Qt::darkCyan);
+	Rule.Format.setFontWeight(QFont::Bold);
 
-		Rule.Expresion = QRegExp("\\b(sin|cos|tan|abs|exp|sqrt|log|ln|not|minus)\\b");
+	Rule.Expresion = QRegExp("\\b(sin|cos|tan|abs|exp|sqrt|log|ln|not|minus)\\b");
 
-		Rules.append(Rule);
+	Rules.insert(MATHS, Rule);
 
-		Rule.Format.setForeground(Qt::darkGreen);
-		Rule.Format.setFontWeight(QFont::Normal);
-		Rule.Format.setFontItalic(true);
+	Rule.Format.setForeground(Qt::darkGreen);
+	Rule.Format.setFontWeight(QFont::Normal);
+	Rule.Format.setFontItalic(true);
 
-		Rule.Expresion = QRegExp("#[^\n]*");
+	Rule.Expresion = QRegExp("#[^\n]*");
 
-		Rules.append(Rule);
-	}
+	Rules.insert(COMMENTS, Rule);
 }
 
 KLHighlighter::~KLHighlighter(void) {}
@@ -89,4 +84,14 @@ void KLHighlighter::highlightBlock(const QString& Text)
 			Index = Rule.Expresion.indexIn(Text, Index + Length);
 		}
 	}
+}
+
+void KLHighlighter::SetFormat(STYLE Style, const QTextCharFormat& Format)
+{
+	Rules[Style].Format = Format;
+}
+
+QTextCharFormat KLHighlighter::GetFormat(STYLE Style) const
+{
+	return Rules[Style].Format;
 }

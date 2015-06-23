@@ -46,6 +46,21 @@ class EXPORT KLHighlighter : public QSyntaxHighlighter
 
 		Q_OBJECT
 
+	/*! \brief		Wyliczenie styli wyróżnienia.
+	 *
+	 * Pozwala ograniczyć pule styli do wybranych pozycji.
+	 *
+	 */
+	public: enum STYLE
+	{
+		NUMBERS,		//!< Liczby.
+		KEYWORDS,		//!< Słowa kluczowe.
+		OPERATORS,	//!< Operatory matematyczne.
+		BREAKS,		//!< Słowa kluczowe kończące program.
+		MATHS,		//!< Funkcje matematyczne.
+		COMMENTS		//!< Komentarze.
+	};
+
 	protected:
 
 		/*! \brief		Reprezentacja wyróżnienia.
@@ -59,7 +74,7 @@ class EXPORT KLHighlighter : public QSyntaxHighlighter
 			QRegExp Expresion;		//!< Wyrażenie reguralne.
 		};
 
-		static QVector<KLHighlighterRule> Rules;	//!< Kontener na wyróżnienia.
+		QMap<STYLE, KLHighlighterRule> Rules;	//!< Kontener na wyróżnienia.
 
 		virtual void highlightBlock(const QString& Text) override;
 
@@ -68,7 +83,7 @@ class EXPORT KLHighlighter : public QSyntaxHighlighter
 		/*! \brief		Konstruktor domyślny.
 		 *  \param [in]	Parent Dokument roboczy.
 		 *
-		 * Inicjuje pole rodzica i tworzy wrzystkie reguły wyróżnień o ile nie zostały już utworzone.
+		 * Inicjuje pole rodzica i tworzy wrzystkie domyślne reguły wyróżnień.
 		 *
 		 */
 		KLHighlighter(QTextDocument* Parent);
@@ -79,6 +94,25 @@ class EXPORT KLHighlighter : public QSyntaxHighlighter
 		 *
 		 */
 		virtual ~KLHighlighter(void) override;
+
+		/*! \brief		Ustala styl.
+		 *  \param [in]	Style	Indeks stylu.
+		 *  \param [in]	Format	Format stylu.
+		 *
+		 * Ustala nowy styl dla wybranego fragmentu kodu.
+		 *
+		 */
+		void SetFormat(STYLE Style,
+					const QTextCharFormat& Format);
+
+		/*! \brief		Pobiera styl.
+		 *  \param [in]	Style Indeks stylu.
+		 *  \return		Styl wybranego fragmentu.
+		 *
+		 * Pobiera styl wybranego fragmentu kodu.
+		 *
+		 */
+		QTextCharFormat GetFormat(STYLE Style) const;
 
 };
 
