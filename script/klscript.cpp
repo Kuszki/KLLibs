@@ -29,7 +29,7 @@ KLScript::OPERATION KLScript::GetToken(const KLString& Script)
 {
 	KLString Token = GetName(Script);
 
-	if (!Token)				return END;
+	if (!Token)				return EXIT;
 
 	else if (Token == "set")		return SET;
 	else if (Token == "call")	return CALL;
@@ -284,11 +284,9 @@ bool KLScript::Evaluate(const KLString& Script)
 
 			case UNKNOWN: ReturnError(UNKNOWN_EXPRESSION);
 
-			case EXIT:
-			case END:
-				return IS_NoError;
+			case EXIT: return IS_NoError;
 
-			default: continue;
+			default: break;
 		}
 
 		if (Terminated) Process++;
