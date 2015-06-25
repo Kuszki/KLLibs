@@ -60,6 +60,7 @@
 
 #if defined(QT_VERSION)
 #include "qt/klhighlighter.hpp"
+#include "qt/klscripteditor.hpp"
 #endif
 
 #endif // KLLIBS_GLOBAL_HPP
