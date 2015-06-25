@@ -227,10 +227,10 @@ class EXPORT KLScript
 		const char* GetMessage(void) const;
 
 		/*! \brief		Obliczenie numeru linii ostatniego błędu.
-		 *  \param [in]	Code Ostatni skrypt.
+		 *  \param [in]	Script Ostatni skrypt.
 		 *  \return		Numer linii ostatniego błędu.
 		 *
-		 * Oblicza i zwraca numer linii w której ostatnio wystąpił błąd.
+		 * Oblicza i zwraca numer linii w której ostatnio wystąpił błąd. Wymaga podania ostatnio przetwarzanego skryptu.
 		 *
 		 */
 		int GetLine(const KLString& Script) const;
