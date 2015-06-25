@@ -188,6 +188,30 @@ Data KLList<Data>::Pop(void)
 }
 
 template<typename Data>
+Data& KLList<Data>::First(void)
+{
+	return *Begin->Record;
+}
+
+template<typename Data>
+const Data& KLList<Data>::First(void) const
+{
+	return *Begin->Record;
+}
+
+template<typename Data>
+Data& KLList<Data>::Last(void)
+{
+	return *End->Record;
+}
+
+template<typename Data>
+const Data& KLList<Data>::Last(void) const
+{
+	return *End->Record;
+}
+
+template<typename Data>
 int KLList<Data>::Size(void) const
 {
 	return Capacity;

@@ -188,6 +188,42 @@ class KLList
 		 */
 		Data Pop(void);
 
+		/*! \brief		Wybór pierwszego elementu.
+		 *  \return		Referencja do pierwszego elementu.
+		 *  \warning		Gdy element o podanym indeksie nie istnieje to zwrócona zostanie niepoprawna referencja do `nullptr` co zapewne spowoduje krytyczny wyjątek.
+		 *
+		 * Wybiera pierwszy element z listy.
+		 *
+		 */
+		Data& First(void);
+
+		/*! \brief		Wybór pierwszego elementu.
+		 *  \return		Stała referencja do pierwszego elementu.
+		 *  \warning		Gdy element o podanym indeksie nie istnieje to zwrócona zostanie niepoprawna referencja do `nullptr` co zapewne spowoduje krytyczny wyjątek.
+		 *
+		 * Wybiera pierwszy element z listy.
+		 *
+		 */
+		const Data& First(void) const;
+
+		/*! \brief		Wybór ostatniego elementu.
+		 *  \return		Referencja do ostatniego elementu.
+		 *  \warning		Gdy element o podanym indeksie nie istnieje to zwrócona zostanie niepoprawna referencja do `nullptr` co zapewne spowoduje krytyczny wyjątek.
+		 *
+		 * Wybiera ostatni element z listy.
+		 *
+		 */
+		Data& Last(void);
+
+		/*! \brief		Wybór ostatniego elementu.
+		 *  \return		Stała referencja do ostatniego elementu.
+		 *  \warning		Gdy element o podanym indeksie nie istnieje to zwrócona zostanie niepoprawna referencja do `nullptr` co zapewne spowoduje krytyczny wyjątek.
+		 *
+		 * Wybiera ostatni element z listy.
+		 *
+		 */
+		const Data& Last(void) const;
+
 		/*! \brief		Sprawdzenie ilości elementów.
 		 *  \return		Aktualna liczba elementów.
 		 *
