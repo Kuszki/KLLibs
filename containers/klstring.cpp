@@ -30,9 +30,8 @@ KLString::KLString(double Value)
 	dtostrf(Value, 0, 5, Buffer);
 #endif
 
-	Capacity = strlen(Buffer);
-
-	Data = new char[Capacity + 1];
+	Capacity	= strlen(Buffer);
+	Data		= new char[Capacity + 1];
 
 	memcpy(Data, Buffer, Capacity + 1);
 }
@@ -47,9 +46,8 @@ KLString::KLString(int Value)
 	itoa(Value, Buffer, 10);
 #endif
 
-	Capacity = strlen(Buffer);
-
-	Data = new char[Capacity + 1];
+	Capacity	= strlen(Buffer);
+	Data		= new char[Capacity + 1];
 
 	memcpy(Data, Buffer, Capacity + 1);
 }
@@ -58,9 +56,8 @@ KLString::KLString(bool Bool)
 {
 	const char* Buffer[] = {"true", "false"};
 
-	Capacity = Bool ? 4 : 5;
-
-	Data = new char[Capacity + 1];
+	Capacity	= Bool ? 4 : 5;
+	Data		= new char[Capacity + 1];
 
 	memcpy(Data, Buffer, Capacity + 1);
 }
@@ -72,12 +69,11 @@ KLString::KLString(const void* Value)
 #ifndef F_CPU
 	snprintf(Buffer, 17, "%p", Value);
 #else
-	utoa((unsigned) Value, Buffer, 16);
+	utoa((unsigned) Value, Buffer, 17);
 #endif
 
-	Capacity = strlen(Buffer);
-
-	Data = new char[Capacity + 1];
+	Capacity	= strlen(Buffer);
+	Data		= new char[Capacity + 1];
 
 	memcpy(Data, Buffer, Capacity + 1);
 }
@@ -85,10 +81,10 @@ KLString::KLString(const void* Value)
 KLString::KLString(char Char)
 : Capacity(1)
 {
-	Data = new char[2];
+	Data		= new char[2];
 
-	Data[0] = Char;
-	Data[1] = 0;
+	Data[0]	= Char;
+	Data[1]	= 0;
 }
 
 KLString::KLString(const char* String)
@@ -96,9 +92,8 @@ KLString::KLString(const char* String)
 {
 	if (String)
 	{
-		Capacity = strlen(String);
-
-		Data = new char[Capacity + 1];
+		Capacity	= strlen(String);
+		Data		= new char[Capacity + 1];
 
 		memcpy(Data, String, Capacity + 1);
 	}
@@ -118,8 +113,8 @@ KLString::KLString(const KLString& String)
 KLString::KLString(KLString&& String)
 : Data(String.Data), Capacity(String.Capacity)
 {
-	String.Data = nullptr;
-	String.Capacity = 0;
+	String.Data		= nullptr;
+	String.Capacity	= 0;
 }
 
 KLString::KLString(void)
@@ -170,8 +165,8 @@ int KLString::Delete(const KLString& String, bool All)
 {
 	if (Capacity < String.Capacity) return 0;
 
-	int Counter = 0;
-	int Found = -1;
+	int Counter	= 0;
+	int Found		= -1;
 
 	while ((Found = Find(String)) != -1)
 	{
@@ -201,8 +196,8 @@ int KLString::Delete(int Start, int Stop)
 
 	if (Stop <= Start) return 0;
 
-	int NewCap = Capacity - Stop + Start - 1;
-	int OldCap = Capacity;
+	int NewCap	= Capacity - Stop + Start - 1;
+	int OldCap	= Capacity;
 
 	char* Buffer = new char[NewCap + 1];
 
@@ -224,8 +219,8 @@ int KLString::Replace(const KLString& Old, const KLString& New, bool All)
 {
 	if (Capacity < Old.Capacity) return 0;
 
-	int Counter = 0;
-	int Found = -1;
+	int Counter	= 0;
+	int Found		= -1;
 
 	while ((Found = Find(Old)) != -1)
 	{
@@ -317,14 +312,14 @@ void KLString::Clean(void)
 	{
 		delete [] Data;
 
-		Data = nullptr;
-		Capacity = 0;
+		Capacity	= 0;
+		Data		= nullptr;
 	}
 }
 
 int KLString::ToBool(void) const
 {
-	if (Data) return atoi(Data) || strcmp(Data, "true") == 0 || strcmp(Data, "TRUE");
+	if (Data) return atoi(Data) || !strcmp(Data, "true") || !strcmp(Data, "TRUE");
 	else return false;
 }
 
@@ -378,7 +373,7 @@ bool KLString::operator== (const char* String) const
 	if (Data == String)
 		return true;
 	else
-		return !strcmp(Data ? Data : "",String);
+		return !strcmp(Data ? Data : "", String);
 }
 
 bool KLString::operator!= (const char* String) const
