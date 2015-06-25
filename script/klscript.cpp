@@ -106,11 +106,11 @@ int KLScript::SkipComment(const KLString& Script)
 	return Process;
 }
 
-bool KLScript::Evaluate(const KLString& Script)
+bool KLScript::Evaluate(const KLString& Script, KLVariables* Scoope)
 {
 	struct JUMP { int When; int Where; };
 
-	KLVariables LocalVars(&Variables);
+	KLVariables LocalVars(Scoope ? Scoope : &Variables);
 	KLList<JUMP> Jumps;
 
 	LastError = NO_ERROR;
@@ -120,7 +120,7 @@ bool KLScript::Evaluate(const KLString& Script)
 
 	while (true)
 	{
-		if (Jumps.Size()) if (Jumps[-1].When == Process) Process = Jumps.Pop().Where;
+		if (Jumps.Size() && Jumps.Last().When == Process) Process = Jumps.Pop().Where;
 
 		int Start = SkipComment(Script);
 
@@ -300,9 +300,9 @@ bool KLScript::Evaluate(const KLString& Script)
 	return true;
 }
 
-bool KLScript::Validate(const KLString& Script)
+bool KLScript::Validate(const KLString& Script, KLVariables* Scoope)
 {
-	KLVariables LocalVars(&Variables);
+	KLVariables LocalVars(Scoope ? Scoope : &Variables);
 
 	LastError = NO_ERROR;
 	Process = 0;

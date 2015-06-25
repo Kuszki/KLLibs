@@ -187,22 +187,26 @@ class EXPORT KLScript
 		KLScript(void);
 
 		/*! \brief		Wykonanie kodu.
-		 *  \param [in]	Script Skrypt do przetworzenia.
+		 *  \param [in]	Script	Skrypt do przetworzenia.
+		 *  \param [in,out]	Scoope	Zmienne wyższego poziomu.
 		 *  \return		Powodzenie operacji.
 		 *
-		 * Przetwarza wybrany kod i zwraca powodzenie operacji.
+		 * Przetwarza wybrany kod i zwraca powodzenie operacji. W przypadku gdy zakres zmiennych wyższego poziomu zostanie pominięty zostanie wykorzystany standardowy kontener na zmienne `Variables`.
 		 *
 		 */
-		bool Evaluate(const KLString& Script);
+		bool Evaluate(const KLString& Script,
+				    KLVariables* Scoope = nullptr);
 
 		/*! \brief		Sprawdzenie kodu.
-		 *  \param [in]	Script Skrypt do przetworzenia.
+		 *  \param [in]	Script	Skrypt do przetworzenia.
+		 *  \param [in,out]	Scoope	Zmienne wyższego poziomu.
 		 *  \return		Powodzenie operacji.
 		 *
-		 * Przetwarza wybrany kod pod kątem błędów składni i zwraca powodzenie operacji.
+		 * Przetwarza wybrany kod pod kątem błędów składni i zwraca powodzenie operacji. W przypadku gdy zakres zmiennych wyższego poziomu zostanie pominięty zostanie wykorzystany standardowy kontener na zmienne `Variables`.
 		 *
 		 */
-		bool Validate(const KLString& Script);
+		bool Validate(const KLString& Script,
+				    KLVariables* Scoope = nullptr);
 
 		/*! \brief		Pobranie ostatniego błędu.
 		 *  \return		Ostatni błąd.

@@ -365,7 +365,7 @@ bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code)
 			{
 				while (Operators.Size() &&
 					  (Operator->GetPriority() <=
-					   Operators[-1]->GetPriority()))
+					   Operators.Last()->GetPriority()))
 				{
 					Tokens << Operators.Pop();
 				}
