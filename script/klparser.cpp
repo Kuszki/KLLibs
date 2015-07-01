@@ -142,7 +142,6 @@ double KLParser::KLParserToken::GetValue(KLList<double>* Values) const
 	switch (Class)
 	{
 		case CLASS::OPERATOR:
-			if (!Values) LastError = NOT_ENOUGH_PARAMETERS;
 			if (Values->Size() < 2) LastError = NOT_ENOUGH_PARAMETERS;
 			else
 			{
@@ -154,83 +153,56 @@ double KLParser::KLParserToken::GetValue(KLList<double>* Values) const
 				    ParamB == 0.0) LastError = DIVISION_BY_ZERO;
 				else switch (Data.Operator)
 				{
-					case OPERATOR::ADD:
-					return ParamA + ParamB;
-					case OPERATOR::SUB:
-					return ParamA - ParamB;
-					case OPERATOR::MUL:
-					return ParamA * ParamB;
-					case OPERATOR::DIV:
-					return ParamA / ParamB;
-					case OPERATOR::MOD:
-					return (int) ParamA % (int) ParamB;
-					case OPERATOR::POW:
-					return pow(ParamA, ParamB);
+					case OPERATOR::ADD:		return ParamA + ParamB;
+					case OPERATOR::SUB:		return ParamA - ParamB;
+					case OPERATOR::MUL:		return ParamA * ParamB;
+					case OPERATOR::DIV:		return ParamA / ParamB;
+					case OPERATOR::MOD:		return (int) ParamA % (int) ParamB;
+					case OPERATOR::POW:		return pow(ParamA, ParamB);
 
-					case OPERATOR::EQ:
-					return ParamA == ParamB;
-					case OPERATOR::NEQ:
-					return ParamA != ParamB;
-					case OPERATOR::GT:
-					return ParamA > ParamB;
-					case OPERATOR::LT:
-					return ParamA < ParamB;
-					case OPERATOR::GE:
-					return ParamA >= ParamB;
-					case OPERATOR::LE:
-					return ParamA <= ParamB;
+					case OPERATOR::EQ:		return ParamA == ParamB;
+					case OPERATOR::NEQ:		return ParamA != ParamB;
+					case OPERATOR::GT:		return ParamA > ParamB;
+					case OPERATOR::LT:		return ParamA < ParamB;
+					case OPERATOR::GE:		return ParamA >= ParamB;
+					case OPERATOR::LE:		return ParamA <= ParamB;
 
-					case OPERATOR::AND:
-					return ParamA && ParamB;
-					case OPERATOR::OR:
-					return ParamA || ParamB;
+					case OPERATOR::AND:		return ParamA && ParamB;
+					case OPERATOR::OR:		return ParamA || ParamB;
 
-					default: break;
+					default: LastError = UNKNOWN_OPERATOR;
 				}
 
 			}
 		break;
 		case CLASS::FUNCTION:
-			if (!Values) LastError = NOT_ENOUGH_PARAMETERS;
-			else if (Values->Size() < 1) LastError = NOT_ENOUGH_PARAMETERS;
+			if (Values->Size() < 1) LastError = NOT_ENOUGH_PARAMETERS;
 			else
 			{
 				double ParamA = Values->Pop();
 
 				switch (Data.Function)
 				{
-					case FUNCTION::SIN:
-					return sin(ParamA);
-					case FUNCTION::COS:
-					return cos(ParamA);
-					case FUNCTION::TAN:
-					return tan(ParamA);
+					case FUNCTION::SIN:		return sin(ParamA);
+					case FUNCTION::COS:		return cos(ParamA);
+					case FUNCTION::TAN:		return tan(ParamA);
 
-					case FUNCTION::ABS:
-					return abs(ParamA);
+					case FUNCTION::ABS:		return abs(ParamA);
 
-					case FUNCTION::EXP:
-					return exp(ParamA);
-					case FUNCTION::SQRT:
-					return sqrt(ParamA);
-					case FUNCTION::LOG:
-					return log10(ParamA);
-					case FUNCTION::LN:
-					return log(ParamA);
+					case FUNCTION::EXP:		return exp(ParamA);
+					case FUNCTION::SQRT:	return sqrt(ParamA);
+					case FUNCTION::LOG:		return log10(ParamA);
+					case FUNCTION::LN:		return log(ParamA);
 
-					case FUNCTION::NOT:
-					return !ParamA;
+					case FUNCTION::NOT:		return !ParamA;
 
-					case FUNCTION::MINUS:
-					return -ParamA;
+					case FUNCTION::MINUS:	return -ParamA;
 
-					default:
-						LastError = UNKNOWN_FUNCTION;
+					default: LastError = UNKNOWN_FUNCTION;
 				}
 			}
 		break;
-		default:
-			return Data.Value;
+		default: return Data.Value;
 	}
 
 	return 0;
@@ -240,11 +212,9 @@ KLParser::KLParserToken::OPERATOR KLParser::KLParserToken::GetOperator(void) con
 {
 	switch (Class)
 	{
-		case CLASS::OPERATOR:
-			return Data.Operator;
+		case CLASS::OPERATOR: return Data.Operator;
 
-		default:
-			return OPERATOR::UNKNOWN;
+		default: return OPERATOR::UNKNOWN;
 	}
 }
 
@@ -252,11 +222,9 @@ KLParser::KLParserToken::FUNCTION KLParser::KLParserToken::GetFunction(void) con
 {
 	switch (Class)
 	{
-		case CLASS::FUNCTION:
-			return Data.Function;
+		case CLASS::FUNCTION: return Data.Function;
 
-		default:
-			return FUNCTION::UNKNOWN;
+		default: return FUNCTION::UNKNOWN;
 	}
 }
 
@@ -307,10 +275,11 @@ bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code)
 				case ')':
 					do
 					{
+						if (!Operators.Size()) ReturnError(EXPECTED_BRACKET);
+
 						Operator = Operators.Pop();
 
-						if (Operator->GetOperator() ==
-						    KLParserToken::OPERATOR::L_BRACKET)
+						if (Operator->GetOperator() == KLParserToken::OPERATOR::L_BRACKET)
 						{
 							delete Operator;
 
@@ -427,29 +396,14 @@ const char* KLParser::GetMessage(void) const
 {
 	switch (LastError)
 	{
-		case UNEXPECTED_OPERATOR:
-			return "Nieoczekiwany operator";
-
-		case UNKNOWN_OPERATOR:
-			return "Nieznany operator";
-
-		case UNKNOWN_FUNCTION:
-			return "Nieznana funkcja";
-
-		case EXPECTED_BRACKET:
-			return "Oczekiwano nawiasu";
-
-		case NOT_ENOUGH_PARAMETERS:
-			return "Oczekiwano na parametry";
-
-		case TOO_MANY_PARAMETERS:
-			return "Oczekiwano na operator";
-
-		case BRACKETS_NOT_EQUAL:
-			return "Niepoprawne nawiasy";
-
-		case DIVISION_BY_ZERO:
-			return "Dzielenie przez zero";
+		case UNEXPECTED_OPERATOR:	return "Nieoczekiwany operator";
+		case UNKNOWN_OPERATOR:		return "Nieznany operator";
+		case UNKNOWN_FUNCTION:		return "Nieznana funkcja";
+		case EXPECTED_BRACKET:		return "Oczekiwano na nawias";
+		case NOT_ENOUGH_PARAMETERS:	return "Oczekiwano na parametry";
+		case TOO_MANY_PARAMETERS:	return "Oczekiwano na operator";
+		case BRACKETS_NOT_EQUAL:		return "Niepoprawne nawiasy";
+		case DIVISION_BY_ZERO:		return "Dzielenie przez zero";
 
 		default: return "Skrypt jest poprawny";
 	}

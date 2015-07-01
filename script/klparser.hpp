@@ -63,7 +63,7 @@ class EXPORT KLParser
 		UNKNOWN_OPERATOR,		//!< Napotkano nieznany operator.
 		UNKNOWN_FUNCTION,		//!< Napotkano nieznaną funkcję.
 
-		EXPECTED_BRACKET,		//!< Oczekiwano na otwierający nawias.
+		EXPECTED_BRACKET,		//!< Oczekiwano na otwierający lub zamykający nawias.
 
 		NOT_ENOUGH_PARAMETERS,	//!< Napotkano zbyt mało parametrów.
 		TOO_MANY_PARAMETERS,	//!< Napotkano zbyt wiele parametrów.

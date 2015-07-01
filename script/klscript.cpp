@@ -21,8 +21,9 @@
 #include "klscript.hpp"
 
 KLScript::KLScript(void)
+: LastReturn(0), LastError(NO_ERROR)
 {
-	Variables.Add("return");
+	Variables.Add("return", LastReturn);
 }
 
 KLScript::OPERATION KLScript::GetToken(const KLString& Script)
@@ -35,12 +36,14 @@ KLScript::OPERATION KLScript::GetToken(const KLString& Script)
 	else if (Token == "call")	return CALL;
 	else if (Token == "var")		return VAR;
 	else if (Token == "export")	return EXP;
+
 	else if (Token == "if")		return T_IF;
 	else if (Token == "else")	return T_ELSE;
 	else if (Token == "fi")		return T_ENDIF;
 	else if (Token == "while")	return T_WHILE;
 	else if (Token == "done")	return T_DONE;
 	else if (Token == "return")	return T_RETURN;
+
 	else if (Token == "exit")	return EXIT;
 
 	else						return UNKNOWN;
@@ -50,16 +53,16 @@ KLString KLScript::GetParam(const KLString& Script)
 {
 	int Start = SkipComment(Script);
 
-	while (Script[Process] != ';' &&
-		  Script[Process] != '#' &&
-		  Script[Process] != ',' &&
-		  Script[Process] != '\0') ++Process;
+	while (Script[LastProcess] != ';' &&
+		  Script[LastProcess] != '#' &&
+		  Script[LastProcess] != ',' &&
+		  Script[LastProcess] != '\0') ++LastProcess;
 
-	KLString Param = Script.Part(Start, Process);
+	KLString Param = Script.Part(Start, LastProcess);
 
-	if (Script[Process] == '#') return Param + GetParam(Script);
+	if (Script[LastProcess] == '#') return Param + GetParam(Script);
 
-	while (isspace(Script[Process])) ++Process;
+	while (isspace(Script[LastProcess])) ++LastProcess;
 
 	return Param;
 }
@@ -68,14 +71,14 @@ KLString KLScript::GetName(const KLString& Script)
 {
 	int Start = SkipComment(Script);
 
-	while (isalpha(Script[Process])) ++Process;
+	while (isalpha(Script[LastProcess])) ++LastProcess;
 
-	int Stop = Process;
+	int Stop = LastProcess;
 
-	if (Script[Process] != ';' &&
-	    Script[Process] != ',')
+	if (Script[LastProcess] != ';' &&
+	    Script[LastProcess] != ',')
 	{
-		while (isspace(Script[Process])) ++Process;
+		while (isspace(Script[LastProcess])) ++LastProcess;
 	}
 
 	return Script.Part(Start, Stop);
@@ -94,33 +97,33 @@ bool KLScript::GetValue(const KLString& Script, KLVariables& Scoope)
 
 int KLScript::SkipComment(const KLString& Script)
 {
-	while (isspace(Script[Process])) ++Process;
+	while (isspace(Script[LastProcess])) ++LastProcess;
 
-	if (Script[Process] == '#')
+	if (Script[LastProcess] == '#')
 	{
-		while (Script[Process] && Script[Process] != '\n') ++Process;
+		while (Script[LastProcess] && Script[LastProcess] != '\n') ++LastProcess;
 
 		SkipComment(Script);
 	}
 
-	return Process;
+	return LastProcess;
 }
 
-bool KLScript::Evaluate(const KLString& Script, KLVariables* Scoope)
+bool KLScript::Evaluate(const KLString& Script)
 {
 	struct JUMP { int When; int Where; };
 
-	KLVariables LocalVars(Scoope ? Scoope : &Variables);
+	KLVariables LocalVars(&Variables);
 	KLList<JUMP> Jumps;
 
-	LastError = NO_ERROR;
-	Process = 0;
+	LastError		= NO_ERROR;
+	LastProcess	= 0;
 
 	if (SkipComment(Script) == Script.Size()) ReturnError(WRONG_SCRIPTCODE);
 
 	while (true)
 	{
-		if (Jumps.Size() && Jumps.Last().When == Process) Process = Jumps.Pop().Where;
+		if (Jumps.Size() && Jumps.Last().When == LastProcess) LastProcess = Jumps.Pop().Where;
 
 		int Start = SkipComment(Script);
 
@@ -162,7 +165,7 @@ bool KLScript::Evaluate(const KLString& Script, KLVariables* Scoope)
 				}
 				while (IS_NextParam);
 
-				if (IS_NoError) Variables["return"] = Bindings[Proc](Params);
+				if (IS_NoError) LastReturn = Bindings[Proc](Params);
 			}
 			break;
 			case VAR:
@@ -197,20 +200,20 @@ bool KLScript::Evaluate(const KLString& Script, KLVariables* Scoope)
 				if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
 
 				int Counter = 1;
-				int Then = Process;
+				int Then = LastProcess;
 				int Else = 0;
 
-				while (Counter && Process)
+				while (Counter && LastProcess)
 				{
-					Process = Script.Find(';', Process) + 1;
+					LastProcess = Script.Find(';', LastProcess) + 1;
 
-					if (Process) switch (GetToken(Script))
+					if (LastProcess) switch (GetToken(Script))
 					{
 						case T_IF:
 							++Counter;
 						break;
 						case T_ELSE:
-							if (Counter == 1) Else = Process;
+							if (Counter == 1) Else = LastProcess;
 						break;
 						case T_ENDIF:
 							--Counter;
@@ -223,11 +226,11 @@ bool KLScript::Evaluate(const KLString& Script, KLVariables* Scoope)
 
 				if (Parser.GetValue())
 				{
-					if (Else) Jumps.Insert({Else, Process});
+					if (Else) Jumps.Insert({Else, LastProcess});
 
-					Process = Then;
+					LastProcess = Then;
 				}
-				else if (Else) Process = Else;
+				else if (Else) LastProcess = Else;
 			}
 			break;
 			case T_WHILE:
@@ -237,13 +240,13 @@ bool KLScript::Evaluate(const KLString& Script, KLVariables* Scoope)
 				if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
 
 				int Counter = 1;
-				int Then = Process;
+				int Then = LastProcess;
 
-				while (Counter && Process)
+				while (Counter && LastProcess)
 				{
-					Process = Script.Find(';', Process) + 1;
+					LastProcess = Script.Find(';', LastProcess) + 1;
 
-					if (Process) switch (GetToken(Script))
+					if (LastProcess) switch (GetToken(Script))
 					{
 						case T_WHILE:
 							++Counter;
@@ -259,9 +262,9 @@ bool KLScript::Evaluate(const KLString& Script, KLVariables* Scoope)
 
 				if (Parser.GetValue())
 				{
-					Jumps.Insert({Process + 1, Start});
+					Jumps.Insert({LastProcess + 1, Start});
 
-					Process = Then;
+					LastProcess = Then;
 				}
 			}
 			break;
@@ -272,7 +275,7 @@ bool KLScript::Evaluate(const KLString& Script, KLVariables* Scoope)
 
 				if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
 
-				Variables["return"] = Parser.GetValue();
+				LastReturn = Parser.GetValue();
 
 				return true;
 			}
@@ -283,7 +286,7 @@ bool KLScript::Evaluate(const KLString& Script, KLVariables* Scoope)
 			break;
 
 			case END:
-				if (Process == Script.Size()) return IS_NoError;
+				if (LastProcess == Script.Size()) return IS_NoError;
 				else ReturnError(EMPTY_EXPRESSION);
 			break;
 
@@ -292,7 +295,7 @@ bool KLScript::Evaluate(const KLString& Script, KLVariables* Scoope)
 			default: break;
 		}
 
-		if (Terminated) ++Process;
+		if (Terminated) ++LastProcess;
 		else ReturnError(EXPECTED_TERMINATOR);
 
 	}
@@ -300,12 +303,12 @@ bool KLScript::Evaluate(const KLString& Script, KLVariables* Scoope)
 	return true;
 }
 
-bool KLScript::Validate(const KLString& Script, KLVariables* Scoope)
+bool KLScript::Validate(const KLString& Script)
 {
-	KLVariables LocalVars(Scoope ? Scoope : &Variables);
+	KLVariables LocalVars(&Variables);
 
 	LastError = NO_ERROR;
-	Process = 0;
+	LastProcess = 0;
 
 	SkipComment(Script);
 
@@ -362,13 +365,13 @@ bool KLScript::Validate(const KLString& Script, KLVariables* Scoope)
 				if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
 
 				int Counter = 1;
-				int Then = Process;
+				int Then = LastProcess;
 
-				while (Counter && Process)
+				while (Counter && LastProcess)
 				{
-					Process = Script.Find(';', Process) + 1;
+					LastProcess = Script.Find(';', LastProcess) + 1;
 
-					if (Process) switch (GetToken(Script))
+					if (LastProcess) switch (GetToken(Script))
 					{
 						case T_IF:
 							++Counter;
@@ -382,7 +385,7 @@ bool KLScript::Validate(const KLString& Script, KLVariables* Scoope)
 
 				if (Counter) ReturnError(EXPECTED_ENDIF_TOK);
 
-				Process = Then;
+				LastProcess = Then;
 			}
 			break;
 			case T_WHILE:
@@ -392,13 +395,13 @@ bool KLScript::Validate(const KLString& Script, KLVariables* Scoope)
 				if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
 
 				int Counter = 1;
-				int Then = Process;
+				int Then = LastProcess;
 
-				while (Counter && Process)
+				while (Counter && LastProcess)
 				{
-					Process = Script.Find(';', Process) + 1;
+					LastProcess = Script.Find(';', LastProcess) + 1;
 
-					if (Process) switch (GetToken(Script))
+					if (LastProcess) switch (GetToken(Script))
 					{
 						case T_WHILE:
 							++Counter;
@@ -412,7 +415,7 @@ bool KLScript::Validate(const KLString& Script, KLVariables* Scoope)
 
 				if (Counter) ReturnError(EXPECTED_DONE_TOK);
 
-				Process = Then;
+				LastProcess = Then;
 			}
 			break;
 
@@ -429,14 +432,14 @@ bool KLScript::Validate(const KLString& Script, KLVariables* Scoope)
 			break;
 
 			case END:
-				if (Process == Script.Size()) return IS_NoError;
+				if (LastProcess == Script.Size()) return IS_NoError;
 				else ReturnError(EMPTY_EXPRESSION);
 			break;
 
 			default: break;
 		}
 
-		if (Terminated) ++Process;
+		if (Terminated) ++LastProcess;
 		else ReturnError(EXPECTED_TERMINATOR);
 
 	}
@@ -453,35 +456,16 @@ const char* KLScript::GetMessage(void) const
 {
 	switch (LastError)
 	{
-		case UNDEFINED_VARIABLE:
-			return "Niezdefiniowana zmienna";
-
-		case UNDEFINED_FUNCTION:
-			return "Niezdefiniowana funkcja";
-
-		case EXPECTED_ENDIF_TOK:
-			return "Oczekiwano znacznika `fi`";
-
-		case EXPECTED_DONE_TOK:
-			return "Oczekiwano znacznika `done`";
-
-		case EXPECTED_TERMINATOR:
-			return "Oczekiwano terminatora `;`";
-
-		case EMPTY_EXPRESSION:
-			return "Napotkano puste polecenie";
-
-		case UNKNOWN_EXPRESSION:
-			return "Napotkano nieznane polecenie";
-
-		case WRONG_SCRIPTCODE:
-			return "Niepoprawny lub pusty skrypt";
-
-		case WRONG_PARAMETERS:
-			return "Niepoprawne parametry polecenia";
-
-		case WRONG_EVALUATION:
-			return "Niepoprawny skrypt matematyczny";
+		case UNDEFINED_VARIABLE:		return "Niezdefiniowana zmienna";
+		case UNDEFINED_FUNCTION:		return "Niezdefiniowana funkcja";
+		case EXPECTED_ENDIF_TOK:		return "Oczekiwano znacznika `fi`";
+		case EXPECTED_DONE_TOK:		return "Oczekiwano znacznika `done`";
+		case EXPECTED_TERMINATOR:	return "Oczekiwano terminatora `;`";
+		case EMPTY_EXPRESSION:		return "Napotkano puste polecenie";
+		case UNKNOWN_EXPRESSION:		return "Napotkano nieznane polecenie";
+		case WRONG_SCRIPTCODE:		return "Niepoprawny lub pusty skrypt";
+		case WRONG_PARAMETERS:		return "Niepoprawne parametry polecenia";
+		case WRONG_EVALUATION:		return "Niepoprawny skrypt matematyczny";
 
 		default: return "Skrypt jest poprawny";
 	}
@@ -491,8 +475,7 @@ int KLScript::GetLine(const KLString& Script) const
 {
 	int Line = 1;
 
-	for (int i = 0; i < Process && i < Script.Size(); i++)
-		if (Script[i] == '\n') ++Line;
+	for (int i = 0; i < LastProcess && i < Script.Size(); i++) if (Script[i] == '\n') ++Line;
 
 	return Line;
 }

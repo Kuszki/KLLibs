@@ -21,14 +21,14 @@
 #ifndef KLSCRIPT_HPP
 #define KLSCRIPT_HPP
 
-#define Terminated		(Script[Process] == ';')						//!< Makro deklarujące zgodność bieżącego znaku z terminatorem.
-#define Separated		(Script[Process] == ',')						//!< Makro deklarujące zgodność bieżącego znaku z separatorem.
+#define Terminated		(Script[LastProcess] == ';')						//!< Makro deklarujące zgodność bieżącego znaku z terminatorem.
+#define Separated		(Script[LastProcess] == ',')						//!< Makro deklarujące zgodność bieżącego znaku z separatorem.
 
 #define IF_Terminated	if(Terminated)								//!< Makro sprawdzające czy kolejny znak to terminator.
 #define IF_Separated	if(Separated)								//!< Makro sprawdzające czy kolejny znak to separator.
 
 #define IS_NoError		(LastError == NO_ERROR)						//!< Makro deklarujące brak błędu.
-#define IS_NextParam	((Separated && IS_NoError) ? Process++ : false)	//!< Makro sprawdzające czy wystąpił błąd.
+#define IS_NextParam	((Separated && IS_NoError) ? LastProcess++ : false)	//!< Makro sprawdzające czy wystąpił błąd.
 
 #define ReturnError(error) { LastError = error; return false; }			//!< Makro zwracające błąd i przerywające skrypt.
 
@@ -167,9 +167,11 @@ class EXPORT KLScript
 		 */
 		int SkipComment(const KLString& Script);
 
-		ERROR LastError;	//!< Wyliczenie ostatniego błędu.
+		double LastReturn;			//!< Ostatnia zwrócona wartość.
 
-		int Process;		//!< Aktualny krok przetwarzania.
+		ERROR LastError;			//!< Wyliczenie ostatniego błędu.
+
+		int LastProcess;			//!< Aktualny krok przetwarzania.
 
 	public:
 
@@ -188,25 +190,21 @@ class EXPORT KLScript
 
 		/*! \brief		Wykonanie kodu.
 		 *  \param [in]	Script	Skrypt do przetworzenia.
-		 *  \param [in,out]	Scoope	Zmienne wyższego poziomu.
 		 *  \return		Powodzenie operacji.
 		 *
-		 * Przetwarza wybrany kod i zwraca powodzenie operacji. W przypadku gdy zakres zmiennych wyższego poziomu zostanie pominięty zostanie wykorzystany standardowy kontener na zmienne `Variables`.
+		 * Przetwarza wybrany kod i zwraca powodzenie operacji.
 		 *
 		 */
-		bool Evaluate(const KLString& Script,
-				    KLVariables* Scoope = nullptr);
+		bool Evaluate(const KLString& Script);
 
 		/*! \brief		Sprawdzenie kodu.
 		 *  \param [in]	Script	Skrypt do przetworzenia.
-		 *  \param [in,out]	Scoope	Zmienne wyższego poziomu.
 		 *  \return		Powodzenie operacji.
 		 *
-		 * Przetwarza wybrany kod pod kątem błędów składni i zwraca powodzenie operacji. W przypadku gdy zakres zmiennych wyższego poziomu zostanie pominięty zostanie wykorzystany standardowy kontener na zmienne `Variables`.
+		 * Przetwarza wybrany kod pod kątem błędów składni i zwraca powodzenie operacji.
 		 *
 		 */
-		bool Validate(const KLString& Script,
-				    KLVariables* Scoope = nullptr);
+		bool Validate(const KLString& Script);
 
 		/*! \brief		Pobranie ostatniego błędu.
 		 *  \return		Ostatni błąd.
