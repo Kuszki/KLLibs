@@ -27,6 +27,21 @@
 
 #include <QObject>
 
+/*! \file		klparserbinding.hpp
+ *  \brief	Deklaracje dla klasy KLParserbinding i jej składników.
+ *
+ */
+
+/*! \file		klparserbinding.cpp
+ *  \brief	Implementacja klasy KLParserbinding i jej składników.
+ *
+ */
+
+/*! \brief	Bindy QT do `KLParser`.
+ *
+ * Bazujący na `QObject` i `KLParser` bind ułatwiający współpracę z `KLParser` w środowisku QT.
+ *
+ */
 class KLParserbinding : public QObject, KLParser
 {
 

@@ -27,6 +27,21 @@
 
 #include <QObject>
 
+/*! \file		klscriptbinding.hpp
+ *  \brief	Deklaracje dla klasy KLScriptbinding i jej składników.
+ *
+ */
+
+/*! \file		klscriptbinding.cpp
+ *  \brief	Implementacja klasy KLScriptbinding i jej składników.
+ *
+ */
+
+/*! \brief	Bindy QT do `KLScript`.
+ *
+ * Bazujący na `QObject` i `KLScript` bind ułatwiający współpracę z `KLScript` w środowisku QT.
+ *
+ */
 class KLScriptbinding : public QObject, KLScript
 {
 

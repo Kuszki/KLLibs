@@ -199,6 +199,12 @@ Możliwości:
 - [X] Automatyczne wyróżnianie składni (`KLHighlighter`).
 - [ ] Zmiana kolorów w widgecie.
 
+### KLScriptbinding
+Bazujący na `QObject` i `KLScript` bind ułatwiający współpracę z `KLScript` w środowisku QT.
+
+### KLParserbinding
+Bazujący na `QObject` i `KLParser` bind ułatwiający współpracę z `KLParser` w środowisku QT.
+
 # Licencja
 KLLibs - Zbiór lekkich bibliotek. Copyright (C) 2015 Łukasz "Kuszki" Dróżdż.
 

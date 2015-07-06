@@ -61,6 +61,8 @@
 #if defined(QT_VERSION)
 #include "qt/klhighlighter.hpp"
 #include "qt/klscripteditor.hpp"
+#include "qt/klparserbinding.hpp"
+#include "qt/klscriptbinding.hpp"
 #endif
 
 #endif // KLLIBS_GLOBAL_HPP
