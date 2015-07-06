@@ -37,10 +37,16 @@ addons {
 	QT		+=	widgets
 
 	SOURCES	+=	qt/klhighlighter.cpp \
-				qt/klscripteditor.cpp
+				qt/klscripteditor.cpp \
+				qt/klscriptbinding.cpp \
+				qt/klparserbinding.cpp
 
 	HEADERS	+=	qt/klhighlighter.hpp \
-				qt/klscripteditor.hpp
+				qt/klscripteditor.hpp \
+				qt/klscriptbinding.hpp \
+				qt/klparserbinding.hpp
+
+	TRANSLATIONS	+=	kllibs_pl.ts
 
 } else {
 
