@@ -24,13 +24,13 @@
 #define Terminated		(Script[LastProcess] == ';')						//!< Makro deklarujące zgodność bieżącego znaku z terminatorem.
 #define Separated		(Script[LastProcess] == ',')						//!< Makro deklarujące zgodność bieżącego znaku z separatorem.
 
-#define IF_Terminated	if(Terminated)								//!< Makro sprawdzające czy kolejny znak to terminator.
-#define IF_Separated	if(Separated)								//!< Makro sprawdzające czy kolejny znak to separator.
+#define IF_Terminated	if(Terminated)									//!< Makro sprawdzające czy kolejny znak to terminator.
+#define IF_Separated	if(Separated)									//!< Makro sprawdzające czy kolejny znak to separator.
 
-#define IS_NoError		(LastError == NO_ERROR)						//!< Makro deklarujące brak błędu.
+#define IS_NoError		(LastError == NO_ERROR)							//!< Makro deklarujące brak błędu.
 #define IS_NextParam	((Separated && IS_NoError) ? LastProcess++ : false)	//!< Makro sprawdzające czy wystąpił błąd.
 
-#define ReturnError(error) { LastError = error; return false; }			//!< Makro zwracające błąd i przerywające skrypt.
+#define ReturnError(error) { LastError = error; return false; }				//!< Makro zwracające błąd i przerywające skrypt.
 
 #include "../libbuild.hpp"
 
@@ -53,13 +53,13 @@
  */
 
 /*! \brief	Lekka interpretacja języka skryptowego.
- *  \warning	Nie zawsze sprawdzanie poprawności zapisu i składni odbywa się dokładnie tak, jak powinno. W przypadku złamania reguł składni może okazać się, że wychwycony zostanie inny błąd, lub z jakiś przyczyn parser uzna wyrażenie za poprawne. Należy dbać zatem by wyrażenia były poprawne.
+ *  \warning	Nie zawsze sprawdzanie poprawności zapisu i składni odbywa się dokładnie tak, jak powinno. W przypadku złamania reguł składni może okazać się, że wychwycony zostanie inny błąd, lub z jakiś przyczyn parser uzna wyrażenie za poprawne. Należy zatem dbać by wyrażenia były poprawne.
  *
  * Prosta i lekka interpretacja języka skryptowego podobnego częściowo do basha. Do przetwarzania wyrażeń używa parsera `KLParser`, obsługuje bindowania zmiennych `KLVariables`, bindowanie funkcji `KLBindings`, tworzenie zmiennych i strukturę `if else`.
  *
  * Utworzone zmienne są niszczone po zakończeniu skryptu. Do funkcji przekazywane są zmienne ze stosu w osobnym zakresie, wraz z dołączeniem zasięgu całego skryptu.
  *
- * Po każdym wyrażeniu (instrukcji) musi zostać umieszczony terminator `;`. Dotyczy to także konstrukcji `if`, `else`, `endif`, `while`, `done` itd. Taka restrykcja wpraszcza parser do minimalnego stopnia skomplikowania.
+ * Po każdym wyrażeniu (instrukcji) musi zostać umieszczony terminator `;`. Dotyczy to także konstrukcji `if`, `else`, `endif`, `while`, `done` itd. Taka restrykcja upraszcza parser do minimalnego stopnia skomplikowania.
  *
  */
 class EXPORT KLScript
