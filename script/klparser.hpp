@@ -300,10 +300,10 @@ class EXPORT KLParser
 
 	public:
 
-		/*! \brief		Domyślny konstruktor.
+		/*! \brief		Wywołanie skryptu.
 		 *  \param [in]	Code Wyrażenie do obliczenia.
 		 *  \return 		Powodzenie operacji.
-		 *  \see			LastError(), LastValue().
+		 *  \see			GetError(), GetValue().
 		 *
 		 * Przetwarza podane wyrażenie i zwraca powodzenie jego wykonania.
 		 *
