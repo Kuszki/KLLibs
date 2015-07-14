@@ -14,21 +14,21 @@ DEFINES	+=	KLLIBS_LIBRARY
 SOURCES	+=	script/klscript.cpp \
 			script/klvariables.cpp \
 			script/klbindings.cpp \
+			script/klparser.cpp \
 			containers/klmap.cpp \
 			containers/kllist.cpp \
 			containers/klstring.cpp \
-			containers/kltree.cpp \
-			script/klparser.cpp
+			containers/kltree.cpp
 
 HEADERS	+=	KLLibs.hpp libbuild.hpp \
 			script/klscript.hpp \
 			script/klvariables.hpp \
 			script/klbindings.hpp \
+			script/klparser.hpp \
 			containers/klmap.hpp \
 			containers/kllist.hpp \
 			containers/klstring.hpp \
-			containers/kltree.hpp \
-			script/klparser.hpp
+			containers/kltree.hpp
 
 QMAKE_CXXFLAGS	+=	-s -fomit-frame-pointer -march=native
 
