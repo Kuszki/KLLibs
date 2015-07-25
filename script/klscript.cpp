@@ -452,6 +452,11 @@ KLScript::ERROR KLScript::GetError(void) const
 	return LastError;
 }
 
+double KLScript::GetReturn(void) const
+{
+	return LastReturn;
+}
+
 const char* KLScript::GetMessage(void) const
 {
 	switch (LastError)

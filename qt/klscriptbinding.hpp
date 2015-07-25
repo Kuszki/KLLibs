@@ -144,7 +144,7 @@ class KLScriptbinding : public QObject, KLScript
 		 * Zdarzenie wywoływane przy poprawnym obliczeniu wartości wyrażenia.
 		 *
 		 */
-		void onEvaluate(double);
+		void onEvaluate(double Value);
 
 };
 

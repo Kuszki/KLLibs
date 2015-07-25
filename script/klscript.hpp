@@ -215,6 +215,15 @@ class EXPORT KLScript
 		 */
 		ERROR GetError(void) const;
 
+		/*! \brief		Pobranie ostatnio zwróconej wartości.
+		 *  \return		Ostatna zwrócona wartość.
+		 *  \see			Evaluate(const KLString&), Validate(const KLString&).
+		 *
+		 * Zwraca ostatnią wartość przekazaną do wyrażenia `return`.
+		 *
+		 */
+		double GetReturn(void) const;
+
 		/*! \brief		Pobranie opisu ostatniego błędu.
 		 *  \return		Opis ostatniego błędu.
 		 *  \see			GetError().
