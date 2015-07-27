@@ -269,6 +269,15 @@ class KLMap
 		 */
 		KLMap<Data, Key>& operator= (const KLMap<Data, Key>& Map);
 
+		/*! \brief		Operator przeniesienia.
+		 *  \param [in]	Map Obiekt do przeniesienia.
+		 *  \return		Referencja do bierzącego obiektu.
+		 *
+		 * Zwalnia dotychczasowe zasoby i przenosi wybrany obiekt.
+		 *
+		 */
+		KLMap<Data, Key>& operator= (KLMap<Data, Key>&& Map);
+
 		KLMapVarIterator begin(void);
 		KLMapVarIterator end(void);
 

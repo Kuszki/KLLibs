@@ -454,6 +454,22 @@ KLTree<Data>& KLTree<Data>::operator= (const KLTree<Data>& Tree)
 }
 
 template<typename Data>
+KLTree<Data>& KLTree<Data>::operator= (KLTree<Data>&& Tree)
+{
+	if (this == &Tree) return *this;
+
+	Clean();
+
+	Root = Tree.Root;
+	Current = Tree.Current;
+
+	Tree.Root = nullptr;
+	Tree.Current = nullptr;
+
+	return *this;
+}
+
+template<typename Data>
 template<typename ...Steps>
 void KLTree<Data>::Select(int ID, Steps... IDS)
 {

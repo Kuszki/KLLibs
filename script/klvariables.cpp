@@ -49,11 +49,13 @@ KLString KLVariables::KLVariable::ToString(void) const
 	if (Pointer) switch (Type)
 	{
 		case BOOLEAN:
-			return KLString(*((bool*) Pointer));
+			return KLString(*reinterpret_cast<bool*>(Pointer));
+
 		case NUMBER:
-			return KLString(*((double*) Pointer));
+			return KLString(*reinterpret_cast<double*>(Pointer));
+
 		case INTEGER:
-			return KLString(*((int*) Pointer));
+			return KLString(*reinterpret_cast<int*>(Pointer));
 	}
 
 	return KLString(Variable);
@@ -64,11 +66,13 @@ double KLVariables::KLVariable::ToNumber(void) const
 	if (Pointer) switch (Type)
 	{
 		case BOOLEAN:
-			return *((bool*) Pointer);
+			return *reinterpret_cast<bool*>(Pointer);
+
 		case NUMBER:
-			return *((double*) Pointer);
+			return *reinterpret_cast<double*>(Pointer);
+
 		case INTEGER:
-			return *((int*) Pointer);
+			return *reinterpret_cast<int*>(Pointer);
 	}
 
 	return Variable;
@@ -95,13 +99,13 @@ KLVariables::KLVariable& KLVariables::KLVariable::operator= (const Data& Value)
 	if (Pointer) switch (Type)
 	{
 		case BOOLEAN:
-			*((bool*) Pointer) = Value;
+			*reinterpret_cast<bool*>(Pointer) = Value;
 		break;
 		case NUMBER:
-			*((double*) Pointer) = Value;
+			*reinterpret_cast<double*>(Pointer) = Value;
 		break;
 		case INTEGER:
-			*((int*) Pointer) = Value;
+			*reinterpret_cast<int*>(Pointer) = Value;
 		break;
 	}
 	else Variable = Value;

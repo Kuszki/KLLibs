@@ -55,7 +55,6 @@ typename KLMap<Data, Key>::KLMapVarIterator& KLMap<Data, Key>::KLMapVarIterator:
 	return *this;
 }
 
-
 template<typename Data, typename Key>
 bool KLMap<Data, Key>::KLMapVarIterator::operator!= (const KLMapVarIterator& Iterator) const
 {
@@ -79,7 +78,6 @@ typename KLMap<Data, Key>::KLMapConstIterator& KLMap<Data, Key>::KLMapConstItera
 
 	return *this;
 }
-
 
 template<typename Data, typename Key>
 bool KLMap<Data, Key>::KLMapConstIterator::operator!= (const KLMapConstIterator& Iterator) const
@@ -131,11 +129,10 @@ int KLMap<Data, Key>::Insert(const Data& Item, const Key& ID)
 	}
 	else
 	{
-		End = End->Next =new KLMapItem;
+		End = End->Next = new KLMapItem;
 	}
 
 	End->Record = new KLMapRecord(Item, ID);
-	End->Next = nullptr;
 
 	return ++Capacity;
 }
@@ -335,6 +332,24 @@ KLMap<Data, Key>& KLMap<Data, Key>::operator= (const KLMap<Data, Key>& Map)
 
 		MapItem = MapItem->Next;
 	}
+
+	return *this;
+}
+
+template<typename Data, typename Key>
+KLMap<Data, Key>& KLMap<Data, Key>::operator= (KLMap<Data, Key>&& Map)
+{
+	if (this == &Map) return *this;
+
+	Clean();
+
+	Begin = Map.Begin;
+	End = Map.End;
+	Capacity = Map.Capacity;
+
+	Map.Begin = nullptr;
+	Map.End = nullptr;
+	Map.Capacity = 0;
 
 	return *this;
 }

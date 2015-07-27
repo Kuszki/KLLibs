@@ -336,4 +336,22 @@ KLList<Data>& KLList<Data>::operator= (const KLList<Data>& List)
 	return *this;
 }
 
+template<typename Data>
+KLList<Data>& KLList<Data>::operator= (KLList<Data>&& List)
+{
+	if (this == &List) return *this;
+
+	Clean();
+
+	Begin = List.Begin;
+	End = List.End;
+	Capacity = List.Capacity;
+
+	List.Begin = nullptr;
+	List.End = nullptr;
+	List.Capacity = 0;
+
+	return *this;
+}
+
 #endif // KLLIST_CPP

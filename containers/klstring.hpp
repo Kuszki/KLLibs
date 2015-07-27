@@ -49,9 +49,11 @@ class EXPORT KLString
 
 	protected:
 
-		char* Data;	//!< Wskaźnik na przechowywane dane.
+		char* Data;		//!< Wskaźnik na przechowywane dane.
 
-		int Capacity;	//!< Ilość przechowywanych danych.
+		int Capacity;		//!< Ilość przechowywanych danych.
+
+		size_t Reserved;	//!< Ilość zarezerwowanych danych.
 
 	public:
 
@@ -133,8 +135,46 @@ class EXPORT KLString
 		 */
 		~KLString(void);
 
+		/*! \brief		Rezerwacja miejsca na dane.
+		 *  \param [in]	Size Liczba bajtów do zarezerwowania.
+		 *  \warning		Przed rozpoczęciem stałych operacji na łańcuchu użyj metody `Refresh()`.
+		 *  \warning		Przed rozpoczęciem operacji modyfikujących łańcuch użyj metody `Finalize()`.
+		 *  \see			Finalize(), Refresh().
+		 *
+		 * Czyści łańcuch i rezerwuje wybraną ilość bajtów na znaki. Znaki można wprowadzać za pomocą operatora wyłuskania. Po zarezerwowaniu wszystkie znaki mają wartość `0`.
+		 *
+		 */
+		void Reserve(size_t Size);
+
+		/*! \brief		Odświeża informację o łańcuchu.
+		 *  \note			Dotyczy tylko łańcuchów z zarezerwowanym miejscem.
+		 *  \see			Reserve().
+		 *
+		 * Oblicza na nowo ilość znaków w łańcuchu.
+		 *
+		 */
+		void Refresh(void);
+
+		/*! \brief		Wymazuje wpisane znaki.
+		 *  \note			Dotyczy tylko łańcuchów z zarezerwowanym miejscem.
+		 *  \see			Reserve().
+		 *
+		 * Wymazuje dane z zarezerwowanej pamięci.
+		 *
+		 */
+		void Erase(void);
+
+		/*! \brief		Przekształca łańcuch w standardowy.
+		 *  \note			Dotyczy tylko łańcuchów z zarezerwowanym miejscem.
+		 *  \see			Reserve().
+		 *
+		 * Oblicza aktualną długość łańcucha i zwalnia nieużywaną pamięć. Umożliwia bezpieczne wywołanie innych metod.
+		 *
+		 */
+		void Finalize(void);
+
 		/*! \brief		Wstawianie łańcucha.
-		 *  \param [in]	String	Łańcuch do wstawienia
+		 *  \param [in]	String	Łańcuch do wstawienia.
 		 *  \param [in]	Position	Pozycja łańcucha - numerowane od 0, -1 oznacza koniec bierzącego łańcucha.
 		 *  \return		Aktualna liczba znaków.
 		 *

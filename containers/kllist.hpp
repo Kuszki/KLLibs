@@ -277,6 +277,15 @@ class KLList
 		 */
 		KLList<Data>& operator= (const KLList<Data>& List);
 
+		/*! \brief		Operator przeniesienia.
+		 *  \param [in]	List Obiekt do przeniesienia.
+		 *  \return		Referencja do bierzącego obiektu.
+		 *
+		 * Zwalnia dotychczasowe zasoby i przenosi wybrany obiekt.
+		 *
+		 */
+		KLList<Data>& operator= (KLList<Data>&& List);
+
 		KLListVarIterator begin(void);
 		KLListVarIterator end(void);
 

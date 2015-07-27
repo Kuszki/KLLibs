@@ -46,7 +46,7 @@
 class EXPORT KLBindings
 {
 
-	protected: using KLSENTRY = double (*)(KLVariables&);	//!< Prototyp funkcji skryptowej.
+	protected: typedef double (*KLSENTRY)(KLVariables&);	//!< Prototyp funkcji skryptowej.
 
 	/*! \brief		Reprezentacja pojedynczego bindu.
 	 *

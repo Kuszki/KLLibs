@@ -290,6 +290,15 @@ class KLTree
 		 */
 		KLTree<Data>& operator= (const KLTree<Data>& Tree);
 
+		/*! \brief		Operator przeniesienia.
+		 *  \param [in]	Tree Obiekt do przeniesienia.
+		 *  \return		Referencja do bierzącego obiektu.
+		 *
+		 * Zwalnia dotychczasowe zasoby i przenosi wybrany obiekt.
+		 *
+		 */
+		KLTree<Data>& operator= (KLTree<Data>&& Tree);
+
 		template<typename ...Steps> void Select(int ID, Steps... IDS);
 
 		KLTreeVarIterator begin(void);

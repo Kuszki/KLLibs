@@ -21,6 +21,7 @@
 #include "klstring.hpp"
 
 KLString::KLString(double Value)
+: KLString()
 {
 	char Buffer[32];
 
@@ -37,6 +38,7 @@ KLString::KLString(double Value)
 }
 
 KLString::KLString(int Value)
+: KLString()
 {
 	char Buffer[32];
 
@@ -53,6 +55,7 @@ KLString::KLString(int Value)
 }
 
 KLString::KLString(bool Bool)
+: KLString()
 {
 	const char* Buffer[] = {"true", "false"};
 
@@ -63,6 +66,7 @@ KLString::KLString(bool Bool)
 }
 
 KLString::KLString(const void* Value)
+: KLString()
 {
 	char Buffer[17];
 
@@ -79,12 +83,14 @@ KLString::KLString(const void* Value)
 }
 
 KLString::KLString(char Char)
-: Capacity(1)
+: KLString()
 {
 	Data		= new char[2];
 
 	Data[0]	= Char;
 	Data[1]	= 0;
+
+	Capacity	= 1;
 }
 
 KLString::KLString(const char* String)
@@ -100,7 +106,7 @@ KLString::KLString(const char* String)
 }
 
 KLString::KLString(const KLString& String)
-: Data(nullptr), Capacity(String.Capacity)
+: Data(nullptr), Capacity(String.Capacity), Reserved(0)
 {
 	if (Capacity)
 	{
@@ -111,18 +117,56 @@ KLString::KLString(const KLString& String)
 }
 
 KLString::KLString(KLString&& String)
-: Data(String.Data), Capacity(String.Capacity)
+: Data(String.Data), Capacity(String.Capacity), Reserved(String.Reserved)
 {
 	String.Data		= nullptr;
 	String.Capacity	= 0;
+	String.Reserved	= 0;
 }
 
 KLString::KLString(void)
-: Data(nullptr), Capacity(0) {}
+: Data(nullptr), Capacity(0), Reserved(0) {}
 
 KLString::~KLString(void)
 {
 	if (Data) delete [] Data;
+}
+
+void KLString::Reserve(size_t Size)
+{
+	Clean();
+
+	Reserved = Size + 1;
+	Data = new char[Reserved];
+
+	Erase();
+}
+
+void KLString::Refresh(void)
+{
+	if (Reserved) Capacity = strlen(Data);
+}
+
+void KLString::Erase(void)
+{
+	if (Reserved) memset(Data, 0, Reserved);
+}
+
+void KLString::Finalize(void)
+{
+	if (Reserved)
+	{
+		Capacity = strlen(Data);
+
+		char* Buffer = new char[Capacity + 1];
+
+		memcpy(Buffer, Data, Capacity);
+
+		Data = Buffer;
+
+		Data[Capacity] = 0;
+		Reserved = 0;
+	}
 }
 
 int KLString::Insert(const KLString& String, int Position)
@@ -338,10 +382,7 @@ double KLString::ToNumber(void) const
 
 char& KLString::operator[] (int ID)
 {
-	if (Capacity > ID)
-		return Data[ID];
-	else
-		return *((char*) nullptr);
+	return Data[ID];
 }
 
 char KLString::operator[] (int ID) const
