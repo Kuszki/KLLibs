@@ -26,6 +26,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <ctype.h>
 
 #define S (KLString)	//!< Makro konwertujące na KLString.
 
@@ -221,9 +222,10 @@ class EXPORT KLString
 				 int Stop);
 
 		/*! \brief		Zamiana słów.
-		 *  \param [in]	Old	Łańcuch do usunięcia.
-		 *  \param [in]	New	Łańcuch do wstawienia.
-		 *  \param [in]	All	Zamień wszystkie wystąpienia.
+		 *  \param [in]	Old		Łańcuch do usunięcia.
+		 *  \param [in]	New		Łańcuch do wstawienia.
+		 *  \param [in]	All		Zamień wszystkie wystąpienia.
+		 *  \param [in]	Words	Wyszukuje dopasowań pełnych słów.
 		 *  \return		Ilość zmienionych fraz.
 		 *
 		 * Usuwa z łańcucha wybrany łańcuch i wstawia na jego miejsce nowy.
@@ -231,12 +233,14 @@ class EXPORT KLString
 		 */
 		int Replace(const KLString& Old,
 				  const KLString& New,
-				  bool All = false);
+				  bool All = false,
+				  bool Words = false);
 
 		/*! \brief		Zliczanie wystąpień.
 		 *  \param [in]	String	Łańcuch do wyszukania.
 		 *  \param [in]	Start	Początek wyszukiwania.
 		 *  \param [in]	Stop		Koniec wyszukiwania.
+		 *  \param [in]	Words	Wyszukuje dopasowań pełnych słów.
 		 *  \return		Ilość wystąpień.
 		 *
 		 * Szuka w łańcuchu wybranejfrazy i zwraca ilość wystąpień.
@@ -244,12 +248,14 @@ class EXPORT KLString
 		 */
 		int Count(const KLString& String,
 				int Start = 0,
-				int Stop = 0) const;
+				int Stop = 0,
+				bool Words = false) const;
 
 		/*! \brief		Wyszukiwanie frazy.
 		 *  \param [in]	String	Łańcuch do wyszukania.
 		 *  \param [in]	Start	Początek wyszukiwania.
 		 *  \param [in]	Stop		Koniec wyszukiwania.
+		 *  \param [in]	Words	Wyszukuje dopasowań pełnych słów.
 		 *  \return		Miejsce wystąpienia numerowane od zera lub -1 gdy nic nie znaleziono.
 		 *
 		 * Szuka w łańcuchu wybranejfrazy i zwraca miejsce pierwszego wystąpienia.
@@ -257,7 +263,8 @@ class EXPORT KLString
 		 */
 		int Find(const KLString& String,
 			    int Start = 0,
-			    int Stop = 0) const;
+			    int Stop = 0,
+			    bool Words = false) const;
 
 		/*! \brief		Kopia części łańcucha.
 		 *  \param [in]	Start	Początek ciągu.

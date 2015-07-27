@@ -259,14 +259,14 @@ int KLString::Delete(int Start, int Stop)
 	return OldCap - NewCap;
 }
 
-int KLString::Replace(const KLString& Old, const KLString& New, bool All)
+int KLString::Replace(const KLString& Old, const KLString& New, bool All, bool Words)
 {
 	if (Capacity < Old.Capacity) return 0;
 
 	int Counter	= 0;
 	int Found		= -1;
 
-	while ((Found = Find(Old)) != -1)
+	while ((Found = Find(Old, 0, 0, Words)) != -1)
 	{
 		char* Buffer = new char[Capacity - Old.Capacity + New.Capacity + 1];
 
@@ -289,32 +289,21 @@ int KLString::Replace(const KLString& Old, const KLString& New, bool All)
 	return Counter;
 }
 
-int KLString::Count(const KLString& String, int Start, int Stop) const
+int KLString::Count(const KLString& String, int Start, int Stop, bool Words) const
 {
 	if (!Data || !String.Data) return 0;
 
 	int Counter = 0;
 
-	Stop = ((Stop && Stop < Capacity) ? Stop : Capacity) - String.Capacity + 1;
-
-	while (Start < Stop)
+	while (Start = Find(String, Start, Stop, Words) + 1)
 	{
-		if (!strncmp(Data + Start, String.Data, String.Capacity))
-		{
-			Start += String.Capacity;
-
-			Counter++;
-		}
-		else
-		{
-			Start++;
-		}
+		++Counter;
 	}
 
 	return Counter;
 }
 
-int KLString::Find(const KLString& String, int Start, int Stop) const
+int KLString::Find(const KLString& String, int Start, int Stop, bool Words) const
 {
 	Stop = ((Stop && Stop < Capacity) ? Stop : Capacity) - String.Capacity + 1;
 
@@ -322,7 +311,16 @@ int KLString::Find(const KLString& String, int Start, int Stop) const
 	{
 		if (!strncmp(Data + i, String.Data, String.Capacity))
 		{
-			return i;
+			if (Words)
+			{
+				bool Found = true;
+
+				if (i) Found = Found && !isalnum(Data[i - 1]);
+				if (i + String.Capacity < Capacity) Found = Found && !isalnum(Data[i + String.Capacity]);
+
+				if (Found) return i;
+			}
+			else return i;
 		}
 	}
 
