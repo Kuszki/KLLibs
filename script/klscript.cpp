@@ -71,7 +71,7 @@ KLString KLScript::GetName(const KLString& Script)
 {
 	int Start = SkipComment(Script);
 
-	while (isalpha(Script[LastProcess])) ++LastProcess;
+	while (isalnum(Script[LastProcess])) ++LastProcess;
 
 	int Stop = LastProcess;
 
@@ -84,13 +84,12 @@ KLString KLScript::GetName(const KLString& Script)
 	return Script.Part(Start, Stop);
 }
 
-
 bool KLScript::GetValue(const KLString& Script, KLVariables& Scoope)
 {
 	KLString Equation = GetParam(Script);
 
 	for (KLVariables* Vars = &Scoope; Vars; Vars = Vars->Parent)
-		for (auto& Var: *Vars) Equation.Replace(Var.ID, Var.Value.ToString(), true);
+		for (auto& Var: *Vars) Equation.Replace(Var.ID, Var.Value.ToString(), true, true);
 
 	return Parser.Evaluate(Equation);
 }
