@@ -26,6 +26,7 @@
 #include "../script/klscript.hpp"
 
 #include <QObject>
+#include <QRegExp>
 
 /*! \file		klscriptbinding.hpp
  *  \brief	Deklaracje dla klasy KLScriptbinding i jej składników.
@@ -82,6 +83,14 @@ class KLScriptbinding : public QObject, KLScript
 		 */
 		void SetCode(const QString& Script);
 
+		/*! \brief		Pobranie skryptu.
+		 *  \return		Bieżący skrypt.
+		 *
+		 * Zwraca aktualnie przechowywany skrypt.
+		 *
+		 */
+		QString GetCode(void) const;
+
 		/*! \brief		Wywołanie skryptu.
 		 *  \return 		Powodzenie operacji.
 		 *  \see			LastError(), LastValue().
@@ -99,6 +108,13 @@ class KLScriptbinding : public QObject, KLScript
 		 *
 		 */
 		bool Validate(const QString& Script);
+
+		/*! \brief		Optymalizacja skryptu.
+		 *
+		 * Usuwa ze skryptu komentarze i niepotrzebne białe znaki.
+		 *
+		 */
+		void Optimize(void);
 
 		/*! \brief		Pobranie wartości.
 		 *  \return		Ostatnia poprawnie obliczona wartość.

@@ -30,6 +30,7 @@
 
 #if defined(USING_BOOST)
 #include <boost/function.hpp>
+#include <boost/bind.hpp>
 #endif
 
 /*! \file		klbindings.hpp

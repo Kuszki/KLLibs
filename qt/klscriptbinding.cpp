@@ -30,6 +30,11 @@ void KLScriptbinding::SetCode(const QString& Script)
 	LastCode = Script;
 }
 
+QString KLScriptbinding::GetCode(void) const
+{
+	return LastCode;
+}
+
 bool KLScriptbinding::Evaluate(void)
 {
 	const bool OK = KLScript::Evaluate(LastCode.toStdString().c_str());
@@ -48,6 +53,14 @@ bool KLScriptbinding::Validate(const QString& Script)
 	LastLine = KLScript::GetLine(Script.toStdString().c_str());
 
 	return OK;
+}
+
+void KLScriptbinding::Optimize(void)
+{
+	LastCode
+		.remove(QRegExp("\\s*#[^\n]*\\s*"))
+		.replace(QRegExp("\\s+(\\W)\\s+|(\\W)\\s+|\\s+(\\W)"), QString("\\1\\2\\3"))
+		.replace(QRegExp("\\s+"), " ");
 }
 
 KLScriptbinding::ERROR KLScriptbinding::GetError(void) const
