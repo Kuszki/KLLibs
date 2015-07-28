@@ -28,6 +28,10 @@
 
 #include "klvariables.hpp"
 
+#if defined(USING_BOOST)
+#include <boost/function.hpp>
+#endif
+
 /*! \file		klbindings.hpp
  *  \brief	Deklaracje dla klasy KLBindings i jej składników.
  *
@@ -46,7 +50,11 @@
 class EXPORT KLBindings
 {
 
-	protected: typedef double (*KLSENTRY)(KLVariables&);	//!< Prototyp funkcji skryptowej.
+#if defined(USING_BOOST)
+	public: typedef boost::function<double (KLVariables&)> KLSENTRY;
+#else
+	public: typedef double (*KLSENTRY)(KLVariables&);
+#endif
 
 	/*! \brief		Reprezentacja pojedynczego bindu.
 	 *

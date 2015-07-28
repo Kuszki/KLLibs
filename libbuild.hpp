@@ -28,13 +28,18 @@
  *
  */
 
-#if defined(QT_VERSION)
+#if defined(USING_QT)
+
+	#include <QtCore/qglobal.h>
 
 	#if defined(KLLIBS_LIBRARY)
-		#include <QtCore/qglobal.h>
+
 		#define EXPORT Q_DECL_EXPORT
+
 	#else
+
 		#define EXPORT Q_DECL_IMPORT
+
 	#endif
 
 #else

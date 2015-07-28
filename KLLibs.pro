@@ -9,7 +9,7 @@ TEMPLATE	=	lib
 
 CONFIG	+=	c++11 shared
 
-DEFINES	+=	KLLIBS_LIBRARY
+DEFINES	+=	KLLIBS_LIBRARY USING_QT
 
 SOURCES	+=	script/klscript.cpp \
 			script/klvariables.cpp \
@@ -51,6 +51,12 @@ addons {
 } else {
 
 	QT		-=	gui core
+
+}
+
+boost {
+
+	DEFINES	+=	USING_BOOST
 
 }
 

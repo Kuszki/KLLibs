@@ -28,8 +28,6 @@
 #include <stdio.h>
 #include <ctype.h>
 
-#define S (KLString)	//!< Makro konwertujące na KLString.
-
 /*! \file		klstring.hpp
  *  \brief	Deklaracje dla klasy KLString i jej składników.
  *
