@@ -51,9 +51,9 @@ class EXPORT KLBindings
 {
 
 #if defined(USING_BOOST)
-	public: typedef boost::function<double (KLVariables&)> KLSENTRY;
+	public: using KLSENTRY = boost::function<double (KLVariables&)>;
 #else
-	public: typedef double (*KLSENTRY)(KLVariables&);
+	public: using KLSENTRY = double (*)(KLVariables&);
 #endif
 
 	/*! \brief		Reprezentacja pojedynczego bindu.
