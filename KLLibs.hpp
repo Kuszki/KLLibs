@@ -33,13 +33,19 @@
  *
  *  \section	license Licencja
  *
- * - [GNU GPL v2 angielski](http://www.gnu.org/licenses/gpl-2.0.html)
- * - [GNU GPL v2 polski](http://gnu.org.pl/text/licencja-gnu.html)
+ * - [GNU GPL v3 (angielski)](https://www.gnu.org/licenses/gpl.html)
+ * - [GNU GPL (Wikipedia.pl)](https://pl.wikipedia.org/wiki/GNU_General_Public_License)
  *
  *  \section	author Autor
  *
  * - [Profil GitHub](https://github.com/Kuszki)
  * - [e-mail](l.drozdz@o2.pl)
+ *
+ */
+
+/*! \page		license_file Licencja
+ *
+ *  \htmlinclude LICENSE.html
  *
  */
 

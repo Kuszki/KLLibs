@@ -205,6 +205,9 @@ Bazujący na `QObject` i `KLScript` bind ułatwiający współpracę z `KLScript
 ### KLParserbinding
 Bazujący na `QObject` i `KLParser` bind ułatwiający współpracę z `KLParser` w środowisku QT.
 
+## Użycie `boost::function` i `boost::bind`
+Aby zamiast prostego bindowania funkcji w stylu `C` używać biblioteki `boost` należy skompilować bibliotekę z użyciem `CONFIG+=boost`, a przy linkowaniu biblioteki uaktywnić globalne makro `USING_BOOST`.
+
 # Licencja
 KLLibs - Zbiór lekkich bibliotek. Copyright (C) 2015 Łukasz "Kuszki" Dróżdż.
 
