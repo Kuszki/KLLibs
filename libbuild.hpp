@@ -34,17 +34,17 @@
 
 	#if defined(KLLIBS_LIBRARY)
 
-		#define EXPORT Q_DECL_EXPORT
+		#define KLLIBS_EXPORT Q_DECL_EXPORT
 
 	#else
 
-		#define EXPORT Q_DECL_IMPORT
+		#define KLLIBS_EXPORT Q_DECL_IMPORT
 
 	#endif
 
 #else
 
-	#define EXPORT
+	#define KLLIBS_EXPORT
 
 #endif
 
