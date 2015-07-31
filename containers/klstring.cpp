@@ -32,7 +32,7 @@ KLString::KLString(double Value)
 #endif
 
 	Capacity	= strlen(Buffer);
-	Data		= new char[Capacity + 1];
+	Data		= (char*) malloc(Capacity + 1);
 
 	memcpy(Data, Buffer, Capacity + 1);
 }
@@ -49,7 +49,7 @@ KLString::KLString(int Value)
 #endif
 
 	Capacity	= strlen(Buffer);
-	Data		= new char[Capacity + 1];
+	Data		= (char*) malloc(Capacity + 1);
 
 	memcpy(Data, Buffer, Capacity + 1);
 }
@@ -60,7 +60,7 @@ KLString::KLString(bool Bool)
 	const char* Buffer[] = {"true", "false"};
 
 	Capacity	= Bool ? 4 : 5;
-	Data		= new char[Capacity + 1];
+	Data		= (char*) malloc(Capacity + 1);
 
 	memcpy(Data, Buffer, Capacity + 1);
 }
@@ -77,7 +77,7 @@ KLString::KLString(const void* Value)
 #endif
 
 	Capacity	= strlen(Buffer);
-	Data		= new char[Capacity + 1];
+	Data		= (char*) malloc(Capacity + 1);
 
 	memcpy(Data, Buffer, Capacity + 1);
 }
@@ -85,7 +85,7 @@ KLString::KLString(const void* Value)
 KLString::KLString(char Char)
 : KLString()
 {
-	Data		= new char[2];
+	Data		= (char*) malloc(2);
 
 	Data[0]	= Char;
 	Data[1]	= 0;
@@ -99,7 +99,7 @@ KLString::KLString(const char* String)
 	if (String)
 	{
 		Capacity	= strlen(String);
-		Data		= new char[Capacity + 1];
+		Data		= (char*) malloc(Capacity + 1);
 
 		memcpy(Data, String, Capacity + 1);
 	}
@@ -110,7 +110,7 @@ KLString::KLString(const KLString& String)
 {
 	if (Capacity)
 	{
-		Data = new char[Capacity + 1];
+		Data = (char*) malloc(Capacity + 1);
 
 		memcpy(Data, String.Data, Capacity + 1);
 	}
@@ -129,15 +129,13 @@ KLString::KLString(void)
 
 KLString::~KLString(void)
 {
-	if (Data) delete [] Data;
+	if (Data) free(Data);
 }
 
 void KLString::Reserve(size_t Size)
 {
-	Clean();
-
 	Reserved = Size + 1;
-	Data = new char[Reserved];
+	Data = (char*) realloc(Data, Reserved);
 
 	Erase();
 }
@@ -157,14 +155,8 @@ void KLString::Finalize(void)
 	if (Reserved)
 	{
 		Capacity = strlen(Data);
+		Data = (char*) realloc(Data ,Capacity + 1);
 
-		char* Buffer = new char[Capacity + 1];
-
-		memcpy(Buffer, Data, Capacity);
-
-		Data = Buffer;
-
-		Data[Capacity] = 0;
 		Reserved = 0;
 	}
 }
@@ -176,33 +168,66 @@ int KLString::Insert(const KLString& String, int Position)
 
 int KLString::Insert(const char* String, int Position, int Length)
 {
-	if (!String) return Capacity;
+	if (!String || Position > Capacity) return -1;
 
 	const int Strlen = (Length > 0) ? Length : strlen(String);
 
-	char* Buffer = new char[Capacity + Strlen + 1];
-
 	if (!Data)
 	{
-		memcpy(Buffer, String, Strlen + 1);
+		Data = (char*) malloc(Capacity + Strlen + 1);
+
+		memcpy(Data, String, Strlen + 1);
 	}
 	else	if (Position < 0 || Position == Capacity)
 	{
-		memcpy(Buffer, Data, Capacity);
-		memcpy(Buffer + Capacity, String, Strlen + 1);
+		Data = (char*) realloc(Data, Capacity + Strlen + 1);
+
+		memcpy(Data + Capacity, String, Strlen + 1);
 	}
 	else
 	{
+		char* Buffer = (char*) malloc(Capacity + Strlen + 1);
+
 		memcpy(Buffer, Data, Position);
 		memcpy(Buffer + Position, String, Strlen);
 		memcpy(Buffer + Position + Strlen, Data + Position, Capacity - Position + 1);
+
+		free(Data);
+
+		Data = Buffer;
 	}
 
-	if (Data) delete [] Data;
-
-	Data = Buffer;
-
 	return Capacity += Strlen;
+}
+
+int KLString::Insert(char Char, int Position)
+{
+	if (!Char || Position > Capacity) return -1;
+
+	if (!Data)
+	{
+		Data = (char*) malloc(2);
+
+		Data[0] = Char;
+		Data[1] = 0;
+	}
+	else	if (Position < 0 || Position == Capacity)
+	{
+		Data = (char*) realloc(Data, Capacity + 2);
+
+		Data[Capacity] = Char;
+		Data[Capacity + 1] = 0;
+	}
+	else
+	{
+		Data = (char*) realloc(Data, Capacity + 2);
+
+		memcpy(Data + Position + 1, Data + Position, Capacity - Position + 1);
+
+		Data[Position] = Char;
+	}
+
+	return ++Capacity;
 }
 
 int KLString::Delete(const KLString& String, bool All)
@@ -223,13 +248,7 @@ int KLString::Delete(const KLString& String, bool All)
 		if (!All) break;
 	}
 
-	char* Buffer = new char[Capacity + 1];
-
-	memcpy(Buffer, Data, Capacity + 1);
-
-	delete [] Data;
-
-	Data = Buffer;
+	Data = (char*) realloc(Data, Capacity + 1);
 
 	return Counter;
 }
@@ -243,14 +262,14 @@ int KLString::Delete(int Start, int Stop)
 	int NewCap	= Capacity - Stop + Start - 1;
 	int OldCap	= Capacity;
 
-	char* Buffer = new char[NewCap + 1];
+	char* Buffer = (char*) malloc(NewCap + 1);
 
 	memcpy(Buffer, Data, Start);
 	memcpy(Buffer + Start, Data + Stop + 1, OldCap - Stop - 1);
 
 	Buffer[NewCap] = 0;
 
-	delete [] Data;
+	free(Data);
 
 	Data = Buffer;
 
@@ -268,13 +287,13 @@ int KLString::Replace(const KLString& Old, const KLString& New, bool All, bool W
 
 	while ((Found = Find(Old, 0, 0, Words)) != -1)
 	{
-		char* Buffer = new char[Capacity - Old.Capacity + New.Capacity + 1];
+		char* Buffer = (char*) malloc(Capacity - Old.Capacity + New.Capacity + 1);
 
 		memcpy(Buffer, Data, Found);
 		memcpy(Buffer + Found, New.Data, New.Capacity);
 		memcpy(Buffer + Found + New.Capacity, Data + Found + Old.Capacity, Capacity - Found - Old.Capacity);
 
-		delete [] Data;
+		free(Data);
 
 		Capacity -= Old.Capacity - New.Capacity;
 
@@ -334,13 +353,35 @@ KLString KLString::Part(int Start, int Stop) const
 	KLString Buffer;
 
 	Buffer.Capacity = Stop - Start;
-	Buffer.Data = new char[Buffer.Capacity + 1];
+	Buffer.Data = (char*) malloc(Buffer.Capacity + 1);
 
 	memcpy(Buffer.Data, Data + Start, Buffer.Capacity);
 
 	Buffer.Data[Buffer.Capacity] = 0;
 
 	return Buffer;
+}
+
+char& KLString::First(void)
+{
+	return Data[0];
+}
+
+char KLString::First(void) const
+{
+	if (Capacity) return Data[0];
+	else return 0;
+}
+
+char& KLString::Last(void)
+{
+	return Data[Capacity - 1];
+}
+
+char KLString::Last(void) const
+{
+	if (Capacity) return Data[Capacity - 1];
+	else return 0;
 }
 
 int KLString::Size(void) const
@@ -352,7 +393,7 @@ void KLString::Clean(void)
 {
 	if (Data)
 	{
-		delete [] Data;
+		free(Data);
 
 		Capacity	= 0;
 		Data		= nullptr;
@@ -450,6 +491,16 @@ KLString KLString::operator+ (const char* String) const
 	return Buffer;
 }
 
+KLString KLString::operator+ (char Char) const
+{
+	KLString Buffer;
+
+	Buffer.Insert(Data);
+	Buffer.Insert(Char);
+
+	return Buffer;
+}
+
 KLString& KLString::operator= (const KLString& String)
 {
 	if (this == &String) return *this;
@@ -493,7 +544,23 @@ KLString::operator const char* (void) const
 	return Data;
 }
 
-KLString::operator bool (void) const
+KLString& KLString::operator << (const KLString& Input)
 {
-	return Capacity;
+	Insert(Input);
+
+	return *this;
+}
+
+KLString& KLString::operator << (const char* Input)
+{
+	Insert(Input);
+
+	return *this;
+}
+
+KLString& KLString::operator << (char Input)
+{
+	Insert(Input);
+
+	return *this;
 }

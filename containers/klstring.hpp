@@ -43,7 +43,7 @@
  * Prosta i lekka interpretacja łańcucha znaków. Wymaga jedynie kilku podstawowych funkcji biblioteki `string.h`.
  *
  */
-class EXPORT KLString
+class KLLIBS_EXPORT KLString
 {
 
 	protected:
@@ -197,6 +197,17 @@ class EXPORT KLString
 				 int Position = -1,
 				 int Length = -1);
 
+		/*! \brief		Wstawianie łańcucha.
+		 *  \param [in]	Char		Znak do wstawienia
+		 *  \param [in]	Position	Pozycja łańcucha - numerowane od 0, -1 oznacza koniec bierzącego łańcucha.
+		 *  \return		Aktualna liczba znaków.
+		 *
+		 * Dodaje do łańcucha podany znak.
+		 *
+		 */
+		int Insert(char Char,
+				 int Position = -1);
+
 		/*! \brief		Usuwanie łańcucha.
 		 *  \param [in]	String	Łańcuch do usunięcia
 		 *  \param [in]	All		Usuń wszystkie wystąpienia.
@@ -274,6 +285,40 @@ class EXPORT KLString
 		 */
 		KLString Part(int Start,
 				    int Stop) const;
+
+		/*! \brief		Wybór pierwszego elementu.
+		 *  \return		Referencja do pierwszego elementu.
+		 *  \warning		Gdy element o podanym indeksie nie istnieje to zwrócona zostanie niepoprawna referencja do `nullptr` co zapewne spowoduje krytyczny wyjątek.
+		 *
+		 * Wybiera pierwszy element z łańcucha.
+		 *
+		 */
+		char& First(void);
+
+		/*! \brief		Wybór pierwszego elementu.
+		 *  \return		Stała referencja do pierwszego elementu.
+		 *
+		 * Wybiera pierwszy element z łańcucha.
+		 *
+		 */
+		char First(void) const;
+
+		/*! \brief		Wybór ostatniego elementu.
+		 *  \return		Referencja do ostatniego elementu.
+		 *  \warning		Gdy element o podanym indeksie nie istnieje to zwrócona zostanie niepoprawna referencja do `nullptr` co zapewne spowoduje krytyczny wyjątek.
+		 *
+		 * Wybiera ostatni element z łańcucha.
+		 *
+		 */
+		char& Last(void);
+
+		/*! \brief		Wybór ostatniego elementu.
+		 *  \return		Stała referencja do ostatniego elementu.
+		 *
+		 * Wybiera ostatni element z łańcucha.
+		 *
+		 */
+		char Last(void) const;
 
 		/*! \brief		Długość łańcucha.
 		 *  \return		Liczba znaków w łańcuchu.
@@ -406,6 +451,15 @@ class EXPORT KLString
 		 */
 		KLString operator+ (const char* String) const;
 
+		/*! \brief		Dodaje znak do łańcucha.
+		 *  \param [in]	Char Znak do dodania.
+		 *  \return		Nowy obiekt reprezentujący sumę łańcuchów.
+		 *
+		 * Tworzy nowy łańcuch jako sumę dwóch łańcuchów.
+		 *
+		 */
+		KLString operator+ (char Char) const;
+
 		/*! \brief		Operator przypisania.
 		 *  \param [in]	String Łańcuch do przypisania.
 		 *  \return		Referencja do bierzącego obiektu.
@@ -450,13 +504,9 @@ class EXPORT KLString
 		 */
 		operator const char* (void) const;
 
-		/*! \brief		Operator konwersji na `bool`.
-		 *  \return		Stan łańcucha.
-		 *
-		 * Zwraca `true` gdy łańcuch zawiera znaki lub `false` gdy jest pusty.
-		 *
-		 */
-		explicit operator bool (void) const;
+		KLString& operator << (const KLString& Input);
+		KLString& operator << (const char* Input);
+		KLString& operator << (char Input);
 
 };
 
