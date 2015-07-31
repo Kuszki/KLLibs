@@ -20,8 +20,11 @@
 
 #include "klscriptbinding.hpp"
 
-KLScriptbinding::KLScriptbinding(QObject *Parent)
-: QObject(Parent), KLScript() {}
+KLScriptbinding::KLScriptbinding(QObject* Parent, KLVariables* Scoope)
+: QObject(Parent), KLScript(Scoope)
+{
+	std::setlocale(LC_NUMERIC, "POSIX");
+}
 
 KLScriptbinding::~KLScriptbinding(void) {}
 
@@ -92,7 +95,7 @@ int KLScriptbinding::GetLine(void) const
 	return LastLine;
 }
 
-double KLScriptbinding::GetValue(void) const
+double KLScriptbinding::GetReturn(void) const
 {
 	return LastReturn;
 }

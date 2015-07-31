@@ -20,11 +20,8 @@
 
 #include "klscript.hpp"
 
-KLScript::KLScript(void)
-: LastReturn(0), LastError(NO_ERROR)
-{
-	Variables.Add("return", LastReturn);
-}
+KLScript::KLScript(KLVariables* Scoope)
+: LastReturn(0), LastError(NO_ERROR), Variables(Scoope) {}
 
 KLScript::OPERATION KLScript::GetToken(const KLString& Script)
 {
@@ -91,6 +88,8 @@ bool KLScript::GetValue(const KLString& Script, KLVariables& Scoope)
 	for (KLVariables* Vars = &Scoope; Vars; Vars = Vars->Parent)
 		for (auto& Var: *Vars) Equation.Replace(Var.ID, Var.Value.ToString(), true, true);
 
+	Equation.Replace("return", LastReturn, true, true);
+
 	return Parser.Evaluate(Equation);
 }
 
@@ -117,6 +116,7 @@ bool KLScript::Evaluate(const KLString& Script)
 
 	LastError		= NO_ERROR;
 	LastProcess	= 0;
+	LastReturn	= 0;
 
 	if (SkipComment(Script) == Script.Size()) ReturnError(WRONG_SCRIPTCODE);
 
@@ -306,8 +306,9 @@ bool KLScript::Validate(const KLString& Script)
 {
 	KLVariables LocalVars(&Variables);
 
-	LastError = NO_ERROR;
-	LastProcess = 0;
+	LastError 	= NO_ERROR;
+	LastProcess 	= 0;
+	LastReturn	= 0;
 
 	SkipComment(Script);
 
@@ -454,25 +455,6 @@ KLScript::ERROR KLScript::GetError(void) const
 double KLScript::GetReturn(void) const
 {
 	return LastReturn;
-}
-
-const char* KLScript::GetMessage(void) const
-{
-	switch (LastError)
-	{
-		case UNDEFINED_VARIABLE:		return "Niezdefiniowana zmienna";
-		case UNDEFINED_FUNCTION:		return "Niezdefiniowana funkcja";
-		case EXPECTED_ENDIF_TOK:		return "Oczekiwano znacznika `fi`";
-		case EXPECTED_DONE_TOK:		return "Oczekiwano znacznika `done`";
-		case EXPECTED_TERMINATOR:	return "Oczekiwano terminatora `;`";
-		case EMPTY_EXPRESSION:		return "Napotkano puste polecenie";
-		case UNKNOWN_EXPRESSION:		return "Napotkano nieznane polecenie";
-		case WRONG_SCRIPTCODE:		return "Niepoprawny lub pusty skrypt";
-		case WRONG_PARAMETERS:		return "Niepoprawne parametry polecenia";
-		case WRONG_EVALUATION:		return "Niepoprawny skrypt matematyczny";
-
-		default: return "Skrypt jest poprawny";
-	}
 }
 
 int KLScript::GetLine(const KLString& Script) const

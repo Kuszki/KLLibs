@@ -83,7 +83,7 @@ int KLVariables::KLVariable::ToInt(void) const
 	return ToNumber();
 }
 
-int KLVariables::KLVariable::ToBool(void) const
+bool KLVariables::KLVariable::ToBool(void) const
 {
 	return ToNumber();
 }
@@ -113,8 +113,8 @@ KLVariables::KLVariable& KLVariables::KLVariable::operator= (const Data& Value)
 	return *this;
 }
 
-KLVariables::KLVariables(KLVariables* UpperScoope)
-: Parent(UpperScoope) {}
+KLVariables::KLVariables(KLVariables* Scoope)
+: Parent(Scoope) {}
 
 KLVariables::KLVariables(const KLVariables& Objects)
 : Variables(Objects.Variables), Parent(Objects.Parent) {}
@@ -160,6 +160,11 @@ bool KLVariables::Exists(const KLString& Name) const
 int KLVariables::Size(void) const
 {
 	return Variables.Size();
+}
+
+void KLVariables::Clean(void)
+{
+	Variables.Clean();
 }
 
 KLVariables::KLVariable& KLVariables::operator[] (const KLString& Name)

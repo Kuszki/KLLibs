@@ -48,7 +48,7 @@
  * System zarządzania bindowaniem funkcji umożliwiający przypisywanie etykiety funkcją o podanym prototypie i wywoływanie ich w skrypcie.
  *
  */
-class EXPORT KLBindings
+class KLLIBS_EXPORT KLBindings
 {
 
 #if defined(USING_BOOST)

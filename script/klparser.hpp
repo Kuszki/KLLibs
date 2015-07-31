@@ -46,7 +46,7 @@
  * Prosta i lekka interpretacja matematycznego parsera. Wspiera wbudowane funkcję z biblioteki `math.c`, obsługuję kolejność działań i priorytety operatorów. Umożliwia działania logiczne i matematyczne.
  *
  */
-class EXPORT KLParser
+class KLLIBS_EXPORT KLParser
 {
 
 	/*! \brief		Wyliczenie błędu przetwarzania.
@@ -327,15 +327,6 @@ class EXPORT KLParser
 		 *
 		 */
 		ERROR GetError(void) const;
-
-		/*! \brief		Pobranie opisu ostatniego błędu.
-		 *  \return		Opis ostatniego błędu.
-		 *  \see			GetError().
-		 *
-		 * Zwraca czytelny dla człowieka opis napotkanego błędu.
-		 *
-		 */
-		const char* GetMessage(void) const;
 
 };
 

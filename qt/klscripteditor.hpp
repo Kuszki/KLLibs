@@ -45,7 +45,7 @@
  * Klasa stanowi pole tekstowe rozszerzające `QPlainTextEdit` z automatycznym podświetlaniem składni, aktywnej linii i z wbudowanym numerowaniem linii.
  *
  */
-class EXPORT KLScripteditor : public QPlainTextEdit
+class KLLIBS_EXPORT KLScripteditor : public QPlainTextEdit
 {
 
 		Q_OBJECT

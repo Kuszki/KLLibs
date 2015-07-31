@@ -45,7 +45,7 @@
  * Organizacja obsługuje możliwość iteracji po zakresie jedynie po bierzącym poziomie, zgodnie z `KLMap`.
  *
  */
-class EXPORT KLVariables
+class KLLIBS_EXPORT KLVariables
 {
 
 	/*! \brief		Wyliczenie typu zmiennej.
@@ -151,7 +151,7 @@ class EXPORT KLVariables
 			 * Konwertuje obiekt do `bool` i zwraca wynik.
 			 *
 			 */
-			int ToBool(void) const;
+			bool ToBool(void) const;
 
 			/*! \brief		Sprawdzenie bindowania.
 			 *  \return		Stan bindowania.
@@ -181,12 +181,12 @@ class EXPORT KLVariables
 		KLVariables* const Parent;			//!< Zmienne wyższego zakresu.
 
 		/*! \brief		Domyślny konstruktor.
-		 *  \param [in]	UpperScoope System zmiennych wyższego zakresu.
+		 *  \param [in]	Scoope System zmiennych wyższego zakresu.
 		 *
 		 * Tworzy nowy system zmiennych i opcjonalnie zapamiętuje wskaźnik na zmienne z wyższego zakresu.
 		 *
 		 */
-		explicit KLVariables(KLVariables* UpperScoope = nullptr);
+		explicit KLVariables(KLVariables* Scoope = nullptr);
 
 		/*! \brief		Konstruktor kopiujący.
 		 *  \param [in]	Objects System zmiennych do skopiowania.
@@ -276,6 +276,13 @@ class EXPORT KLVariables
 		 *
 		 */
 		int Size(void) const;
+
+		/*! \brief		Czyszczenie kontenera.
+		 *
+		 * Usuwa wszystkie zmienne z kontenera.
+		 *
+		 */
+		void Clean(void);
 
 		/*! \brief		Operator wyboru.
 		 *  \param [in]	Name Nazwa zmiennej.

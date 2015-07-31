@@ -41,7 +41,7 @@
  * Implementacja subklasy `QSyntaxHighlighter` umożliwiająca wyróżnianie składni `KLScript` w dokumentach Qt.
  *
  */
-class EXPORT KLHighlighter : public QSyntaxHighlighter
+class KLLIBS_EXPORT KLHighlighter : public QSyntaxHighlighter
 {
 
 		Q_OBJECT

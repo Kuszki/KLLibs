@@ -63,7 +63,7 @@
  * Po każdym wyrażeniu (instrukcji) musi zostać umieszczony terminator `;`. Dotyczy to także konstrukcji `if`, `else`, `endif`, `while`, `done` itd. Taka restrykcja upraszcza parser do minimalnego stopnia skomplikowania.
  *
  */
-class EXPORT KLScript
+class KLLIBS_EXPORT KLScript
 {
 
 	/*! \brief		Wyliczenie operacji.
@@ -183,14 +183,15 @@ class EXPORT KLScript
 		KLParser		Parser;		//!< Parser matematyczny.
 
 		/*! \brief		Domyślny konstruktor.
+		 *  \param [in]	Scoope Wyższy poziom dla zmiennych skryptu.
 		 *
 		 * Inicjuje obiekt i tworzy specjalną zmienną `return` do przechowywania wyników funkcji.
 		 *
 		 */
-		KLScript(void);
+		KLScript(KLVariables* Scoope = nullptr);
 
 		/*! \brief		Wykonanie kodu.
-		 *  \param [in]	Script	Skrypt do przetworzenia.
+		 *  \param [in]	Script Skrypt do przetworzenia.
 		 *  \return		Powodzenie operacji.
 		 *
 		 * Przetwarza wybrany kod i zwraca powodzenie operacji.
@@ -199,7 +200,7 @@ class EXPORT KLScript
 		bool Evaluate(const KLString& Script);
 
 		/*! \brief		Sprawdzenie kodu.
-		 *  \param [in]	Script	Skrypt do przetworzenia.
+		 *  \param [in]	Script Skrypt do przetworzenia.
 		 *  \return		Powodzenie operacji.
 		 *
 		 * Przetwarza wybrany kod pod kątem błędów składni i zwraca powodzenie operacji.
@@ -224,15 +225,6 @@ class EXPORT KLScript
 		 *
 		 */
 		double GetReturn(void) const;
-
-		/*! \brief		Pobranie opisu ostatniego błędu.
-		 *  \return		Opis ostatniego błędu.
-		 *  \see			GetError().
-		 *
-		 * Zwraca czytelny dla człowieka opis napotkanego błędu.
-		 *
-		 */
-		const char* GetMessage(void) const;
 
 		/*! \brief		Obliczenie numeru linii ostatniego błędu.
 		 *  \param [in]	Script Ostatni skrypt.

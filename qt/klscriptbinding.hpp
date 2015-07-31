@@ -43,7 +43,7 @@
  * Bazujący na `QObject` i `KLScript` bind ułatwiający współpracę z `KLScript` w środowisku QT.
  *
  */
-class KLScriptbinding : public QObject, KLScript
+class KLLIBS_EXPORT KLScriptbinding : public QObject, KLScript
 {
 
 		Q_OBJECT
@@ -61,12 +61,14 @@ class KLScriptbinding : public QObject, KLScript
 		using KLScript::Parser;
 
 		/*! \brief		Konstruktor.
-		 *  \param [in]	Parent Rodzic obiektu.
+		 *  \param [in]	Parent	Rodzic obiektu.
+		 *  \param [in]	Scoope	Wyższy poziom dla zmiennych skryptu.
 		 *
 		 * Buduje obiekt zgodnie z mechanizmem `QObject`.
 		 *
 		 */
-		explicit KLScriptbinding(QObject* Parent = nullptr);
+		explicit KLScriptbinding(QObject* Parent = nullptr,
+							KLVariables* Scoope = nullptr);
 
 		/*! \brief		Destruktor.
 		 *
@@ -149,7 +151,7 @@ class KLScriptbinding : public QObject, KLScript
 		 * Pobiera ostatnią obliczoną wartość.
 		 *
 		 */
-		double GetValue(void) const;
+		double GetReturn(void) const;
 
 	signals:
 

@@ -42,7 +42,7 @@
  * Bazujący na `QObject` i `KLParser` bind ułatwiający współpracę z `KLParser` w środowisku QT.
  *
  */
-class KLParserbinding : public QObject, KLParser
+class KLLIBS_EXPORT KLParserbinding : public QObject, KLParser
 {
 
 		Q_OBJECT
