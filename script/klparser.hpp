@@ -21,8 +21,6 @@
 #ifndef KLPARSER_HPP
 #define KLPARSER_HPP
 
-#define ReturnError(error) { LastError = error; return false; }
-
 #include "../libbuild.hpp"
 
 #include "../containers/klstring.hpp"

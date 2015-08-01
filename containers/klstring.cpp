@@ -400,7 +400,7 @@ void KLString::Clean(void)
 	}
 }
 
-int KLString::ToBool(void) const
+bool KLString::ToBool(void) const
 {
 	if (Data) return atoi(Data) || !strcmp(Data, "true") || !strcmp(Data, "TRUE");
 	else return false;

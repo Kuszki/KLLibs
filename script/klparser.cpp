@@ -20,6 +20,8 @@
 
 #include "klparser.hpp"
 
+#define ReturnError(error) { LastError = error; return false; }
+
 thread_local KLParser::ERROR KLParser::KLParserToken::LastError = NO_ERROR;
 
 const KLParser::KLParserToken::KLParserOperatorData KLParser::KLParserToken::Operators[] =

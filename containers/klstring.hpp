@@ -341,7 +341,7 @@ class KLLIBS_EXPORT KLString
 		 * Zwraca `true` gdy ciąg jest liczbą niezerową lub ma wartość "true".
 		 *
 		 */
-		int ToBool(void) const;
+		bool ToBool(void) const;
 
 		/*! \brief		Operator konwersji na `int`.
 		 *  \return		Interpretacja łańcucha jako liczba całkowita.
