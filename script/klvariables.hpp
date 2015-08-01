@@ -26,6 +26,12 @@
 #include "../containers/klmap.hpp"
 #include "../containers/klstring.hpp"
 
+#if defined(USING_BOOST)
+#include <boost/function.hpp>
+#include <boost/bind.hpp>
+#endif
+
+
 /*! \file		klvariables.hpp
  *  \brief	Deklaracje dla klasy KLVariables i jej składników.
  *
@@ -47,6 +53,12 @@
  */
 class KLLIBS_EXPORT KLVariables
 {
+
+#if defined(USING_BOOST)
+	public: using KLSCALLBACK = boost::function<void (double)>;
+#else
+	public: using KLSCALLBACK = void (*)(double);
+#endif
 
 	/*! \brief		Wyliczenie typu zmiennej.
 	 *
@@ -74,6 +86,8 @@ class KLLIBS_EXPORT KLVariables
 
 			double Variable;		//!< Przechowywane dane.
 
+			KLSCALLBACK Callback;	//!< Funkcja zwrotna przy zmianie stanu zmiennej.
+
 		public:
 
 			const TYPE Type;	//!< Wyliczenie typu zmiennej.
@@ -95,7 +109,8 @@ class KLLIBS_EXPORT KLVariables
 			 *
 			 */
 			KLVariable(TYPE VarType = NUMBER,
-					 void* Bind = nullptr);
+					 void* Bind = nullptr,
+					 KLSCALLBACK Handler = KLSCALLBACK());
 
 			/*! \brief		Konstruktor konwertujący z `bool`.
 			 *  \param [in]	Boolean Początkowa wartość.
@@ -103,7 +118,8 @@ class KLLIBS_EXPORT KLVariables
 			 * Tworzy zmienną logiczną o podanej wartości
 			 *
 			 */
-			KLVariable(bool Boolean);
+			KLVariable(bool Boolean,
+					 KLSCALLBACK Handler = KLSCALLBACK());
 
 			/*! \brief		Konstruktor konwertujący z `double`.
 			 *  \param [in]	Number Początkowa wartość.
@@ -111,7 +127,8 @@ class KLLIBS_EXPORT KLVariables
 			 * Tworzy zmienną rzeczywistą o podanej wartości
 			 *
 			 */
-			KLVariable(double Number);
+			KLVariable(double Number,
+					 KLSCALLBACK Handler = KLSCALLBACK());
 
 			/*! \brief		Konstruktor konwertujący z `int`.
 			 *  \param [in]	Integer Początkowa wartość.
@@ -119,7 +136,8 @@ class KLLIBS_EXPORT KLVariables
 			 * Tworzy zmienną całkowitą o podanej wartości
 			 *
 			 */
-			KLVariable(int Integer);
+			KLVariable(int Integer,
+					 KLSCALLBACK Handler = KLSCALLBACK());
 
 			/*! \brief		Konwersja na `KLString`.
 			 *  \return		Reprezentacja zmiennej jako `KLString`.
@@ -160,6 +178,10 @@ class KLLIBS_EXPORT KLVariables
 			 *
 			 */
 			bool Binded(void) const;
+
+			void SetCallback(KLSCALLBACK Handler);
+
+			KLSCALLBACK GetCallback(void) const;
 
 			/*! \brief		Zmiana wartość zmiennej.
 			 *  \tparam		Data		Typ nowej wartości.
@@ -216,7 +238,8 @@ class KLLIBS_EXPORT KLVariables
 		 *
 		 */
 		bool Add(const KLString& Name,
-			    TYPE Type = NUMBER);
+			    TYPE Type = NUMBER,
+			    KLSCALLBACK Handler = KLSCALLBACK());
 
 		/*! \brief		Tworzenie zmiennej w systemie.
 		 *  \param [in]	Name		Nazwa zmiennej.
@@ -227,7 +250,8 @@ class KLLIBS_EXPORT KLVariables
 		 *
 		 */
 		bool Add(const KLString& Name,
-			    bool& Boolean);
+			    bool& Boolean,
+			    KLSCALLBACK Handler = KLSCALLBACK());
 
 		/*! \brief		Tworzenie zmiennej w systemie.
 		 *  \param [in]	Name		Nazwa zmiennej.
@@ -238,7 +262,8 @@ class KLLIBS_EXPORT KLVariables
 		 *
 		 */
 		bool Add(const KLString& Name,
-			    double& Number);
+			    double& Number,
+			    KLSCALLBACK Handler = KLSCALLBACK());
 
 		/*! \brief		Tworzenie zmiennej w systemie.
 		 *  \param [in]	Name		Nazwa zmiennej.
@@ -249,7 +274,8 @@ class KLLIBS_EXPORT KLVariables
 		 *
 		 */
 		bool Add(const KLString& Name,
-			    int& Integer);
+			    int& Integer,
+			    KLSCALLBACK Handler = KLSCALLBACK());
 
 		/*! \brief		Usuwanie zmiennej z systemu.
 		 *  \param [in]	Name Nazwa zmiennej.

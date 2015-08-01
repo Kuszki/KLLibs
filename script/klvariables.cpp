@@ -21,25 +21,25 @@
 #include "klvariables.hpp"
 
 KLVariables::KLVariable::KLVariable(const KLVariable& Object)
-: Pointer(Object.Pointer), Variable(Object.Variable), Type(Object.Type) {}
+: Pointer(Object.Pointer), Variable(Object.Variable), Callback(Object.Callback), Type(Object.Type) {}
 
-KLVariables::KLVariable::KLVariable(TYPE VarType, void* Bind)
-: Pointer(Bind), Variable(0.0), Type(VarType) {}
+KLVariables::KLVariable::KLVariable(TYPE VarType, void* Bind, KLSCALLBACK Handler)
+: Pointer(Bind), Variable(0.0), Callback(Handler), Type(VarType) {}
 
-KLVariables::KLVariable::KLVariable(bool Boolean)
-: KLVariable(BOOLEAN)
+KLVariables::KLVariable::KLVariable(bool Boolean, KLSCALLBACK Handler)
+: KLVariable(BOOLEAN, nullptr, Handler)
 {
 	*this = Boolean;
 }
 
-KLVariables::KLVariable::KLVariable(double Number)
-: KLVariable(NUMBER)
+KLVariables::KLVariable::KLVariable(double Number, KLSCALLBACK Handler)
+: KLVariable(NUMBER, nullptr, Handler)
 {
 	*this = Number;
 }
 
-KLVariables::KLVariable::KLVariable(int Integer)
-: KLVariable(INTEGER)
+KLVariables::KLVariable::KLVariable(int Integer, KLSCALLBACK Handler)
+: KLVariable(INTEGER, nullptr, Handler)
 {
 	*this = Integer;
 }
@@ -93,6 +93,16 @@ bool KLVariables::KLVariable::Binded(void) const
 	return Pointer;
 }
 
+void KLVariables::KLVariable::SetCallback(KLSCALLBACK Handler)
+{
+	Callback = Handler;
+}
+
+KLVariables::KLSCALLBACK KLVariables::KLVariable::GetCallback(void) const
+{
+	return Callback;
+}
+
 template<typename Data>
 KLVariables::KLVariable& KLVariables::KLVariable::operator= (const Data& Value)
 {
@@ -110,6 +120,8 @@ KLVariables::KLVariable& KLVariables::KLVariable::operator= (const Data& Value)
 	}
 	else Variable = Value;
 
+	if (Callback) Callback(ToNumber());
+
 	return *this;
 }
 
@@ -124,24 +136,24 @@ bool KLVariables::Add(const KLString& Name, const KLVariable& Object)
 	return Variables.Insert(Object, Name) != -1;
 }
 
-bool KLVariables::Add(const KLString& Name, TYPE Type)
+bool KLVariables::Add(const KLString& Name, TYPE Type, KLSCALLBACK Handler)
 {
-	return Variables.Insert(KLVariable(Type), Name) != -1;
+	return Variables.Insert(KLVariable(Type, nullptr, Handler), Name) != -1;
 }
 
-bool KLVariables::Add(const KLString& Name, bool& Boolean)
+bool KLVariables::Add(const KLString& Name, bool& Boolean, KLSCALLBACK Handler)
 {
-	return Variables.Insert(KLVariable(BOOLEAN, &Boolean), Name) != -1;
+	return Variables.Insert(KLVariable(BOOLEAN, &Boolean, Handler), Name) != -1;
 }
 
-bool KLVariables::Add(const KLString& Name, double& Number)
+bool KLVariables::Add(const KLString& Name, double& Number, KLSCALLBACK Handler)
 {
-	return Variables.Insert(KLVariable(NUMBER, &Number), Name) != -1;
+	return Variables.Insert(KLVariable(NUMBER, &Number, Handler), Name) != -1;
 }
 
-bool KLVariables::Add(const KLString& Name, int& Integer)
+bool KLVariables::Add(const KLString& Name, int& Integer, KLSCALLBACK Handler)
 {
-	return Variables.Insert(KLVariable(INTEGER, &Integer), Name) != -1;
+	return Variables.Insert(KLVariable(INTEGER, &Integer, Handler), Name) != -1;
 }
 
 bool KLVariables::Delete(const KLString& Name)
