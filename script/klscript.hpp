@@ -21,16 +21,6 @@
 #ifndef KLSCRIPT_HPP
 #define KLSCRIPT_HPP
 
-#define Terminated			(Script[LastProcess] == ';')						//!< Makro deklarujące zgodność bieżącego znaku z terminatorem.
-#define Separated			(Script[LastProcess] == ',')						//!< Makro deklarujące zgodność bieżącego znaku z separatorem.
-
-#define IF_Terminated		if(Terminated)									//!< Makro sprawdzające czy kolejny znak to terminator.
-#define IF_Separated		if(Separated)									//!< Makro sprawdzające czy kolejny znak to separator.
-
-#define IS_NoError			(LastError == NO_ERROR)							//!< Makro deklarujące brak błędu.
-#define IS_NextParam		((Separated && IS_NoError) ? LastProcess++ : false)	//!< Makro sprawdzające czy wystąpił błąd.
-
-#define ReturnError(error) 	{ LastError = error; return false; }				//!< Makro zwracające błąd i przerywające skrypt.
 #define BIND(function) 		#function, function								//!< Makro ułatwiające bindowanie funkcji pod taką samą nazwą, jak w kodzie.
 
 #include "../libbuild.hpp"

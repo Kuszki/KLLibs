@@ -20,6 +20,17 @@
 
 #include "klscript.hpp"
 
+#define Terminated			(Script[LastProcess] == ';')
+#define Separated			(Script[LastProcess] == ',')
+
+#define IF_Terminated		if(Terminated)
+#define IF_Separated		if(Separated)
+
+#define IS_NoError			(LastError == NO_ERROR)
+#define IS_NextParam		((Separated && IS_NoError) ? LastProcess++ : false)
+
+#define ReturnError(error) 	{ LastError = error; return false; }
+
 KLScript::KLScript(KLVariables* Scoope)
 : LastReturn(0), LastError(NO_ERROR), Variables(Scoope) {}
 
