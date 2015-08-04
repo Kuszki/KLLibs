@@ -179,8 +179,20 @@ class KLLIBS_EXPORT KLVariables
 			 */
 			bool Binded(void) const;
 
+			/*! \brief		Ustalenie funkcji zwrotnej.
+			 *  \param [in]	Handler Funkcja zwrotna.
+			 *
+			 * Ustala funkcję zwrotną wywoływaną przy zmianie wartości zmiennej.
+			 *
+			 */
 			void SetCallback(KLSCALLBACK Handler);
 
+			/*! \brief		Ustalenie funkcji zwrotnej.
+			 *  \return		Funkcja zwrotna.
+			 *
+			 * Pobiera funkcję zwrotną wywoływaną przy zmianie wartości zmiennej.
+			 *
+			 */
 			KLSCALLBACK GetCallback(void) const;
 
 			/*! \brief		Zmiana wartość zmiennej.
