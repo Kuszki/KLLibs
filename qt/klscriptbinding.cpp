@@ -60,10 +60,7 @@ bool KLScriptbinding::Validate(const QString& Script)
 
 void KLScriptbinding::Optimize(void)
 {
-	LastCode
-		.remove(QRegExp("\\s*#[^\n]*\\s*"))
-		.replace(QRegExp("\\s+(\\W)\\s+|(\\W)\\s+|\\s+(\\W)"), QString("\\1\\2\\3"))
-		.replace(QRegExp("\\s+"), " ");
+	LastCode = Optimize(LastCode);
 }
 
 KLScriptbinding::ERROR KLScriptbinding::GetError(void) const
@@ -98,4 +95,12 @@ int KLScriptbinding::GetLine(void) const
 double KLScriptbinding::GetReturn(void) const
 {
 	return LastReturn;
+}
+
+QString KLScriptbinding::Optimize(const QString& Script)
+{
+	return QString(Script)
+			.remove(QRegExp("\\s*#[^\n]*\\s*"))
+			.replace(QRegExp("\\s+(\\W)\\s+|(\\W)\\s+|\\s+(\\W)"), QString("\\1\\2\\3"))
+			.replace(QRegExp("\\s+"), " ");
 }

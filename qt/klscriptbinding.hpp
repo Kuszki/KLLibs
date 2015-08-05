@@ -153,6 +153,15 @@ class KLLIBS_EXPORT KLScriptbinding : public QObject, KLScript
 		 */
 		double GetReturn(void) const;
 
+		/*! \brief		Optymalizacja skryptu.
+		 *  \param [in]	Script Skrypt do optymalizacji.
+		 *  \return		Zoptymalizowany skrypt.
+		 *
+		 * Usuwa ze skryptu komentarze i niepotrzebne białe znaki.
+		 *
+		 */
+		static QString Optimize(const QString& Sctipt);
+
 	signals:
 
 		/*! \brief		Zdarzenie obliczenia wartości.
