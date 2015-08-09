@@ -342,6 +342,15 @@ class KLLIBS_EXPORT KLVariables
 		 */
 		const KLVariable& operator[] (const KLString& Name) const;
 
+		/*! \brief		Operator przypisania.
+		 *  \param [in]	Objects Zmienne do skopiowania.
+		 *  \return		Referencja do bieżącego obiektu.
+		 *
+		 * Czyści bieżący system i kopiuje wybrany.
+		 *
+		 */
+		KLVariables& operator = (const KLVariables& Objects);
+
 		KLMap<KLVariable, KLString>::KLMapVarIterator begin(void);
 		KLMap<KLVariable, KLString>::KLMapVarIterator end(void);
 

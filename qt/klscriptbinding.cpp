@@ -20,7 +20,7 @@
 
 #include "klscriptbinding.hpp"
 
-KLScriptbinding::KLScriptbinding(QObject* Parent, KLVariables* Scoope)
+KLScriptbinding::KLScriptbinding(KLVariables* Scoope, QObject* Parent)
 : QObject(Parent), KLScript(Scoope)
 {
 	std::setlocale(LC_NUMERIC, "POSIX");

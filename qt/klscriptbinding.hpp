@@ -67,8 +67,8 @@ class KLLIBS_EXPORT KLScriptbinding : public QObject, KLScript
 		 * Buduje obiekt zgodnie z mechanizmem `QObject`.
 		 *
 		 */
-		explicit KLScriptbinding(QObject* Parent = nullptr,
-							KLVariables* Scoope = nullptr);
+		explicit KLScriptbinding(KLVariables* Scoope = nullptr,
+							QObject* Parent = nullptr);
 
 		/*! \brief		Destruktor.
 		 *

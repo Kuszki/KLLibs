@@ -195,6 +195,15 @@ const KLVariables::KLVariable& KLVariables::operator[] (const KLString& Name) co
 		return Variables[Name];
 }
 
+KLVariables& KLVariables::operator = (const KLVariables& Objects)
+{
+	if (&Objects == this) return *this;
+
+	Clean();
+
+	for (const auto& Var: Objects) Add(Var.ID, Var.Value);
+}
+
 KLMap<KLVariables::KLVariable, KLString>::KLMapVarIterator KLVariables::begin(void)
 {
 	return Variables.begin();

@@ -189,7 +189,7 @@ double KLParser::KLParserToken::GetValue(KLList<double>* Values) const
 					case FUNCTION::COS:		return cos(ParamA);
 					case FUNCTION::TAN:		return tan(ParamA);
 
-					case FUNCTION::ABS:		return abs(ParamA);
+					case FUNCTION::ABS:		return fabs(ParamA);
 
 					case FUNCTION::EXP:		return exp(ParamA);
 					case FUNCTION::SQRT:	return sqrt(ParamA);

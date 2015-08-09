@@ -236,7 +236,7 @@ bool KLScript::Evaluate(const KLString& Script)
 
 				if (Parser.GetValue())
 				{
-					if (Else) Jumps.Insert({Else, LastProcess});
+					if (Else) Jumps.Insert({Else + 1, LastProcess + 1});
 
 					LastProcess = Then;
 				}
