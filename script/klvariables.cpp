@@ -202,6 +202,8 @@ KLVariables& KLVariables::operator = (const KLVariables& Objects)
 	Clean();
 
 	for (const auto& Var: Objects) Add(Var.ID, Var.Value);
+
+	return *this;
 }
 
 KLMap<KLVariables::KLVariable, KLString>::KLMapVarIterator KLVariables::begin(void)
