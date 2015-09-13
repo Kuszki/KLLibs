@@ -46,7 +46,7 @@ addons {
 				qt/klscriptbinding.hpp \
 				qt/klparserbinding.hpp
 
-	TRANSLATIONS	+=	kllibs_pl.ts
+	TRANSLATIONS	+=	translations/kllibs_pl.ts
 
 } else {
 
