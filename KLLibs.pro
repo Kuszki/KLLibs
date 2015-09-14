@@ -30,7 +30,7 @@ HEADERS	+=	KLLibs.hpp libbuild.hpp \
 			containers/klstring.hpp \
 			containers/kltree.hpp
 
-QMAKE_CXXFLAGS	+=	-s -fomit-frame-pointer -march=native
+QMAKE_CXXFLAGS	+=	-s -march=native
 
 addons {
 
