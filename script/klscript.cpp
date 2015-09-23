@@ -321,8 +321,6 @@ bool KLScript::Validate(const KLString& Script)
 	LastProcess 	= 0;
 	LastReturn	= 0;
 
-	SkipComment(Script);
-
 	if (SkipComment(Script) == Script.Size()) ReturnError(WRONG_SCRIPTCODE);
 
 	while (true)
@@ -348,7 +346,7 @@ bool KLScript::Validate(const KLString& Script)
 
 				if (!Terminated) do
 				{
-					if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
+					if (!GetValue(Script, LocalVars) && Parser.GetError() != KLParser::DIVISION_BY_ZERO) ReturnError(WRONG_EVALUATION);
 				}
 				while (IS_NextParam);
 			}
