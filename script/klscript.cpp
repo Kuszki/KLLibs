@@ -337,7 +337,7 @@ bool KLScript::Validate(const KLString& Script)
 
 				if (!LocalVars.Exists(GetName(Script))) ReturnError(UNDEFINED_VARIABLE);
 
-				if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
+				if (!GetValue(Script, LocalVars) && Parser.GetError() != KLParser::DIVISION_BY_ZERO) ReturnError(WRONG_EVALUATION);
 			}
 			break;
 			case CALL:
