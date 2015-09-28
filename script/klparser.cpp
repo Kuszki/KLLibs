@@ -28,22 +28,23 @@ const KLParser::KLParserToken::KLParserOperatorData KLParser::KLParserToken::Ope
 {
 	{KLParser::KLParserToken::OPERATOR::UNKNOWN,		"",		00},
 
-	{KLParser::KLParserToken::OPERATOR::ADD,		"+",		30},
-	{KLParser::KLParserToken::OPERATOR::SUB,		"-",		30},
-	{KLParser::KLParserToken::OPERATOR::MUL,		"*",		31},
-	{KLParser::KLParserToken::OPERATOR::DIV,		"/",		31},
-	{KLParser::KLParserToken::OPERATOR::MOD,		"%",		31},
-	{KLParser::KLParserToken::OPERATOR::POW,		"^",		32},
+	{KLParser::KLParserToken::OPERATOR::ROUND,		"~",		31},
+	{KLParser::KLParserToken::OPERATOR::ADD,		"+",		32},
+	{KLParser::KLParserToken::OPERATOR::SUB,		"-",		32},
+	{KLParser::KLParserToken::OPERATOR::MUL,		"*",		33},
+	{KLParser::KLParserToken::OPERATOR::DIV,		"/",		33},
+	{KLParser::KLParserToken::OPERATOR::MOD,		"%",		33},
+	{KLParser::KLParserToken::OPERATOR::POW,		"^",		34},
 
-	{KLParser::KLParserToken::OPERATOR::EQ,			"==",	20},
-	{KLParser::KLParserToken::OPERATOR::NEQ,		"!=",	20},
-	{KLParser::KLParserToken::OPERATOR::GT,			">",		21},
-	{KLParser::KLParserToken::OPERATOR::LT,			"<",		21},
-	{KLParser::KLParserToken::OPERATOR::GE,			">=",	21},
-	{KLParser::KLParserToken::OPERATOR::LE,			"<=",	21},
+	{KLParser::KLParserToken::OPERATOR::EQ,			"==",	21},
+	{KLParser::KLParserToken::OPERATOR::NEQ,		"!=",	21},
+	{KLParser::KLParserToken::OPERATOR::GT,			">",		22},
+	{KLParser::KLParserToken::OPERATOR::LT,			"<",		22},
+	{KLParser::KLParserToken::OPERATOR::GE,			">=",	22},
+	{KLParser::KLParserToken::OPERATOR::LE,			"<=",	22},
 
-	{KLParser::KLParserToken::OPERATOR::AND,		"&&",	10},
-	{KLParser::KLParserToken::OPERATOR::OR,			"||",	11},
+	{KLParser::KLParserToken::OPERATOR::AND,		"&&",	11},
+	{KLParser::KLParserToken::OPERATOR::OR,			"||",	12},
 
 	{KLParser::KLParserToken::OPERATOR::L_BRACKET,	"(",		01},
 	{KLParser::KLParserToken::OPERATOR::R_BRACKET,	")",		01}
@@ -139,6 +140,16 @@ unsigned KLParser::KLParserToken::GetPriority(void) const
 
 double KLParser::KLParserToken::GetValue(KLList<double>* Values) const
 {
+	static const auto roundto = [] (double Number, unsigned char To) -> double
+	{
+		if (To > 0)
+		{
+			double Pow = pow(10, To);
+			return round(Number * Pow) / Pow;
+		}
+		else return round(Number);
+	};
+
 	LastError = NO_ERROR;
 
 	switch (Class)
@@ -155,11 +166,12 @@ double KLParser::KLParserToken::GetValue(KLList<double>* Values) const
 				    ParamB == 0.0) LastError = DIVISION_BY_ZERO;
 				else switch (Data.Operator)
 				{
+					case OPERATOR::ROUND:	return roundto(ParamA, ParamB);
 					case OPERATOR::ADD:		return ParamA + ParamB;
 					case OPERATOR::SUB:		return ParamA - ParamB;
 					case OPERATOR::MUL:		return ParamA * ParamB;
 					case OPERATOR::DIV:		return ParamA / ParamB;
-					case OPERATOR::MOD:		return (int) ParamA % (int) ParamB;
+					case OPERATOR::MOD:		return int(ParamA) % int(ParamB);
 					case OPERATOR::POW:		return pow(ParamA, ParamB);
 
 					case OPERATOR::EQ:		return ParamA == ParamB;

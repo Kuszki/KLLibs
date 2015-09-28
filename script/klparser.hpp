@@ -100,6 +100,7 @@ class KLLIBS_EXPORT KLParser
 		{
 			UNKNOWN,		//!< Nieznany operator.
 
+			ROUND,		//!< Operacja zaokrąglenia `a ~ b`.
 			ADD,			//!< Dodawanie: `a + b`.
 			SUB,			//!< Odejmowanie: `a - b`.
 			MUL,			//!< Mnożenie: `a * b`.
