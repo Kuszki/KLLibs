@@ -299,13 +299,14 @@ class KLLIBS_EXPORT KLVariables
 		bool Delete(const KLString& Name);
 
 		/*! \brief		Test obecności zmiennej.
-		 *  \param [in]	Name Nazwa zmiennej.
+		 *  \param [in]	Name		Nazwa zmiennej.
+		 *  \param [in]	Recursive	Wyszukiwanie w kontenerach-rodzicach.
 		 *  \return		Obecność zmiennej.
 		 *
 		 * Sprawdza czy podana zmienna istnieje w systemie.
 		 *
 		 */
-		bool Exists(const KLString& Name) const;
+		bool Exists(const KLString& Name, bool Recursive = true) const;
 
 		/*! \brief		Pobranie ilości zmiennych.
 		 *  \return		Ilośc zmiennych w obecnym zakresie.

@@ -266,21 +266,15 @@ bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code)
 
 		if (isdigit(Code[Pos]))
 		{
-			while (isdigit(Code[Pos]) || Code[Pos] == '.') ++Pos;
+			while (isdigit(Code[Pos]) || Code[Pos] == '.') ++Pos; isLastTokenOperator = false;
 
-			Tokens << new KLParserToken(Code.Part(Start, Pos),
-								   KLParserToken::CLASS::VALUE);
-
-			isLastTokenOperator = false;
+			Tokens << new KLParserToken(Code.Part(Start, Pos), KLParserToken::CLASS::VALUE);
 		}
 		else if (isalpha(Code[Pos]))
 		{
-			while (isalpha(Code[Pos])) ++Pos;
+			while (isalpha(Code[Pos])) ++Pos; isLastTokenOperator = true;
 
-			Operators << new KLParserToken(Code.Part(Start, Pos),
-									 KLParserToken::CLASS::FUNCTION);
-
-			isLastTokenOperator = true;
+			Operators << new KLParserToken(Code.Part(Start, Pos), KLParserToken::CLASS::FUNCTION);
 		}
 		else
 		{
@@ -289,15 +283,12 @@ bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code)
 				case ')':
 					do
 					{
-						if (!Operators.Size()) ReturnError(EXPECTED_BRACKET);
-
-						Operator = Operators.Pop();
+						if (Operators.Size()) Operator = Operators.Pop();
+						else ReturnError(EXPECTED_BRACKET);
 
 						if (Operator->GetOperator() == KLParserToken::OPERATOR::L_BRACKET)
 						{
-							delete Operator;
-
-							Operator = nullptr;
+							delete Operator; Operator = nullptr;
 						}
 						else
 						{
@@ -313,10 +304,8 @@ bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code)
 					Operator = new KLParserToken(KLParserToken::OPERATOR::ADD);
 				break;
 				case '-':
-					if (isLastTokenOperator)
-						Operator = new KLParserToken(KLParserToken::FUNCTION::MINUS);
-					else
-						Operator = new KLParserToken(KLParserToken::OPERATOR::SUB);
+					if (isLastTokenOperator) Operator = new KLParserToken(KLParserToken::FUNCTION::MINUS);
+					else Operator = new KLParserToken(KLParserToken::OPERATOR::SUB);
 				break;
 				case '*':
 					Operator = new KLParserToken(KLParserToken::OPERATOR::MUL);
@@ -339,8 +328,7 @@ bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code)
 						  Code[Pos] != '(' &&
 						  Code[Pos] != ')') ++Pos;
 
-					Operator = new KLParserToken(Code.Part(Start, Pos--),
-										    KLParserToken::CLASS::OPERATOR);
+					Operator = new KLParserToken(Code.Part(Start, Pos--), KLParserToken::CLASS::OPERATOR);
 				}
 			}
 
@@ -381,8 +369,9 @@ bool KLParser::Evaluate(const KLString& Code)
 	for (auto& Token: Tokens)
 	{
 		Values << Token->GetValue(&Values);
+		LastError = Token->GetError();
 
-		if ((LastError = Token->GetError()) != NO_ERROR) break;
+		if (LastError) break;
 	}
 
 	if (LastError == NO_ERROR)
@@ -391,7 +380,7 @@ bool KLParser::Evaluate(const KLString& Code)
 		else LastError = TOO_MANY_PARAMETERS;
 	}
 
-	for (auto& Token: Tokens) delete Token;
+	for (auto Token: Tokens) delete Token;
 
 	return LastError == NO_ERROR;
 }

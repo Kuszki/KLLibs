@@ -161,9 +161,9 @@ bool KLVariables::Delete(const KLString& Name)
 	return Variables.Delete(Name) != -1;
 }
 
-bool KLVariables::Exists(const KLString& Name) const
+bool KLVariables::Exists(const KLString& Name, bool Recursive) const
 {
-	if (Parent)
+	if (Parent && Recursive)
 		return Variables.Exists(Name) || Parent->Exists(Name);
 	else
 		return Variables.Exists(Name);

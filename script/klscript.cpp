@@ -146,7 +146,6 @@ bool KLScript::Evaluate(const KLString& Script)
 				const KLString Var = GetName(Script);
 
 				if (!LocalVars.Exists(Var)) ReturnError(UNDEFINED_VARIABLE);
-
 				if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
 
 				LocalVars[Var] = Parser.GetValue();
@@ -190,12 +189,15 @@ bool KLScript::Evaluate(const KLString& Script)
 						if (ID == VAR) LocalVars.Add(Name);
 						else
 						{
-							if (LocalVars.Exists(Name))
+							if (LocalVars.Exists(Name, false))
 							{
 								Variables.Add(Name, LocalVars[Name]);
 								LocalVars.Delete(Name);
 							}
-							else Variables.Add(Name);
+							else if (Variables.Parent && !Variables.Parent->Exists(Name))
+							{
+								Variables.Add(Name);
+							}
 						}
 					}
 					else ReturnError(EMPTY_EXPRESSION);
@@ -334,7 +336,6 @@ bool KLScript::Validate(const KLString& Script)
 				IF_Terminated ReturnError(WRONG_PARAMETERS);
 
 				if (!LocalVars.Exists(GetName(Script))) ReturnError(UNDEFINED_VARIABLE);
-
 				if (!GetValue(Script, LocalVars) && Parser.GetError() != KLParser::DIVISION_BY_ZERO) ReturnError(WRONG_EVALUATION);
 			}
 			break;
