@@ -120,8 +120,7 @@ class KLLIBS_EXPORT KLBindings
 		 * Dodaje do systemu nową funkcję o podanym adresie.
 		 *
 		 */
-		bool Add(const KLString& Name,
-			    KLSENTRY Entry);
+		bool Add(const KLString& Name, KLSENTRY Entry);
 
 		/*! \brief		Usuwanie przypisania.
 		 *  \param [in]	Name		Nazwa przypisania.

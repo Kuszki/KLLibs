@@ -102,8 +102,7 @@ class KLLIBS_EXPORT KLHighlighter : public QSyntaxHighlighter
 		 * Ustala nowy styl dla wybranego fragmentu kodu.
 		 *
 		 */
-		void SetFormat(STYLE Style,
-					const QTextCharFormat& Format);
+		void SetFormat(STYLE Style, const QTextCharFormat& Format);
 
 		/*! \brief		Pobiera styl.
 		 *  \param [in]	Style Indeks stylu.

@@ -180,8 +180,7 @@ class KLLIBS_EXPORT KLString
 		 * Dodaje do łańcucha podany łańcuch.
 		 *
 		 */
-		int Insert(const KLString& String,
-				 int Position = -1);
+		int Insert(const KLString& String, int Position = -1);
 
 		/*! \brief		Wstawianie łańcucha.
 		 *  \param [in]	String	Łańcuch do wstawienia
@@ -193,9 +192,7 @@ class KLLIBS_EXPORT KLString
 		 * Dodaje do łańcucha podany łańcuch. Gdy długość nie zostanie podana to zostanie ona automatycznie obliczona.
 		 *
 		 */
-		int Insert(const char* String,
-				 int Position = -1,
-				 int Length = -1);
+		int Insert(const char* String, int Position = -1, int Length = -1);
 
 		/*! \brief		Wstawianie łańcucha.
 		 *  \param [in]	Char		Znak do wstawienia
@@ -205,8 +202,7 @@ class KLLIBS_EXPORT KLString
 		 * Dodaje do łańcucha podany znak.
 		 *
 		 */
-		int Insert(char Char,
-				 int Position = -1);
+		int Insert(char Char, int Position = -1);
 
 		/*! \brief		Usuwanie łańcucha.
 		 *  \param [in]	String	Łańcuch do usunięcia
@@ -216,8 +212,7 @@ class KLLIBS_EXPORT KLString
 		 * Usuwa z łańcucha wybrany łańcuch.
 		 *
 		 */
-		int Delete(const KLString& String,
-				 bool All = false);
+		int Delete(const KLString& String, bool All = false);
 
 		/*! \brief		Usuwanie części łańcucha.
 		 *  \param [in]	Start	Punkt początkowy.
@@ -227,8 +222,7 @@ class KLLIBS_EXPORT KLString
 		 * Usuwa z łańcucha wybrany fragment.
 		 *
 		 */
-		int Delete(int Start,
-				 int Stop);
+		int Delete(int Start, int Stop);
 
 		/*! \brief		Zamiana słów.
 		 *  \param [in]	Old		Łańcuch do usunięcia.
@@ -240,10 +234,7 @@ class KLLIBS_EXPORT KLString
 		 * Usuwa z łańcucha wybrany łańcuch i wstawia na jego miejsce nowy.
 		 *
 		 */
-		int Replace(const KLString& Old,
-				  const KLString& New,
-				  bool All = false,
-				  bool Words = false);
+		int Replace(const KLString& Old, const KLString& New, bool All = false, bool Words = false);
 
 		/*! \brief		Zliczanie wystąpień.
 		 *  \param [in]	String	Łańcuch do wyszukania.
@@ -255,10 +246,7 @@ class KLLIBS_EXPORT KLString
 		 * Szuka w łańcuchu wybranejfrazy i zwraca ilość wystąpień.
 		 *
 		 */
-		int Count(const KLString& String,
-				int Start = 0,
-				int Stop = 0,
-				bool Words = false) const;
+		int Count(const KLString& String, int Start = 0, int Stop = 0, bool Words = false) const;
 
 		/*! \brief		Wyszukiwanie frazy.
 		 *  \param [in]	String	Łańcuch do wyszukania.
@@ -270,10 +258,7 @@ class KLLIBS_EXPORT KLString
 		 * Szuka w łańcuchu wybranejfrazy i zwraca miejsce pierwszego wystąpienia.
 		 *
 		 */
-		int Find(const KLString& String,
-			    int Start = 0,
-			    int Stop = 0,
-			    bool Words = false) const;
+		int Find(const KLString& String, int Start = 0, int Stop = 0, bool Words = false) const;
 
 		/*! \brief		Kopia części łańcucha.
 		 *  \param [in]	Start	Początek ciągu.
@@ -283,8 +268,7 @@ class KLLIBS_EXPORT KLString
 		 * Kopiuje znaki od wybranego znaku początkowego do końcowego i zwraca nowy łańcuch.
 		 *
 		 */
-		KLString Part(int Start,
-				    int Stop) const;
+		KLString Part(int Start, int Stop) const;
 
 		/*! \brief		Wybór pierwszego elementu.
 		 *  \return		Referencja do pierwszego elementu.

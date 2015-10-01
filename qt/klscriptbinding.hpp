@@ -160,7 +160,7 @@ class KLLIBS_EXPORT KLScriptbinding : public QObject, KLScript
 		 * Usuwa ze skryptu komentarze i niepotrzebne białe znaki.
 		 *
 		 */
-		static QString Optimize(const QString& Sctipt);
+		static QString Optimize(const QString& Script);
 
 	signals:
 

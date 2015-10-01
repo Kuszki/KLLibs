@@ -209,8 +209,7 @@ class KLLIBS_EXPORT KLParser
 			 * Na podstawie podanego typu tokena wybiera odpowiednie informacje z tabeli.
 			 *
 			 */
-			KLParserToken(const char* Token,
-					    CLASS TokenClass);
+			KLParserToken(const char* Token, CLASS TokenClass);
 
 			/*! \brief		Konstruktor konwertujący z `double`.
 			 *  \param [in]	Value Wartość liczbowa.
@@ -290,8 +289,7 @@ class KLLIBS_EXPORT KLParser
 		 * Parsuje wyrażenie i zamienia je na postać Odwrotnej Notacji Polskiej.
 		 *
 		 */
-		bool GetTokens(KLList<KLParserToken*>& Tokens,
-					const KLString& Code);
+		bool GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code);
 
 		double LastValue;				//!< Ostatnia poprawnie obliczona wartość wyrażenia.
 

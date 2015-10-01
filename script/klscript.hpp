@@ -146,8 +146,7 @@ class KLLIBS_EXPORT KLScript
 		 * Oblicza wartość kolejnego napotkanego wyrażenia matematycznego.
 		 *
 		 */
-		bool GetValue(const KLString& Script,
-				    KLVariables& Scoope);
+		bool GetValue(const KLString& Script, KLVariables& Scoope);
 
 		/*! \brief		Pominięcie komentarza.
 		 *  \param [in]	Script Przetwarzany kod.

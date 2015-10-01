@@ -177,8 +177,7 @@ class KLMap
 		 * Dodaje do listy kopie podanego elementu i zwraca nową ilość elementów.
 		 *
 		 */
-		int Insert(const Data& Item,
-				 const Key& ID);
+		int Insert(const Data& Item, const Key& ID);
 
 		/*! \brief		Usunięcie elementu.
 		 *  \param [in]	ID Klucz elementu.
@@ -206,8 +205,7 @@ class KLMap
 		 * Zamienia podany klucz na nowy. Zwraca `true` gdy udało się zamienić klucz, lub `false` gdy nie znaleziono podanego klucza.
 		 *
 		 */
-		bool Update(const Key& OldID,
-				  const Key& NewID);
+		bool Update(const Key& OldID, const Key& NewID);
 
 		/*! \brief		Sprawdzenie ilości elementów.
 		 *  \return		Aktualna liczba elementów.
