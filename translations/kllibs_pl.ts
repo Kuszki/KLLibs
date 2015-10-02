@@ -6,47 +6,47 @@
     <message>
         <location filename="../qt/klparserbinding.cpp" line="51"/>
         <source>Encountered unexpected operator</source>
-        <translation type="unfinished"></translation>
+        <translation>Napotkano nieoczekiwany operator</translation>
     </message>
     <message>
         <location filename="../qt/klparserbinding.cpp" line="52"/>
         <source>Encountered unknown operator</source>
-        <translation type="unfinished"></translation>
+        <translation>Napotkano nieznany operator</translation>
     </message>
     <message>
         <location filename="../qt/klparserbinding.cpp" line="53"/>
         <source>Encountered unknown function</source>
-        <translation type="unfinished"></translation>
+        <translation>Napotkano nieznaną funkcję</translation>
     </message>
     <message>
         <location filename="../qt/klparserbinding.cpp" line="54"/>
         <source>Expected bracket</source>
-        <translation type="unfinished"></translation>
+        <translation>Oczekiwano nawiasu</translation>
     </message>
     <message>
         <location filename="../qt/klparserbinding.cpp" line="55"/>
         <source>Expected function paramters</source>
-        <translation type="unfinished"></translation>
+        <translation>Oczekiwano parametrów funkcji</translation>
     </message>
     <message>
         <location filename="../qt/klparserbinding.cpp" line="56"/>
         <source>Expected operator</source>
-        <translation type="unfinished"></translation>
+        <translation>Oczekiwano operatora</translation>
     </message>
     <message>
         <location filename="../qt/klparserbinding.cpp" line="57"/>
         <source>Encountered wrong bracket number</source>
-        <translation type="unfinished"></translation>
+        <translation>Napotkano niepoprawną liczbę nawiasów</translation>
     </message>
     <message>
         <location filename="../qt/klparserbinding.cpp" line="58"/>
         <source>Encountered division by zero</source>
-        <translation type="unfinished"></translation>
+        <translation>Napotkano dzielenie przez zero</translation>
     </message>
     <message>
         <location filename="../qt/klparserbinding.cpp" line="60"/>
         <source>Script is valid</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrypt jest poprawny</translation>
     </message>
 </context>
 <context>
@@ -54,57 +54,57 @@
     <message>
         <location filename="../qt/klscriptbinding.cpp" line="75"/>
         <source>Encountered undefined variable</source>
-        <translation type="unfinished"></translation>
+        <translation>Napotkano niezdefiniowaną zmienną</translation>
     </message>
     <message>
         <location filename="../qt/klscriptbinding.cpp" line="76"/>
         <source>Encountered undefined function bind</source>
-        <translation type="unfinished"></translation>
+        <translation>Napotkano niezdefiniowaną funkcję</translation>
     </message>
     <message>
         <location filename="../qt/klscriptbinding.cpp" line="77"/>
         <source>Expected `fi` token</source>
-        <translation type="unfinished"></translation>
+        <translation>Oczekiwano znacznika `fi`</translation>
     </message>
     <message>
         <location filename="../qt/klscriptbinding.cpp" line="78"/>
         <source>Expected `done` token</source>
-        <translation type="unfinished"></translation>
+        <translation>Oczekiwano znacznika `done`</translation>
     </message>
     <message>
         <location filename="../qt/klscriptbinding.cpp" line="79"/>
         <source>Expected `;` token</source>
-        <translation type="unfinished"></translation>
+        <translation>Oczekiwano terminatora `;`</translation>
     </message>
     <message>
         <location filename="../qt/klscriptbinding.cpp" line="80"/>
         <source>Encountered empty expression</source>
-        <translation type="unfinished"></translation>
+        <translation>Napotkano puste wyrażenie</translation>
     </message>
     <message>
         <location filename="../qt/klscriptbinding.cpp" line="81"/>
         <source>Encountered unknown expression</source>
-        <translation type="unfinished"></translation>
+        <translation>Napotkano nieznane wyrażenie</translation>
     </message>
     <message>
         <location filename="../qt/klscriptbinding.cpp" line="82"/>
         <source>Wrong or empty Scriptcode</source>
-        <translation type="unfinished"></translation>
+        <translation>Pusty lub niepoprawny skrypt</translation>
     </message>
     <message>
         <location filename="../qt/klscriptbinding.cpp" line="83"/>
         <source>Encountered invalid expresion parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Napotkano niepoprawne parametry wyrażenia</translation>
     </message>
     <message>
         <location filename="../qt/klscriptbinding.cpp" line="84"/>
         <source>Encountered invalid math expresion</source>
-        <translation type="unfinished"></translation>
+        <translation>Napotkano niepoprawne wyrażenie matematyczne</translation>
     </message>
     <message>
         <location filename="../qt/klscriptbinding.cpp" line="86"/>
         <source>Script is valid</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrypt jest poprawny</translation>
     </message>
 </context>
 </TS>
