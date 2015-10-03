@@ -22,7 +22,7 @@
 
 #define ReturnError(error) { LastError = error; return false; }
 
-thread_local KLParser::ERROR KLParser::KLParserToken::LastError = NO_ERROR;
+thread_local KLParser::ERROR KLParser::KLParserToken::LastError = KLParser::ERROR::NO_ERROR;
 
 const KLParser::KLParserToken::KLParserOperatorData KLParser::KLParserToken::Operators[] =
 {
@@ -131,8 +131,7 @@ unsigned KLParser::KLParserToken::GetPriority(void) const
 		case CLASS::OPERATOR:
 			return Operators[(unsigned) Data.Operator].Priority;
 
-		default:
-			return 100;
+		default: return 100;
 	}
 
 	return 0;
@@ -140,9 +139,9 @@ unsigned KLParser::KLParserToken::GetPriority(void) const
 
 double KLParser::KLParserToken::GetValue(KLList<double>* Values) const
 {
-	static const auto roundto = [] (double Number, unsigned char To) -> double
+	static const auto roundto = [] (double Number, int To) -> double
 	{
-		if (To > 0)
+		if (To)
 		{
 			double Pow = pow(10, To);
 			return round(Number * Pow) / Pow;

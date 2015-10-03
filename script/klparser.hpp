@@ -192,10 +192,10 @@ class KLLIBS_EXPORT KLParser
 		protected:
 
 			static const KLParserOperatorData Operators[];	//!< Tabela dostępnych operatorów.
-
 			static const KLParserFunctionData Functions[];	//!< Tablica znanych funkcji.
 
 			thread_local static ERROR LastError;			//!< Ostatni napotkany błąd.
+
 			TOKEN Data;								//!< Dane tokenu.
 
 		public:
