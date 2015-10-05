@@ -59,7 +59,7 @@ bool KLTree<Data>::KLTreeVarIterator::operator!= (const KLTreeVarIterator& Itera
 }
 
 template<typename Data>
-KLTree<Data>::KLTreeConstIterator::KLTreeConstIterator(KLTreeItem* Begin)
+KLTree<Data>::KLTreeConstIterator::KLTreeConstIterator(const KLTreeItem* Begin)
 : Current(Begin) {}
 
 template<typename Data>

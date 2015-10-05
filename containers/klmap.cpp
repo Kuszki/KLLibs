@@ -62,7 +62,7 @@ bool KLMap<Data, Key>::KLMapVarIterator::operator!= (const KLMapVarIterator& Ite
 }
 
 template<typename Data, typename Key>
-KLMap<Data, Key>::KLMapConstIterator::KLMapConstIterator(KLMapItem* Begin)
+KLMap<Data, Key>::KLMapConstIterator::KLMapConstIterator(const KLMapItem* Begin)
 : Current(Begin) {}
 
 template<typename Data, typename Key>

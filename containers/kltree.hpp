@@ -105,11 +105,11 @@ class KLTree
 
 		protected:
 
-			KLTreeItem* Current;
+			const KLTreeItem* Current;
 
 		public:
 
-			KLTreeConstIterator(KLTreeItem* Begin);
+			KLTreeConstIterator(const KLTreeItem* Begin);
 
 			const Data& operator* (void) const;
 			KLTreeConstIterator& operator++ (void);

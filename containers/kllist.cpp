@@ -59,7 +59,7 @@ bool KLList<Data>::KLListVarIterator::operator!= (const KLListVarIterator& Itera
 }
 
 template<typename Data>
-KLList<Data>::KLListConstIterator::KLListConstIterator(KLListItem* Begin)
+KLList<Data>::KLListConstIterator::KLListConstIterator(const KLListItem* Begin)
 : Current(Begin) {}
 
 template<typename Data>

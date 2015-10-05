@@ -103,11 +103,11 @@ class KLList
 
 		protected:
 
-			KLListItem* Current;
+			const KLListItem* Current;
 
 		public:
 
-			KLListConstIterator(KLListItem* Begin);
+			KLListConstIterator(const KLListItem* Begin);
 
 			const Data& operator* (void) const;
 			KLListConstIterator& operator++ (void);

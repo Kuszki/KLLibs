@@ -118,11 +118,11 @@ class KLMap
 
 		protected:
 
-			KLMapItem* Current;
+			const KLMapItem* Current;
 
 		public:
 
-			KLMapConstIterator(KLMapItem* Begin);
+			KLMapConstIterator(const KLMapItem* Begin);
 
 			const KLMapRecord& operator* (void) const;
 			KLMapConstIterator& operator++ (void);
