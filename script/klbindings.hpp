@@ -62,7 +62,7 @@ class KLLIBS_EXPORT KLBindings
 	 * Definiuje bind przechowywany w organizacji.
 	 *
 	 */
-	public: class KLBinding
+	public: class KLLIBS_EXPORT KLBinding
 	{
 
 		protected:

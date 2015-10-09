@@ -226,6 +226,6 @@ KLMap<KLVariables::KLVariable, KLString>::KLMapConstIterator KLVariables::end(vo
 	return Variables.end();
 }
 
-template KLVariables::KLVariable& KLVariables::KLVariable::operator= (const double&);
-template KLVariables::KLVariable& KLVariables::KLVariable::operator= (const int&);
-template KLVariables::KLVariable& KLVariables::KLVariable::operator= (const bool&);
+template KLLIBS_EXPORT KLVariables::KLVariable& KLVariables::KLVariable::operator= (const double&);
+template KLLIBS_EXPORT KLVariables::KLVariable& KLVariables::KLVariable::operator= (const int&);
+template KLLIBS_EXPORT KLVariables::KLVariable& KLVariables::KLVariable::operator= (const bool&);

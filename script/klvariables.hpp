@@ -77,7 +77,7 @@ class KLLIBS_EXPORT KLVariables
 	 * Definiuje typ zmiennej przechowywanej w organizacji.
 	 *
 	 */
-	public: class KLVariable
+	public: class KLLIBS_EXPORT KLVariable
 	{
 
 		protected:
