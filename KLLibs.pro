@@ -9,7 +9,7 @@ TEMPLATE	=	lib
 
 CONFIG	+=	c++11 shared
 
-DEFINES	+=	KLLIBS_LIBRARY USING_QT
+DEFINES	+=	KLLIBS_LIBRARY
 
 SOURCES	+=	script/klscript.cpp \
 			script/klvariables.cpp \
@@ -35,6 +35,8 @@ QMAKE_CXXFLAGS	+=	-s -march=native
 addons {
 
 	QT		+=	widgets
+
+	DEFINES	+=	USING_QT
 
 	SOURCES	+=	qt/klhighlighter.cpp \
 				qt/klscripteditor.cpp \
