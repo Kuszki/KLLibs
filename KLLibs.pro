@@ -35,8 +35,6 @@ QMAKE_CXXFLAGS	+=	-s -march=native
 addons {
 
 	QT		+=	widgets
-	
-	DEFINES	+=	USING_QT
 
 	DEFINES	+=	USING_QT
 
