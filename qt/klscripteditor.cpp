@@ -43,14 +43,14 @@ KLScripteditor::KLScripteditor(QWidget* Parent)
 	SyntaxHighlighter = new KLHighlighter(this->document());
 	NumberArea = new KLScripteditorNumberarea(this);
 
-	connect(this, SIGNAL(blockCountChanged(int)),
-		   this, SLOT(updateNumberareaWidth(int)));
+	connect(this, &KLScripteditor::blockCountChanged,
+		   this, &KLScripteditor::updateNumberareaWidth);
 
-	connect(this, SIGNAL(updateRequest(QRect,int)),
-		   this, SLOT(updateNumberareaView(QRect,int)));
+	connect(this, &KLScripteditor::updateRequest,
+		   this, &KLScripteditor::updateNumberareaView);
 
-	connect(this, SIGNAL(cursorPositionChanged()),
-		   this, SLOT(highlightCurrentLine()));
+	connect(this, &KLScripteditor::cursorPositionChanged,
+		   this, &KLScripteditor::highlightCurrentLine);
 
 	updateNumberareaWidth(0);
 	highlightCurrentLine();
@@ -120,8 +120,7 @@ void KLScripteditor::updateNumberareaWidth(int)
 void KLScripteditor::updateNumberareaView(const QRect& Rect, int dY)
 {
 	if (dY)
-		NumberArea->scroll(0,
-					    dY);
+		NumberArea->scroll(0, dY);
 	else
 		NumberArea->update(0,
 					    Rect.y(),

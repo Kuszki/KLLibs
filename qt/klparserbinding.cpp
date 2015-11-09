@@ -20,7 +20,7 @@
 
 #include "klparserbinding.hpp"
 
-KLParserbinding::KLParserbinding(QObject *Parent)
+KLParserbinding::KLParserbinding(QObject* Parent)
 : QObject(Parent), KLParser() {}
 
 KLParserbinding::~KLParserbinding(void) {}

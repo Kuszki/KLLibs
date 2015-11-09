@@ -73,7 +73,7 @@ KLHighlighter::~KLHighlighter(void) {}
 
 void KLHighlighter::highlightBlock(const QString& Text)
 {
-	foreach (const auto& Rule, Rules)
+	for (const auto& Rule: Rules)
 	{
 		int Index = Rule.Expresion.indexIn(Text);
 
