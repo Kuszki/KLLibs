@@ -54,6 +54,8 @@ KLScripteditor::KLScripteditor(QWidget* Parent)
 
 	updateNumberareaWidth(0);
 	highlightCurrentLine();
+
+	setFont(QFont("monospace"));
 	setTabStopWidth(25);
 }
 
