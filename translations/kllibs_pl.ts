@@ -52,57 +52,67 @@
 <context>
     <name>KLScriptbinding</name>
     <message>
-        <location filename="../qt/klscriptbinding.cpp" line="75"/>
+        <location filename="../qt/klscriptbinding.cpp" line="77"/>
         <source>Encountered undefined variable</source>
         <translation>Napotkano niezdefiniowaną zmienną</translation>
     </message>
     <message>
-        <location filename="../qt/klscriptbinding.cpp" line="76"/>
+        <location filename="../qt/klscriptbinding.cpp" line="78"/>
         <source>Encountered undefined function bind</source>
         <translation>Napotkano niezdefiniowaną funkcję</translation>
     </message>
     <message>
-        <location filename="../qt/klscriptbinding.cpp" line="77"/>
+        <location filename="../qt/klscriptbinding.cpp" line="79"/>
         <source>Expected `fi` token</source>
         <translation>Oczekiwano znacznika `fi`</translation>
     </message>
     <message>
-        <location filename="../qt/klscriptbinding.cpp" line="78"/>
+        <location filename="../qt/klscriptbinding.cpp" line="80"/>
         <source>Expected `done` token</source>
         <translation>Oczekiwano znacznika `done`</translation>
     </message>
     <message>
-        <location filename="../qt/klscriptbinding.cpp" line="79"/>
+        <location filename="../qt/klscriptbinding.cpp" line="81"/>
         <source>Expected `;` token</source>
         <translation>Oczekiwano terminatora `;`</translation>
     </message>
     <message>
-        <location filename="../qt/klscriptbinding.cpp" line="80"/>
+        <location filename="../qt/klscriptbinding.cpp" line="82"/>
+        <source>Encountered empty function</source>
+        <translation>Napotkano pustą funkcję</translation>
+    </message>
+    <message>
+        <location filename="../qt/klscriptbinding.cpp" line="83"/>
         <source>Encountered empty expression</source>
         <translation>Napotkano puste wyrażenie</translation>
     </message>
     <message>
-        <location filename="../qt/klscriptbinding.cpp" line="81"/>
+        <location filename="../qt/klscriptbinding.cpp" line="84"/>
         <source>Encountered unknown expression</source>
         <translation>Napotkano nieznane wyrażenie</translation>
     </message>
     <message>
-        <location filename="../qt/klscriptbinding.cpp" line="82"/>
+        <location filename="../qt/klscriptbinding.cpp" line="85"/>
         <source>Wrong or empty Scriptcode</source>
         <translation>Pusty lub niepoprawny skrypt</translation>
     </message>
     <message>
-        <location filename="../qt/klscriptbinding.cpp" line="83"/>
+        <location filename="../qt/klscriptbinding.cpp" line="86"/>
         <source>Encountered invalid expresion parameters</source>
         <translation>Napotkano niepoprawne parametry wyrażenia</translation>
     </message>
     <message>
-        <location filename="../qt/klscriptbinding.cpp" line="84"/>
+        <location filename="../qt/klscriptbinding.cpp" line="87"/>
         <source>Encountered invalid math expresion</source>
         <translation>Napotkano niepoprawne wyrażenie matematyczne</translation>
     </message>
     <message>
-        <location filename="../qt/klscriptbinding.cpp" line="86"/>
+        <location filename="../qt/klscriptbinding.cpp" line="88"/>
+        <source>Selected variable is readonly</source>
+        <translation>Próba modyfikacji zmiennej tylko do odczytu</translation>
+    </message>
+    <message>
+        <location filename="../qt/klscriptbinding.cpp" line="90"/>
         <source>Script is valid</source>
         <translation>Skrypt jest poprawny</translation>
     </message>

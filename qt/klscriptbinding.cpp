@@ -79,6 +79,7 @@ QString KLScriptbinding::GetMessage(void) const
 		case EXPECTED_ENDIF_TOK:		return tr("Expected `fi` token");
 		case EXPECTED_DONE_TOK:		return tr("Expected `done` token");
 		case EXPECTED_TERMINATOR:	return tr("Expected `;` token");
+		case EMPTY_EXPRESSION:		return tr("Encountered empty function");
 		case EMPTY_EXPRESSION:		return tr("Encountered empty expression");
 		case UNKNOWN_EXPRESSION:		return tr("Encountered unknown expression");
 		case WRONG_SCRIPTCODE:		return tr("Wrong or empty Scriptcode");
