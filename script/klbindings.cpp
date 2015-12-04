@@ -31,7 +31,7 @@ void KLBindings::KLBinding::Update(KLSENTRY Entry)
 	Pointer = Entry;
 }
 
-double KLBindings::KLBinding::operator() (KLVariables& Variables)
+double KLBindings::KLBinding::operator() (KLList<double>& Variables)
 {
 	return Pointer(Variables);
 }

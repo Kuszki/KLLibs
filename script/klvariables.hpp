@@ -111,7 +111,7 @@ class KLLIBS_EXPORT KLVariables
 			 * Tworzy zmienną na podstawie podanego typu i opcjonalnie binduje ją pod wskazany adres.
 			 *
 			 */
-			KLVariable(TYPE VarType = NUMBER, void* Bind = nullptr, KLSCALLBACK Handler = KLSCALLBACK());
+			KLVariable(TYPE VarType = NUMBER, void* Bind = nullptr, KLSCALLBACK Handler = KLSCALLBACK(), bool Writeable = true);
 
 			/*! \brief		Konstruktor konwertujący z `bool`.
 			 *  \param [in]	Boolean	Początkowa wartość.
@@ -120,7 +120,7 @@ class KLLIBS_EXPORT KLVariables
 			 * Tworzy zmienną logiczną o podanej wartości
 			 *
 			 */
-			KLVariable(bool Boolean, KLSCALLBACK Handler = KLSCALLBACK());
+			KLVariable(bool Boolean, KLSCALLBACK Handler = KLSCALLBACK(), bool Writeable = true);
 
 			/*! \brief		Konstruktor konwertujący z `double`.
 			 *  \param [in]	Number	Początkowa wartość.
@@ -129,7 +129,7 @@ class KLLIBS_EXPORT KLVariables
 			 * Tworzy zmienną rzeczywistą o podanej wartości
 			 *
 			 */
-			KLVariable(double Number, KLSCALLBACK Handler = KLSCALLBACK());
+			KLVariable(double Number, KLSCALLBACK Handler = KLSCALLBACK(), bool Writeable = true);
 
 			/*! \brief		Konstruktor konwertujący z `int`.
 			 *  \param [in]	Integer	Początkowa wartość.
@@ -138,7 +138,7 @@ class KLLIBS_EXPORT KLVariables
 			 * Tworzy zmienną całkowitą o podanej wartości
 			 *
 			 */
-			KLVariable(int Integer, KLSCALLBACK Handler = KLSCALLBACK());
+			KLVariable(int Integer, KLSCALLBACK Handler = KLSCALLBACK(), bool Writeable = true);
 
 			/*! \brief		Konwersja na `KLString`.
 			 *  \return		Reprezentacja zmiennej jako `KLString`.
@@ -266,7 +266,7 @@ class KLLIBS_EXPORT KLVariables
 		 * Tworzy nową zmienną w systemie zgodnie z regułami konstruktora `KLVariable::KLVariable(TYPE, void*)`.
 		 *
 		 */
-		bool Add(const KLString& Name, TYPE Type = NUMBER, KLSCALLBACK Handler = KLSCALLBACK());
+		bool Add(const KLString& Name, TYPE Type = NUMBER, KLSCALLBACK Handler = KLSCALLBACK(), bool Writeable = true);
 
 		/*! \brief		Tworzenie zmiennej w systemie.
 		 *  \param [in]	Name		Nazwa zmiennej.
@@ -277,7 +277,7 @@ class KLLIBS_EXPORT KLVariables
 		 * Tworzy nową zmienną w systemie bindując do niej podany obiekt.
 		 *
 		 */
-		bool Add(const KLString& Name, bool& Boolean, KLSCALLBACK Handler = KLSCALLBACK());
+		bool Add(const KLString& Name, bool& Boolean, KLSCALLBACK Handler = KLSCALLBACK(), bool Writeable = true);
 
 		/*! \brief		Tworzenie zmiennej w systemie.
 		 *  \param [in]	Name		Nazwa zmiennej.
@@ -288,7 +288,7 @@ class KLLIBS_EXPORT KLVariables
 		 * Tworzy nową zmienną w systemie bindując do niej podany obiekt.
 		 *
 		 */
-		bool Add(const KLString& Name, double& Number, KLSCALLBACK Handler = KLSCALLBACK());
+		bool Add(const KLString& Name, double& Number, KLSCALLBACK Handler = KLSCALLBACK(), bool Writeable = true);
 
 		/*! \brief		Tworzenie zmiennej w systemie.
 		 *  \param [in]	Name		Nazwa zmiennej.
@@ -299,7 +299,7 @@ class KLLIBS_EXPORT KLVariables
 		 * Tworzy nową zmienną w systemie bindując do niej podany obiekt.
 		 *
 		 */
-		bool Add(const KLString& Name, int& Integer, KLSCALLBACK Handler = KLSCALLBACK());
+		bool Add(const KLString& Name, int& Integer, KLSCALLBACK Handler = KLSCALLBACK(), bool Writeable = true);
 
 		/*! \brief		Usuwanie zmiennej z systemu.
 		 *  \param [in]	Name Nazwa zmiennej.

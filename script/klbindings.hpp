@@ -23,6 +23,7 @@
 
 #include "../libbuild.hpp"
 
+#include "../containers/kllist.hpp"
 #include "../containers/klmap.hpp"
 #include "../containers/klstring.hpp"
 
@@ -52,9 +53,9 @@ class KLLIBS_EXPORT KLBindings
 {
 
 #if defined(USING_BOOST)
-	public: using KLSENTRY = boost::function<double (KLVariables&)>;
+	public: using KLSENTRY = boost::function<double (KLList<double>&)>;
 #else
-	public: using KLSENTRY = double (*)(KLVariables&);
+	public: using KLSENTRY = double (*)(KLList<double>&);
 #endif
 
 	/*! \brief		Reprezentacja pojedynczego bindu.
@@ -102,7 +103,7 @@ class KLLIBS_EXPORT KLBindings
 			 * Wywołuje funkcję z podanymi parametrami.
 			 *
 			 */
-			double operator() (KLVariables& Variables);
+			double operator() (KLList<double>& Variables);
 
 	};
 
