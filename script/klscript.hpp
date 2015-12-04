@@ -69,9 +69,11 @@ class KLLIBS_EXPORT KLScript
 
 		SET,		//!< Przypisanie do zmiennej: `set ZM wyrażenie`.
 		CALL,	//!< Wywołanie zbindowanej funkcji: `call FN paramA, paramB, ...`.
+		GOTO,	//!< Wywołanie zdefiniowanej funkcji: `goto FN paramA, paramB, ...`.
 
 		VAR,		//!< Utworzenie zmiennej: `var zmA, zmB, ...`.
-		EXP,		//!< Eksportuje zmienną: `export zmA, zmB, ...`.
+		EXP,		//!< Eksportuje zmienną: `exp zmA, zmB, ...`.
+		POP,		//!< Ściąga wartość do zmiennej ze stosu `pop zmA, zmB, ...`.
 
 		T_IF,	//!< Konstrukcja warunkowa: `if wyrażenie`.
 		T_ELSE,	//!< Konstrukcja warunkowa: `else`.
@@ -79,6 +81,9 @@ class KLLIBS_EXPORT KLScript
 
 		T_WHILE,	//!< Konstrukcja warunkowa: `while`.
 		T_DONE,	//!< Konstrukcja warunkowa: `done`.
+
+		T_DEF,	//!< Definicja funkcji: `define funkcja`.
+		T_END,	//!< Zakończenie funkcji: `end`.
 
 		T_RETURN,	//!< Zakończenie skryptu i zwrócenie wartości: `return wyrażenie`.
 
@@ -101,7 +106,8 @@ class KLLIBS_EXPORT KLScript
 		EXPECTED_DONE_TOK,		//!< Brak oczekiwanego `done`.
 		EXPECTED_TERMINATOR,	//!< Oczekiwano terminatora `;`.
 
-		EMPTY_EXPRESSION,		//!< Puste wyrażenie; np `;;`.
+		EMPTY_FUNCTION,		//!< Pusta funkcja.
+		EMPTY_EXPRESSION,		//!< Puste wyrażenie (np `;;`).
 		UNKNOWN_EXPRESSION,		//!< Nieznane wyrażenie.
 
 		WRONG_SCRIPTCODE,		//!< Niepoprawny lub pusty skrypt.
@@ -159,19 +165,21 @@ class KLLIBS_EXPORT KLScript
 		 */
 		int SkipComment(const KLString& Script);
 
-		double LastReturn;			//!< Ostatnia zwrócona wartość.
+		double LastReturn;					//!< Ostatnia zwrócona wartość.
 
-		ERROR LastError;			//!< Wyliczenie ostatniego błędu.
+		ERROR LastError;					//!< Wyliczenie ostatniego błędu.
 
-		int LastProcess;			//!< Aktualny krok przetwarzania.
+		int LastProcess;					//!< Aktualny krok przetwarzania.
 
 	public:
 
-		KLVariables	Variables;	//!< Zmienne i ich bindy.
+		KLMap<KLString, KLString> Functions;	//!< Funkcje zdefiniowane za pomocą skryptu.
 
-		KLBindings	Bindings;		//!< Bindy lokalnych funkcji.
+		KLVariables	Variables;			//!< Zmienne i ich bindy.
 
-		KLParser		Parser;		//!< Parser matematyczny.
+		KLBindings	Bindings;				//!< Bindy lokalnych funkcji.
+
+		KLParser		Parser;				//!< Parser matematyczny.
 
 		/*! \brief		Domyślny konstruktor.
 		 *  \param [in]	Scoope Wyższy poziom dla zmiennych skryptu.
@@ -188,7 +196,7 @@ class KLLIBS_EXPORT KLScript
 		 * Przetwarza wybrany kod i zwraca powodzenie operacji.
 		 *
 		 */
-		bool Evaluate(const KLString& Script);
+		bool Evaluate(const KLString& Script, KLList<double>* Params = nullptr);
 
 		/*! \brief		Sprawdzenie kodu.
 		 *  \param [in]	Script Skrypt do przetworzenia.

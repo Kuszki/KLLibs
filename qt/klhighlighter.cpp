@@ -35,7 +35,7 @@ KLHighlighter::KLHighlighter(QTextDocument* Parent)
 	Rule.Format.setForeground(Qt::darkBlue);
 	Rule.Format.setFontWeight(QFont::Bold);
 
-	Rule.Expresion = QRegExp("\\b(set|call|var|export|if|else|fi|while|done)\\b");
+	Rule.Expresion = QRegExp("\\b(set|call|goto|var|export|pop|if|else|fi|while|done|define|end)\\b");
 
 	Rules.insert(KEYWORDS, Rule);
 

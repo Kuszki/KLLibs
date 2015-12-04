@@ -42,14 +42,22 @@ KLScript::OPERATION KLScript::GetToken(const KLString& Script)
 
 	else if (Token == "set")		return SET;
 	else if (Token == "call")	return CALL;
+	else if (Token == "goto")	return GOTO;
+
 	else if (Token == "var")		return VAR;
 	else if (Token == "export")	return EXP;
+	else if (Token == "pop")		return POP;
 
 	else if (Token == "if")		return T_IF;
 	else if (Token == "else")	return T_ELSE;
 	else if (Token == "fi")		return T_ENDIF;
+
 	else if (Token == "while")	return T_WHILE;
 	else if (Token == "done")	return T_DONE;
+
+	else if (Token == "define")	return T_DEF;
+	else if (Token == "end")		return T_END;
+
 	else if (Token == "return")	return T_RETURN;
 
 	else if (Token == "exit")	return EXIT;
@@ -118,7 +126,7 @@ int KLScript::SkipComment(const KLString& Script)
 	return LastProcess;
 }
 
-bool KLScript::Evaluate(const KLString& Script)
+bool KLScript::Evaluate(const KLString& Script, KLList<double>* Params)
 {
 	struct JUMP { int When; int Where; };
 
@@ -150,38 +158,63 @@ bool KLScript::Evaluate(const KLString& Script)
 
 				KLVariables::KLVariable& Variable = LocalVars[Var];
 
-				if (Variable.IsReadonly()) Variable = Parser.GetValue();
-				else ReturnError(VARIABLE_READONLY);
+				if (Variable.IsReadonly()) ReturnError(VARIABLE_READONLY);
+
+				Variable = Parser.GetValue();
 			}
 			break;
+
 			case CALL:
 			{
 				IF_Terminated ReturnError(WRONG_PARAMETERS);
 
-				const KLString Proc = GetName(Script);
+				const KLString Proc = GetName(Script); KLList<double> Params;
 
 				if (!Bindings.Exists(Proc)) ReturnError(UNDEFINED_FUNCTION);
-
-				KLVariables Params(&LocalVars);
-				int ParamID = 0;
 
 				if (!Terminated) do
 				{
 					if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
 
-					KLString ID(ParamID++);
-
-					Params.Add(ID);
-
-					Params[ID] = Parser.GetValue();
+					Params.Insert(Parser.GetValue());
 				}
 				while (IS_NextParam);
 
 				if (IS_NoError) LastReturn = Bindings[Proc](Params);
 			}
 			break;
+
+			case GOTO:
+			{
+				IF_Terminated ReturnError(WRONG_PARAMETERS);
+
+				const KLString Proc = GetName(Script); KLList<double> Params;
+
+				if (!Functions.Exists(Proc)) ReturnError(UNDEFINED_FUNCTION);
+
+				if (!Terminated) do
+				{
+					if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
+
+					Params.Insert(Parser.GetValue());
+				}
+				while (IS_NextParam);
+
+				if (!IS_NoError) return false;
+				else
+				{
+					int SavedLastProcess = LastProcess;
+
+					Evaluate(Functions[Proc], &Params);
+
+					LastProcess = SavedLastProcess;
+				}
+			}
+			break;
+
 			case VAR:
 			case EXP:
+			case POP:
 			{
 				IF_Terminated ReturnError(WRONG_PARAMETERS);
 
@@ -189,8 +222,7 @@ bool KLScript::Evaluate(const KLString& Script)
 				{
 					if (KLString Name = GetName(Script))
 					{
-						if (ID == VAR) LocalVars.Add(Name);
-						else
+						if (ID == EXP)
 						{
 							if (LocalVars.Exists(Name, false))
 							{
@@ -202,12 +234,19 @@ bool KLScript::Evaluate(const KLString& Script)
 								Variables.Add(Name);
 							}
 						}
+						else
+						{
+							LocalVars.Add(Name);
+						}
+
+						if (ID == POP && Params) LocalVars[Name] = Params->Dequeue();
 					}
 					else ReturnError(EMPTY_EXPRESSION);
 				}
 				while (IS_NextParam);
 			}
 			break;
+
 			case T_IF:
 			{
 				IF_Terminated ReturnError(WRONG_PARAMETERS);
@@ -248,6 +287,7 @@ bool KLScript::Evaluate(const KLString& Script)
 				else if (Else) LastProcess = Else;
 			}
 			break;
+
 			case T_WHILE:
 			{
 				IF_Terminated ReturnError(WRONG_PARAMETERS);
@@ -281,6 +321,50 @@ bool KLScript::Evaluate(const KLString& Script)
 
 					LastProcess = Then;
 				}
+			}
+			break;
+
+			case T_DEF:
+			{
+				IF_Terminated ReturnError(WRONG_PARAMETERS);
+
+				const KLString Name = GetName(Script);
+
+				if (Terminated) ++LastProcess;
+				else ReturnError(WRONG_PARAMETERS);
+
+				int Start = SkipComment(Script);
+				int Stop = 0;
+				int Counter = 1;
+
+				while (Counter && LastProcess)
+				{
+					LastProcess = Stop = Script.Find(';', LastProcess) + 1;
+
+					if (LastProcess) switch (GetToken(Script))
+					{
+						case T_DEF:
+							++Counter;
+						break;
+						case T_END:
+							--Counter;
+						break;
+						default: break;
+					}
+				}
+
+				if (Counter) ReturnError(EXPECTED_DONE_TOK);
+
+				const KLString Code = Script.Part(Start, Stop);
+				int SavedLastProcess = LastProcess;
+
+				if (!Code.Size()) ReturnError(EMPTY_FUNCTION);
+
+				if (!Validate(Code)) return false;
+				else LastProcess = SavedLastProcess;
+
+				if (Functions.Exists(Name)) Functions[Name] = Code;
+				else Functions.Insert(Code, Name);
 			}
 			break;
 
@@ -321,6 +405,7 @@ bool KLScript::Evaluate(const KLString& Script)
 bool KLScript::Validate(const KLString& Script)
 {
 	KLVariables LocalVars(&Variables);
+	KLList<KLString> DefinedFunctions;
 
 	LastError 	= NO_ERROR;
 	LastProcess 	= 0;
@@ -342,6 +427,7 @@ bool KLScript::Validate(const KLString& Script)
 				if (!GetValue(Script, LocalVars) && Parser.GetError() != KLParser::DIVISION_BY_ZERO) ReturnError(WRONG_EVALUATION);
 			}
 			break;
+
 			case CALL:
 			{
 				IF_Terminated ReturnError(WRONG_PARAMETERS);
@@ -355,8 +441,24 @@ bool KLScript::Validate(const KLString& Script)
 				while (IS_NextParam);
 			}
 			break;
+
+			case GOTO:
+			{
+				IF_Terminated ReturnError(WRONG_PARAMETERS);
+
+				GetName(Script);
+
+				if (!Terminated) do
+				{
+					if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
+				}
+				while (IS_NextParam);
+			}
+			break;
+
 			case VAR:
 			case EXP:
+			case POP:
 			{
 				IF_Terminated ReturnError(WRONG_PARAMETERS);
 
@@ -371,6 +473,7 @@ bool KLScript::Validate(const KLString& Script)
 				while (IS_NextParam);
 			}
 			break;
+
 			case T_IF:
 			{
 				IF_Terminated ReturnError(WRONG_PARAMETERS);
@@ -401,6 +504,7 @@ bool KLScript::Validate(const KLString& Script)
 				LastProcess = Then;
 			}
 			break;
+
 			case T_WHILE:
 			{
 				IF_Terminated ReturnError(WRONG_PARAMETERS);
@@ -429,6 +533,47 @@ bool KLScript::Validate(const KLString& Script)
 				if (Counter) ReturnError(EXPECTED_DONE_TOK);
 
 				LastProcess = Then;
+			}
+			break;
+
+			case T_DEF:
+			{
+				IF_Terminated ReturnError(WRONG_PARAMETERS);
+
+				GetName(Script);
+
+				if (Terminated) ++LastProcess;
+				else ReturnError(WRONG_PARAMETERS);
+
+				int Start = SkipComment(Script);
+				int Stop = 0;
+				int Counter = 1;
+
+				while (Counter && LastProcess)
+				{
+					LastProcess = Stop = Script.Find(';', LastProcess) + 1;
+
+					if (LastProcess) switch (GetToken(Script))
+					{
+						case T_DEF:
+							++Counter;
+						break;
+						case T_END:
+							--Counter;
+						break;
+						default: break;
+					}
+				}
+
+				if (Counter) ReturnError(EXPECTED_DONE_TOK);
+
+				const KLString Code = Script.Part(Start, Stop);
+				int SavedLastProcess = LastProcess;
+
+				if (!Code.Size()) ReturnError(EMPTY_FUNCTION);
+
+				if (!Validate(Code)) return false;
+				else LastProcess = SavedLastProcess;
 			}
 			break;
 

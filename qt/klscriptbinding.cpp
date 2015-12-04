@@ -60,6 +60,8 @@ bool KLScriptbinding::Validate(const QString& Script)
 
 void KLScriptbinding::Optimize(void)
 {
+	for (auto& Code: Functions) Code.Value = Optimize(QString((const char*) Code.Value)).toStdString().c_str();
+
 	LastCode = Optimize(LastCode);
 }
 
