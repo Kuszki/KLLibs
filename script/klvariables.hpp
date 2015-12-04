@@ -106,6 +106,7 @@ class KLLIBS_EXPORT KLVariables
 			 *  \param [in]	VarType	Wyliczenie typu.
 			 *  \param [in]	Bind		Adres przypisanej zmiennej.
 			 *  \param [in]	Handler	Obiekt funkcyjny wywoływany przy modyfikacji zmiennej.
+			 *  \param [in]	Writeable	Ustalenie możliwości edycji zmiennej.
 			 *  \warning		Bardzo istotne jest, aby zachować zgodność podanego typu z typem zbindowanego obiektu.
 			 *
 			 * Tworzy zmienną na podstawie podanego typu i opcjonalnie binduje ją pod wskazany adres.
@@ -116,6 +117,7 @@ class KLLIBS_EXPORT KLVariables
 			/*! \brief		Konstruktor konwertujący z `bool`.
 			 *  \param [in]	Boolean	Początkowa wartość.
 			 *  \param [in]	Handler	Obiekt funkcyjny wywoływany przy modyfikacji zmiennej.
+			 *  \param [in]	Writeable	Ustalenie możliwości edycji zmiennej.
 			 *
 			 * Tworzy zmienną logiczną o podanej wartości
 			 *
@@ -125,6 +127,7 @@ class KLLIBS_EXPORT KLVariables
 			/*! \brief		Konstruktor konwertujący z `double`.
 			 *  \param [in]	Number	Początkowa wartość.
 			 *  \param [in]	Handler	Obiekt funkcyjny wywoływany przy modyfikacji zmiennej.
+			 *  \param [in]	Writeable	Ustalenie możliwości edycji zmiennej.
 			 *
 			 * Tworzy zmienną rzeczywistą o podanej wartości
 			 *
@@ -134,6 +137,7 @@ class KLLIBS_EXPORT KLVariables
 			/*! \brief		Konstruktor konwertujący z `int`.
 			 *  \param [in]	Integer	Początkowa wartość.
 			 *  \param [in]	Handler	Obiekt funkcyjny wywoływany przy modyfikacji zmiennej.
+			 *  \param [in]	Writeable	Ustalenie możliwości edycji zmiennej.
 			 *
 			 * Tworzy zmienną całkowitą o podanej wartości
 			 *
@@ -261,6 +265,7 @@ class KLLIBS_EXPORT KLVariables
 		 *  \param [in]	Name		Nazwa zmiennej.
 		 *  \param [in]	Type		Wyliczenie typu zmiennej.
 		 *  \param [in]	Handler	Obiekt funkcyjny wywoływany przy modyfikacji zmiennej.
+		 *  \param [in]	Writeable	Ustalenie możliwości edycji zmiennej.
 		 *  \return		Powodzenie operacji.
 		 *
 		 * Tworzy nową zmienną w systemie zgodnie z regułami konstruktora `KLVariable::KLVariable(TYPE, void*)`.
@@ -272,6 +277,7 @@ class KLLIBS_EXPORT KLVariables
 		 *  \param [in]	Name		Nazwa zmiennej.
 		 *  \param [in]	Boolean	Referencja do zbindowanego obiektu.
 		 *  \param [in]	Handler	Obiekt funkcyjny wywoływany przy modyfikacji zmiennej.
+		 *  \param [in]	Writeable	Ustalenie możliwości edycji zmiennej.
 		 *  \return		Powodzenie operacji.
 		 *
 		 * Tworzy nową zmienną w systemie bindując do niej podany obiekt.
@@ -283,6 +289,7 @@ class KLLIBS_EXPORT KLVariables
 		 *  \param [in]	Name		Nazwa zmiennej.
 		 *  \param [in]	Number	Referencja do zbindowanego obiektu.
 		 *  \param [in]	Handler	Obiekt funkcyjny wywoływany przy modyfikacji zmiennej.
+		 *  \param [in]	Writeable	Ustalenie możliwości edycji zmiennej.
 		 *  \return		Powodzenie operacji.
 		 *
 		 * Tworzy nową zmienną w systemie bindując do niej podany obiekt.
@@ -294,6 +301,7 @@ class KLLIBS_EXPORT KLVariables
 		 *  \param [in]	Name		Nazwa zmiennej.
 		 *  \param [in]	Integer	Referencja do zbindowanego obiektu.
 		 *  \param [in]	Handler	Obiekt funkcyjny wywoływany przy modyfikacji zmiennej.
+		 *  \param [in]	Writeable	Ustalenie możliwości edycji zmiennej.
 		 *  \return		Powodzenie operacji.
 		 *
 		 * Tworzy nową zmienną w systemie bindując do niej podany obiekt.

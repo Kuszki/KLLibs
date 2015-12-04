@@ -190,7 +190,8 @@ class KLLIBS_EXPORT KLScript
 		KLScript(KLVariables* Scoope = nullptr);
 
 		/*! \brief		Wykonanie kodu.
-		 *  \param [in]	Script Skrypt do przetworzenia.
+		 *  \param [in]	Script	Skrypt do przetworzenia.
+		 *  \param [in]	Params	Stos ze zmiennymi do pobrania.
 		 *  \return		Powodzenie operacji.
 		 *
 		 * Przetwarza wybrany kod i zwraca powodzenie operacji.

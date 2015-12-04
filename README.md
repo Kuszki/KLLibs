@@ -94,16 +94,33 @@ Możliwości:
 - [X] Wywoływanie funkcji.
 - [X] Konstrukcja `if () ... else ...`.
 - [X] Konstrukcja `while () ...`.
+- [X] Dynamiczne definiowanie funkcji `define ... end`.
 
 Przykład:
 
 ``` bash
 
+	# definicja własnej funkcji
+	define funkcja;
+		pop a;	# pobranie pierwszej wartości ze ztosu parametrów
+		pop b;	# pobranie drugiej wartości ze ztosu parametrów
+
+		# obliczenie wyniku funkcji
+		if (a > b); return a;
+		else; return b;
+	end;
+
      # utworzenie zmiennej
-     var Zmienna;
+     var Zmienna1, Zmienna2;
 
      # przypisanie wartości
      set Zmienna sin( (2+2)*3 + 10 );
+
+     # wywołanie własnej funkcji
+     goto funkcja Zmienna1, Zmienna2;
+
+     # pobranie wyniku wywołanej funkcji do zmiennej
+     var wynik; set wynik return;
 
      # instrukcja if
      if Zmienna != 100 || Zmienna < 50;
