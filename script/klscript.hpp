@@ -106,7 +106,9 @@ class KLLIBS_EXPORT KLScript
 
 		WRONG_SCRIPTCODE,		//!< Niepoprawny lub pusty skrypt.
 		WRONG_PARAMETERS,		//!< Brakujące lub błędne parametry.
-		WRONG_EVALUATION		//!< Błąd w wyrażeniu matematycznym.
+		WRONG_EVALUATION,		//!< Błąd w wyrażeniu matematycznym.
+
+		VARIABLE_READONLY		//!< Zmienna tylko do odczytu.
 	};
 
 	protected:

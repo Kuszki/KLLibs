@@ -148,7 +148,10 @@ bool KLScript::Evaluate(const KLString& Script)
 				if (!LocalVars.Exists(Var)) ReturnError(UNDEFINED_VARIABLE);
 				if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
 
-				LocalVars[Var] = Parser.GetValue();
+				KLVariables::KLVariable& Variable = LocalVars[Var];
+
+				if (Variable.IsReadonly()) Variable = Parser.GetValue();
+				else ReturnError(VARIABLE_READONLY);
 			}
 			break;
 			case CALL:

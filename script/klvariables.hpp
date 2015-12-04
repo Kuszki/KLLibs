@@ -86,6 +86,8 @@ class KLLIBS_EXPORT KLVariables
 
 			double Variable;		//!< Przechowywane dane.
 
+			bool Readonly;			//!< Modyfikator `tylko do odczytu` przy wykonywaniu skryptu.
+
 			KLSCALLBACK Callback;	//!< Funkcja zwrotna przy zmianie stanu zmiennej.
 
 		public:
@@ -193,6 +195,22 @@ class KLLIBS_EXPORT KLVariables
 			 *
 			 */
 			KLSCALLBACK GetCallback(void) const;
+
+			/*! \brief		Ustalenie praw zapisu.
+			 *  \param [in]	Active Modyfikator `tylko do odczytu`.
+			 *
+			 * Ustala czy zmienna powinna zezwalać jedynie na odczyt wartości przy wykonywaniu skryptu.
+			 *
+			 */
+			void SetReadonly(bool Active);
+
+			/*! \brief		Odczytanie praw zapisu.
+			 *  \return		Aktualny modyfikator `tylko do odczytu`.
+			 *
+			 * Sprawdza czy zmienna jest `tylko do odczytu` w skrypcie.
+			 *
+			 */
+			bool IsReadonly(void) const;
 
 			/*! \brief		Zmiana wartość zmiennej.
 			 *  \tparam		Data		Typ nowej wartości.

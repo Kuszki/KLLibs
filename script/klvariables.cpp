@@ -21,10 +21,10 @@
 #include "klvariables.hpp"
 
 KLVariables::KLVariable::KLVariable(const KLVariable& Object)
-: Pointer(Object.Pointer), Variable(Object.Variable), Callback(Object.Callback), Type(Object.Type) {}
+: Pointer(Object.Pointer), Variable(Object.Variable), Readonly(Object.Readonly), Callback(Object.Callback), Type(Object.Type) {}
 
 KLVariables::KLVariable::KLVariable(TYPE VarType, void* Bind, KLSCALLBACK Handler)
-: Pointer(Bind), Variable(0.0), Callback(Handler), Type(VarType) {}
+: Pointer(Bind), Variable(0.0), Readonly(false), Callback(Handler), Type(VarType) {}
 
 KLVariables::KLVariable::KLVariable(bool Boolean, KLSCALLBACK Handler)
 : KLVariable(BOOLEAN, nullptr, Handler)
@@ -101,6 +101,16 @@ void KLVariables::KLVariable::SetCallback(KLSCALLBACK Handler)
 KLVariables::KLSCALLBACK KLVariables::KLVariable::GetCallback(void) const
 {
 	return Callback;
+}
+
+void KLVariables::KLVariable::SetReadonly(bool Active)
+{
+	Readonly = Active;
+}
+
+bool KLVariables::KLVariable::IsReadonly(void) const
+{
+	return Readonly;
 }
 
 template<typename Data>
