@@ -100,15 +100,15 @@ Przykład:
 
 ``` bash
 
-	# definicja własnej funkcji
-	define funkcja;
-		pop a;	# pobranie pierwszej wartości ze ztosu parametrów
-		pop b;	# pobranie drugiej wartości ze ztosu parametrów
+     # definicja własnej funkcji
+     define funkcja;
+          pop a;	# pobranie pierwszej wartości ze ztosu parametrów
+          pop b;	# pobranie drugiej wartości ze ztosu parametrów
 
-		# obliczenie wyniku funkcji
-		if (a > b); return a;
-		else; return b;
-	end;
+          # obliczenie wyniku funkcji
+          if (a > b); return a;
+          else; return b;
+     end;
 
      # utworzenie zmiennej
      var Zmienna1, Zmienna2;
