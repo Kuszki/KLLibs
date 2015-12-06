@@ -360,7 +360,7 @@ bool KLScript::Evaluate(const KLString& Script, KLList<double>* Params)
 
 				if (!Code.Size()) ReturnError(EMPTY_FUNCTION);
 
-				if (!Validate(Code)) return false;
+				if (!Validate(Code, &LocalVars)) return false;
 				else LastProcess = SavedLastProcess;
 
 				if (Functions.Exists(Name)) Functions[Name] = Code;
@@ -402,10 +402,9 @@ bool KLScript::Evaluate(const KLString& Script, KLList<double>* Params)
 	return true;
 }
 
-bool KLScript::Validate(const KLString& Script)
+bool KLScript::Validate(const KLString& Script, KLVariables* Scoope)
 {
-	KLVariables LocalVars(&Variables);
-	KLList<KLString> DefinedFunctions;
+	KLVariables LocalVars(Scoope ? Scoope : &Variables);
 
 	LastError 	= NO_ERROR;
 	LastProcess 	= 0;

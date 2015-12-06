@@ -206,7 +206,7 @@ class KLLIBS_EXPORT KLScript
 		 * Przetwarza wybrany kod pod kątem błędów składni i zwraca powodzenie operacji.
 		 *
 		 */
-		bool Validate(const KLString& Script);
+		bool Validate(const KLString& Script, KLVariables* Scoope = nullptr);
 
 		/*! \brief		Pobranie ostatniego błędu.
 		 *  \return		Ostatni błąd.
