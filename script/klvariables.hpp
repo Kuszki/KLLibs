@@ -31,7 +31,6 @@
 #include <boost/bind.hpp>
 #endif
 
-
 /*! \file		klvariables.hpp
  *  \brief	Deklaracje dla klasy KLVariables i jej składników.
  *
