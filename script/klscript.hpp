@@ -114,7 +114,9 @@ class KLLIBS_EXPORT KLScript
 		WRONG_PARAMETERS,		//!< Brakujące lub błędne parametry.
 		WRONG_EVALUATION,		//!< Błąd w wyrażeniu matematycznym.
 
-		VARIABLE_READONLY		//!< Zmienna tylko do odczytu.
+		VARIABLE_READONLY,		//!< Zmienna tylko do odczytu.
+
+		SCRIPT_TERMINATED		//!< Użytkownik przerwał skrypt.
 	};
 
 	protected:
@@ -165,11 +167,13 @@ class KLLIBS_EXPORT KLScript
 		 */
 		int SkipComment(const KLString& Script);
 
+		volatile bool Sigterm;				//!< Sygnał zakończenia skryptu.
+
 		double LastReturn;					//!< Ostatnia zwrócona wartość.
 
-		ERROR LastError;					//!< Wyliczenie ostatniego błędu.
-
 		int LastProcess;					//!< Aktualny krok przetwarzania.
+
+		ERROR LastError;					//!< Wyliczenie ostatniego błędu.
 
 	public:
 
@@ -208,6 +212,13 @@ class KLLIBS_EXPORT KLScript
 		 *
 		 */
 		bool Validate(const KLString& Script, KLVariables* Scoope = nullptr);
+
+		/*! \brief		Przerwanie skryptu.
+		 *
+		 * Ustala zmienną odpowiedzialną za zakończenie skryptu przy następnej iteracji. Metode należy wywołać za pośrednictwem innego wątku lub w kodzie przerwanai watchdoga.
+		 *
+		 */
+		void Terminate(void);
 
 		/*! \brief		Pobranie ostatniego błędu.
 		 *  \return		Ostatni błąd.

@@ -32,7 +32,7 @@
 #define ReturnError(error) 	{ LastError = error; return false; }
 
 KLScript::KLScript(KLVariables* Scoope)
-: LastReturn(0), LastError(NO_ERROR), Variables(Scoope) {}
+: Sigterm(false), LastReturn(0), Variables(Scoope), LastError(NO_ERROR) {}
 
 KLScript::OPERATION KLScript::GetToken(const KLString& Script)
 {
@@ -136,11 +136,14 @@ bool KLScript::Evaluate(const KLString& Script, KLList<double>* Params)
 	LastError		= NO_ERROR;
 	LastProcess	= 0;
 	LastReturn	= 0;
+	Sigterm		= false;
 
 	if (SkipComment(Script) == Script.Size()) ReturnError(WRONG_SCRIPTCODE);
 
 	while (true)
 	{
+		if (Sigterm) ReturnError(SCRIPT_TERMINATED);
+
 		if (Jumps.Size() && Jumps.Last().When == LastProcess) LastProcess = Jumps.Pop().Where;
 
 		int Start = SkipComment(Script);
@@ -602,6 +605,11 @@ bool KLScript::Validate(const KLString& Script, KLVariables* Scoope)
 	}
 
 	return true;
+}
+
+void KLScript::Terminate(void)
+{
+	Sigterm = true;
 }
 
 KLScript::ERROR KLScript::GetError(void) const

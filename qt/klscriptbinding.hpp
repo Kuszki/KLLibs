@@ -162,6 +162,8 @@ class KLLIBS_EXPORT KLScriptbinding : public QObject, KLScript
 		 */
 		static QString Optimize(const QString& Script);
 
+		using KLScript::Terminate;
+
 	signals:
 
 		/*! \brief		Zdarzenie obliczenia wartości.
