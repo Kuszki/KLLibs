@@ -112,7 +112,12 @@
         <translation>Próba modyfikacji zmiennej tylko do odczytu</translation>
     </message>
     <message>
-        <location filename="../qt/klscriptbinding.cpp" line="90"/>
+        <location filename="../qt/klscriptbinding.cpp" line="89"/>
+        <source>Script terminated before end</source>
+        <translation>Przerwano wykonywanie skryptu przed jego zakończeniem</translation>
+    </message>
+    <message>
+        <location filename="../qt/klscriptbinding.cpp" line="91"/>
         <source>Script is valid</source>
         <translation>Skrypt jest poprawny</translation>
     </message>

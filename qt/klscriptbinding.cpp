@@ -86,6 +86,7 @@ QString KLScriptbinding::GetMessage(void) const
 		case WRONG_PARAMETERS:		return tr("Encountered invalid expresion parameters");
 		case WRONG_EVALUATION:		return tr("Encountered invalid math expresion");
 		case VARIABLE_READONLY:		return tr("Selected variable is readonly");
+		case SCRIPT_TERMINATED:		return tr("Script terminated before end");
 
 		default: return tr("Script is valid");
 	}
