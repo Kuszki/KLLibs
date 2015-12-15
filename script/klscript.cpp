@@ -32,7 +32,7 @@
 #define ReturnError(error) 	{ LastError = error; return false; }
 
 KLScript::KLScript(KLVariables* Scoope)
-: Sigterm(false), LastReturn(0), Variables(Scoope), LastError(NO_ERROR) {}
+: Sigterm(false), LastReturn(0), LastError(NO_ERROR), Variables(Scoope) {}
 
 KLScript::OPERATION KLScript::GetToken(const KLString& Script)
 {
