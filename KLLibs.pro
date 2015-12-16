@@ -7,7 +7,7 @@
 TARGET	=	kllibs
 TEMPLATE	=	lib
 
-CONFIG	+=	c++11 shared
+CONFIG	+=	c++14 shared
 
 DEFINES	+=	KLLIBS_LIBRARY
 
