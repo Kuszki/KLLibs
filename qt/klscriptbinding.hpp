@@ -167,13 +167,14 @@ class KLLIBS_EXPORT KLScriptbinding : public QObject, KLScript
 	signals:
 
 		/*! \brief		Zdarzenie obliczenia wartości.
-		 *  \param [in]	Value Wartość wyrażenia.
+		 *  \param [in]	Value	Zwrócona wartość.
+		 *  \param [in]	Error	Zwrócony kod błędu.
 		 *  \see			Evaluate().
 		 *
 		 * Zdarzenie wywoływane przy poprawnym obliczeniu wartości wyrażenia.
 		 *
 		 */
-		void onEvaluate(double Value);
+		void onEvaluate(double Value, ERROR Error);
 
 };
 

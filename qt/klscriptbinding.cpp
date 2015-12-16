@@ -44,7 +44,7 @@ bool KLScriptbinding::Evaluate(void)
 
 	LastLine = KLScript::GetLine(LastCode.toStdString().c_str());
 
-	if (OK) emit onEvaluate(LastReturn);
+	emit onEvaluate(LastReturn, LastError);
 
 	return OK;
 }
