@@ -205,7 +205,7 @@ class KLLIBS_EXPORT KLScript
 
 		/*! \brief		Sprawdzenie kodu.
 		 *  \param [in]	Script	Skrypt do przetworzenia.
-		 *  \param [in]	Params	Globalny zakres zmiennych.
+		 *  \param [in]	Scoope	Globalny zakres zmiennych.
 		 *  \return		Powodzenie operacji.
 		 *
 		 * Przetwarza wybrany kod pod kątem błędów składni i zwraca powodzenie operacji.
