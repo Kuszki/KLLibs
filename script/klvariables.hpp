@@ -317,6 +317,16 @@ class KLLIBS_EXPORT KLVariables
 		 */
 		bool Delete(const KLString& Name);
 
+		/*! \brief		Zmiana nazwy zmiennej.
+		 *  \param [in]	OldName	Stara nazwa zmiennej.
+		 *  \param [in]	NewName	Nowa nazwa zmiennej.
+		 *  \return		Powodzenie operacji.
+		 *
+		 * Usuwa wybraną zmienną z systemu zgodnie z regułami `KLVariable::~KLVariable()`.
+		 *
+		 */
+		bool Rename(const KLString& OldName, const KLString& NewName);
+
 		/*! \brief		Test obecności zmiennej.
 		 *  \param [in]	Name		Nazwa zmiennej.
 		 *  \param [in]	Recursive	Wyszukiwanie w kontenerach-rodzicach.

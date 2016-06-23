@@ -188,6 +188,8 @@ bool KLMap<Data, Key>::Exists(const Key& ID) const
 template<typename Data, typename Key>
 bool KLMap<Data, Key>::Update(const Key& OldID, const Key& NewID)
 {
+	if (OldID == NewID) return true;
+
 	KLMapItem* MapItem = Begin;
 
 	while (MapItem)

@@ -171,6 +171,11 @@ bool KLVariables::Delete(const KLString& Name)
 	return Variables.Delete(Name) != -1;
 }
 
+bool KLVariables::Rename(const KLString& OldName, const KLString& NewName)
+{
+	return Variables.Update(OldName, NewName);
+}
+
 bool KLVariables::Exists(const KLString& Name, bool Recursive) const
 {
 	if (Parent && Recursive)
