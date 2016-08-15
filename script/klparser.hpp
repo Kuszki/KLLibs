@@ -285,6 +285,7 @@ class KLLIBS_EXPORT KLParser
 		/*! \brief		Przekształcenie wyrażenia do notacli RPN.
 		 *  \param [out]	Tokens	Wyjściowa lista tokenów.
 		 *  \param [in]	Code		Wyrażenie do przetworzenia.
+		 *  \param [in]	Scoope	Zasięg zmiennych.
 		 *  \return		Powodzenie operacji.
 		 *
 		 * Parsuje wyrażenie i zamienia je na postać Odwrotnej Notacji Polskiej.
@@ -299,7 +300,8 @@ class KLLIBS_EXPORT KLParser
 	public:
 
 		/*! \brief		Wywołanie skryptu.
-		 *  \param [in]	Code Wyrażenie do obliczenia.
+		 *  \param [in]	Code		Wyrażenie do obliczenia.
+		 *  \param [in]	Scoope	Zasięg zmiennych.
 		 *  \return 		Powodzenie operacji.
 		 *  \see			GetError(), GetValue().
 		 *
