@@ -14,9 +14,13 @@
         <translation>Napotkano nieznany operator</translation>
     </message>
     <message>
-        <location filename="../qt/klparserbinding.cpp" line="53"/>
         <source>Encountered unknown function</source>
-        <translation>Napotkano nieznaną funkcję</translation>
+        <translation type="vanished">Napotkano nieznaną funkcję</translation>
+    </message>
+    <message>
+        <location filename="../qt/klparserbinding.cpp" line="53"/>
+        <source>Encountered unknown function or variable</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qt/klparserbinding.cpp" line="54"/>

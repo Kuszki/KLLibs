@@ -104,12 +104,9 @@ bool KLScript::GetValue(const KLString& Script, KLVariables& Scoope)
 {
 	KLString Equation = GetParam(Script);
 
-	for (KLVariables* Vars = &Scoope; Vars; Vars = Vars->Parent)
-		for (auto& Var: *Vars) Equation.Replace(Var.ID, Var.Value.ToString(), true, true);
-
 	Equation.Replace("return", LastReturn, true, true);
 
-	return Parser.Evaluate(Equation);
+	return Parser.Evaluate(Equation, &Scoope);
 }
 
 int KLScript::SkipComment(const KLString& Script)

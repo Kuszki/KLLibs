@@ -101,7 +101,7 @@ KLParser::KLParserToken::KLParserToken(const char* Token, CLASS TokenClass)
 				}
 			}
 
-			if (Data.Function == FUNCTION::UNKNOWN) LastError = UNKNOWN_FUNCTION;
+			if (Data.Function == FUNCTION::UNKNOWN) LastError = UNKNOWN_EXPRESSION;
 		break;
 	}
 }
@@ -211,7 +211,7 @@ double KLParser::KLParserToken::GetValue(KLList<double>* Values) const
 
 					case FUNCTION::MINUS:	return -ParamA;
 
-					default: LastError = UNKNOWN_FUNCTION;
+					default: LastError = UNKNOWN_EXPRESSION;
 				}
 			}
 		break;
@@ -246,7 +246,7 @@ KLParser::ERROR KLParser::KLParserToken::GetError(void) const
 	return LastError;
 }
 
-bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code)
+bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code, const KLVariables* Scoope)
 {
 	if (Code.Count('(') != Code.Count(')')) ReturnError(BRACKETS_NOT_EQUAL);
 
@@ -271,9 +271,19 @@ bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code)
 		}
 		else if (isalpha(Code[Pos]))
 		{
-			while (isalpha(Code[Pos])) ++Pos; isLastTokenOperator = true;
+			while (isalnum(Code[Pos])) ++Pos; isLastTokenOperator = true;
 
-			Operators << new KLParserToken(Code.Part(Start, Pos), KLParserToken::CLASS::FUNCTION);
+			const KLString Name = Code.Part(Start, Pos);
+			KLParserToken* Token = new KLParserToken(Name, KLParserToken::CLASS::FUNCTION);
+
+			if (Token->GetFunction() == KLParserToken::FUNCTION::UNKNOWN)
+			{
+				delete Token;
+
+				if (Scoope && Scoope->Exists(Name)) Tokens << new KLParserToken((*Scoope)[Name].ToNumber());
+				else ReturnError(UNKNOWN_EXPRESSION);
+			}
+			else Operators << Token;
 		}
 		else
 		{
@@ -355,7 +365,7 @@ bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code)
 	return LastError == NO_ERROR;
 }
 
-bool KLParser::Evaluate(const KLString& Code)
+bool KLParser::Evaluate(const KLString& Code, const KLVariables* Scoope)
 {
 	KLList<KLParserToken*> Tokens;
 	KLList<double> Values;
@@ -363,7 +373,7 @@ bool KLParser::Evaluate(const KLString& Code)
 	LastError = NO_ERROR;
 	LastValue = 0;
 
-	if (!GetTokens(Tokens, Code)) return false;
+	if (!GetTokens(Tokens, Code, Scoope)) return false;
 
 	for (auto& Token: Tokens)
 	{

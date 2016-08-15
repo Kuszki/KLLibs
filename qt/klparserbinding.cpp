@@ -50,7 +50,7 @@ QString KLParserbinding::GetMessage(void) const
 	{
 		case UNEXPECTED_OPERATOR:	return tr("Encountered unexpected operator");
 		case UNKNOWN_OPERATOR:		return tr("Encountered unknown operator");
-		case UNKNOWN_FUNCTION:		return tr("Encountered unknown function");
+		case UNKNOWN_EXPRESSION:		return tr("Encountered unknown function or variable");
 		case EXPECTED_BRACKET:		return tr("Expected bracket");
 		case NOT_ENOUGH_PARAMETERS:	return tr("Expected function paramters");
 		case TOO_MANY_PARAMETERS:	return tr("Expected operator");

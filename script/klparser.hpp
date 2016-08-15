@@ -25,6 +25,7 @@
 
 #include "../containers/klstring.hpp"
 #include "../containers/kllist.hpp"
+#include "../script/klvariables.hpp"
 
 #include <ctype.h>
 #include <math.h>
@@ -59,7 +60,7 @@ class KLLIBS_EXPORT KLParser
 		UNEXPECTED_OPERATOR,	//!< Nieoczekiwany operator.
 
 		UNKNOWN_OPERATOR,		//!< Napotkano nieznany operator.
-		UNKNOWN_FUNCTION,		//!< Napotkano nieznaną funkcję.
+		UNKNOWN_EXPRESSION,		//!< Napotkano nieznane wyrażenie.
 
 		EXPECTED_BRACKET,		//!< Oczekiwano na otwierający lub zamykający nawias.
 
@@ -289,7 +290,7 @@ class KLLIBS_EXPORT KLParser
 		 * Parsuje wyrażenie i zamienia je na postać Odwrotnej Notacji Polskiej.
 		 *
 		 */
-		bool GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code);
+		bool GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code, const KLVariables* Scoope);
 
 		double LastValue;				//!< Ostatnia poprawnie obliczona wartość wyrażenia.
 
@@ -305,7 +306,7 @@ class KLLIBS_EXPORT KLParser
 		 * Przetwarza podane wyrażenie i zwraca powodzenie jego wykonania.
 		 *
 		 */
-		bool Evaluate(const KLString& Code);
+		bool Evaluate(const KLString& Code, const KLVariables* Scoope = nullptr);
 
 		/*! \brief		Pobranie wartości.
 		 *  \return		Ostatnia poprawnie obliczona wartość.
