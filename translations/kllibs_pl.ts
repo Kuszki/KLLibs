@@ -20,7 +20,7 @@
     <message>
         <location filename="../qt/klparserbinding.cpp" line="53"/>
         <source>Encountered unknown function or variable</source>
-        <translation type="unfinished"></translation>
+        <translation>Napotkano nieznaną funkcję lub zmienną</translation>
     </message>
     <message>
         <location filename="../qt/klparserbinding.cpp" line="54"/>
