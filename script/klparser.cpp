@@ -278,7 +278,7 @@ bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code, c
 
 			if (Token->GetFunction() == KLParserToken::FUNCTION::UNKNOWN)
 			{
-				delete Token;
+				delete Token; isLastTokenOperator = false;
 
 				if (Scoope && Scoope->Exists(Name)) Tokens << new KLParserToken((*Scoope)[Name].ToNumber());
 				else ReturnError(UNKNOWN_EXPRESSION);
