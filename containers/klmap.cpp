@@ -24,8 +24,8 @@
 #include "klmap.hpp"
 
 template<typename Data, typename Key>
-KLMap<Data, Key>::KLMapRecord::KLMapRecord(const Data& _Value, const Key& _ID)
-: Value(_Value), ID(_ID) {}
+KLMap<Data, Key>::KLMapRecord::KLMapRecord(const Data& _Value, const Key& _Index)
+: Value(_Value), Index(_Index) {}
 
 template<typename Data, typename Key>
 KLMap<Data, Key>::KLMapItem::KLMapItem(void)
@@ -93,7 +93,7 @@ KLMap<Data, Key>::KLMap(const KLMap<Data, Key>& Map)
 
 	while (MapItem)
 	{
-		Insert(MapItem->Record->Value, MapItem->Record->ID);
+		Insert(MapItem->Record->Value, MapItem->Record->Index);
 
 		MapItem = MapItem->Next;
 	}
@@ -145,7 +145,7 @@ int KLMap<Data, Key>::Delete(const Key& ID)
 
 	while (MapItem)
 	{
-		if (MapItem->Record->ID == ID)
+		if (MapItem->Record->Index == ID)
 		{
 			if (!PrevItem)
 				Begin = MapItem->Next;
@@ -176,7 +176,7 @@ bool KLMap<Data, Key>::Exists(const Key& ID) const
 
 	while (MapItem)
 	{
-		if (MapItem->Record->ID == ID)
+		if (MapItem->Record->Index == ID)
 			return true;
 		else
 			MapItem = MapItem->Next;
@@ -194,9 +194,9 @@ bool KLMap<Data, Key>::Update(const Key& OldID, const Key& NewID)
 
 	while (MapItem)
 	{
-		if (MapItem->Record->ID == OldID)
+		if (MapItem->Record->Index == OldID)
 		{
-			MapItem->Record->ID = NewID;
+			MapItem->Record->Index = NewID;
 
 			return true;
 		}
@@ -239,7 +239,7 @@ KLList<Key> KLMap<Data, Key>::Keys(void) const
 
 	while (MapItem)
 	{
-		Buffer.Insert(MapItem->Record->ID);
+		Buffer.Insert(MapItem->Record->Index);
 
 		MapItem = MapItem->Next;
 	}
@@ -294,7 +294,7 @@ Data& KLMap<Data, Key>::operator[] (const Key& ID)
 
 	while (MapItem)
 	{
-		if (MapItem->Record->ID == ID)
+		if (MapItem->Record->Index == ID)
 			return MapItem->Record->Value;
 		else
 			MapItem = MapItem->Next;
@@ -310,7 +310,7 @@ const Data& KLMap<Data, Key>::operator[] (const Key& ID) const
 
 	while (MapItem)
 	{
-		if (MapItem->Record->ID == ID)
+		if (MapItem->Record->Index == ID)
 			return MapItem->Record->Value;
 		else
 			MapItem = MapItem->Next;

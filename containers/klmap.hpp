@@ -56,7 +56,7 @@ class KLMap
 	{
 
 		Data	Value;	//!< Dane obiektu.
-		Key	ID;		//!< Klucz obiektu.
+		Key	Index;		//!< Klucz obiektu.
 
 		/*! \brief		Konstruktor rekordu.
 		 *  \param [in]	_Value	Dane rekordu.
@@ -65,7 +65,7 @@ class KLMap
 		 * Tworzy nowy rekord na podstawie podanych obiektów klucza i danych. Kopiuje wszystkie obiekty.
 		 *
 		 */
-		KLMapRecord(const Data& _Value, const Key& _ID);
+		KLMapRecord(const Data& _Value, const Key& _Index);
 
 	};
 

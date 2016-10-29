@@ -216,7 +216,7 @@ KLVariables& KLVariables::operator = (const KLVariables& Objects)
 
 	Clean();
 
-	for (const auto& Var: Objects) Add(Var.ID, Var.Value);
+	for (const auto& Var: Objects) Add(Var.Index, Var.Value);
 
 	return *this;
 }
