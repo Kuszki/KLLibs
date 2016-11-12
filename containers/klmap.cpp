@@ -324,13 +324,13 @@ KLMap<Data, Key>& KLMap<Data, Key>::operator= (const KLMap<Data, Key>& Map)
 {
 	if (this == &Map) return *this;
 
-	KLMapItem MapItem = Map.Begin;
+	KLMapItem* MapItem = Map.Begin;
 
 	Clean();
 
 	while (MapItem)
 	{
-		Insert(MapItem->Record->Value, MapItem->Record->ID);
+		Insert(MapItem->Record->Value, MapItem->Record->Index);
 
 		MapItem = MapItem->Next;
 	}

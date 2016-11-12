@@ -56,6 +56,7 @@ class KLLIBS_EXPORT KLScriptbinding : public QObject, KLScript
 
 	public:
 
+		using KLScript::Functions;
 		using KLScript::Variables;
 		using KLScript::Bindings;
 		using KLScript::Parser;
