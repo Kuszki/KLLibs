@@ -67,9 +67,7 @@ class KLLIBS_EXPORT KLParser
 		NOT_ENOUGH_PARAMETERS,	//!< Napotkano zbyt mało parametrów.
 		TOO_MANY_PARAMETERS,	//!< Napotkano zbyt wiele parametrów.
 
-		BRACKETS_NOT_EQUAL,		//!< Niepoprawna ilość nawiasów.
-
-		DIVISION_BY_ZERO		//!< Dzielenie przez zero.
+		BRACKETS_NOT_EQUAL		//!< Niepoprawna ilość nawiasów.
 	};
 
 	/*! \brief		Klasa bazowa dla tokenu.

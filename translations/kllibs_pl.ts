@@ -43,12 +43,11 @@
         <translation>Napotkano niepoprawną liczbę nawiasów</translation>
     </message>
     <message>
-        <location filename="../qt/klparserbinding.cpp" line="58"/>
         <source>Encountered division by zero</source>
-        <translation>Napotkano dzielenie przez zero</translation>
+        <translation type="vanished">Napotkano dzielenie przez zero</translation>
     </message>
     <message>
-        <location filename="../qt/klparserbinding.cpp" line="60"/>
+        <location filename="../qt/klparserbinding.cpp" line="59"/>
         <source>Script is valid</source>
         <translation>Skrypt jest poprawny</translation>
     </message>

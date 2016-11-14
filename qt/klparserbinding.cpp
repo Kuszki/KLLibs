@@ -55,7 +55,6 @@ QString KLParserbinding::GetMessage(void) const
 		case NOT_ENOUGH_PARAMETERS:	return tr("Expected function paramters");
 		case TOO_MANY_PARAMETERS:	return tr("Expected operator");
 		case BRACKETS_NOT_EQUAL:		return tr("Encountered wrong bracket number");
-		case DIVISION_BY_ZERO:		return tr("Encountered division by zero");
 
 		default: return tr("Script is valid");
 	}

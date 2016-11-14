@@ -423,7 +423,7 @@ bool KLScript::Validate(const KLString& Script, KLVariables* Scoope)
 				IF_Terminated ReturnError(WRONG_PARAMETERS);
 
 				if (!LocalVars.Exists(GetName(Script))) ReturnError(UNDEFINED_VARIABLE);
-				if (!GetValue(Script, LocalVars) && Parser.GetError() != KLParser::DIVISION_BY_ZERO) ReturnError(WRONG_EVALUATION);
+				if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
 			}
 			break;
 
@@ -435,7 +435,7 @@ bool KLScript::Validate(const KLString& Script, KLVariables* Scoope)
 
 				if (!Terminated) do
 				{
-					if (!GetValue(Script, LocalVars) && Parser.GetError() != KLParser::DIVISION_BY_ZERO) ReturnError(WRONG_EVALUATION);
+					if (!GetValue(Script, LocalVars)) ReturnError(WRONG_EVALUATION);
 				}
 				while (IS_NextParam);
 			}
