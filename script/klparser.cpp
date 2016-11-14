@@ -162,8 +162,12 @@ double KLParser::KLParserToken::GetValue(KLList<double>* Values) const
 
 				if ((Data.Operator == OPERATOR::DIV ||
 					Data.Operator == OPERATOR::MOD) &&
-				    ParamB == 0.0) return INFINITY;
-
+				    ParamB == 0.0)
+				{
+					if (ParamA > 0) return INFINITY;
+					else if (ParamA < 0) return -INFINITY;
+					else return 0.0;
+				}
 				else switch (Data.Operator)
 				{
 					case OPERATOR::ROUND:	return roundto(ParamA, ParamB);
