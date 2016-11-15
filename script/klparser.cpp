@@ -182,7 +182,6 @@ double KLParser::KLParserToken::GetValue(KLList<double>* Values) const
 
 					default: LastError = UNKNOWN_OPERATOR;
 				}
-
 			}
 		break;
 		case CLASS::FUNCTION:
