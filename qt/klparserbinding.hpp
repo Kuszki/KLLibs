@@ -65,14 +65,15 @@ class KLLIBS_EXPORT KLParserbinding : public QObject, KLParser
 		virtual ~KLParserbinding(void) override;
 
 		/*! \brief		Wywołanie skryptu.
-		 *  \param [in]	Code Wyrażenie do obliczenia.
+		 *  \param [in]	Code		Wyrażenie do obliczenia.
+		 *  \param [in]	Scoope	Zasięg zmiennych.
 		 *  \return 		Powodzenie operacji.
 		 *  \see			GetError(), GetValue().
 		 *
 		 * Przetwarza podane wyrażenie i zwraca powodzenie jego wykonania.
 		 *
 		 */
-		bool Evaluate(const QString& Code);
+		bool Evaluate(const QString& Code, const KLVariables* Scoope = nullptr);
 
 		/*! \brief		Pobranie wartości.
 		 *  \return		Ostatnia poprawnie obliczona wartość.

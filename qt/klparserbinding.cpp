@@ -25,9 +25,9 @@ KLParserbinding::KLParserbinding(QObject* Parent)
 
 KLParserbinding::~KLParserbinding(void) {}
 
-bool KLParserbinding::Evaluate(const QString& Code)
+bool KLParserbinding::Evaluate(const QString& Code, const KLVariables* Scoope)
 {
-	const bool OK = KLParser::Evaluate(Code.toStdString().c_str());
+	const bool OK = KLParser::Evaluate(Code.toStdString().c_str(), Scoope);
 
 	if (OK) emit onEvaluate(LastValue);
 
