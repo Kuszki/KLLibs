@@ -106,6 +106,6 @@ QString KLScriptbinding::Optimize(const QString& Script)
 {
 	return QString(Script)
 			.remove(QRegExp("\\s*#[^\n]*\\s*"))
-			.replace(QRegExp("\\s+(\\W)\\s+|(\\W)\\s+|\\s+(\\W)"), QString("\\1\\2\\3"))
+			.replace(QRegExp("\\s+(;)\\s+|(;)\\s+|\\s+(;)"), QString("\\1\\2\\3"))
 			.replace(QRegExp("\\s+"), " ");
 }
