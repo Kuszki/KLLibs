@@ -163,6 +163,15 @@ class KLLIBS_EXPORT KLScriptbinding : public QObject, KLScript
 		 */
 		static QString Optimize(const QString& Script);
 
+		/*! \brief		Tłumaczenie kodu błędu.
+		 *  \param [in]	Code Kod błędu.
+		 *  \return		Czytelny opis błędu.
+		 *
+		 * Tłumaczy podany numer błędu na czytelny opis.
+		 *
+		 */
+		static QString Errorcode(ERROR Code);
+
 		using KLScript::Terminate;
 
 	signals:

@@ -72,24 +72,7 @@ KLScriptbinding::ERROR KLScriptbinding::GetError(void) const
 
 QString KLScriptbinding::GetMessage(void) const
 {
-	switch (LastError)
-	{
-		case UNDEFINED_VARIABLE:		return tr("Encountered undefined variable");
-		case UNDEFINED_FUNCTION:		return tr("Encountered undefined function bind");
-		case EXPECTED_ENDIF_TOK:		return tr("Expected `fi` token");
-		case EXPECTED_DONE_TOK:		return tr("Expected `done` token");
-		case EXPECTED_TERMINATOR:	return tr("Expected `;` token");
-		case EMPTY_FUNCTION:		return tr("Encountered empty function");
-		case EMPTY_EXPRESSION:		return tr("Encountered empty expression");
-		case UNKNOWN_EXPRESSION:		return tr("Encountered unknown expression");
-		case WRONG_SCRIPTCODE:		return tr("Wrong or empty Scriptcode");
-		case WRONG_PARAMETERS:		return tr("Encountered invalid expresion parameters");
-		case WRONG_EVALUATION:		return tr("Encountered invalid math expresion");
-		case VARIABLE_READONLY:		return tr("Selected variable is readonly");
-		case SCRIPT_TERMINATED:		return tr("Script terminated before end");
-
-		default: return tr("Script is valid");
-	}
+	return Errorcode(LastError);
 }
 
 int KLScriptbinding::GetLine(void) const
@@ -108,4 +91,26 @@ QString KLScriptbinding::Optimize(const QString& Script)
 			.remove(QRegExp("\\s*#[^\n]*\\s*"))
 			.replace(QRegExp("\\s+(;)\\s+|(;)\\s+|\\s+(;)"), QString("\\1\\2\\3"))
 			.replace(QRegExp("\\s+"), " ");
+}
+
+QString KLScriptbinding::Errorcode(KLScript::ERROR Code)
+{
+	switch (Code)
+	{
+		case UNDEFINED_VARIABLE:		return tr("Encountered undefined variable");
+		case UNDEFINED_FUNCTION:		return tr("Encountered undefined function bind");
+		case EXPECTED_ENDIF_TOK:		return tr("Expected `fi` token");
+		case EXPECTED_DONE_TOK:		return tr("Expected `done` token");
+		case EXPECTED_TERMINATOR:	return tr("Expected `;` token");
+		case EMPTY_FUNCTION:		return tr("Encountered empty function");
+		case EMPTY_EXPRESSION:		return tr("Encountered empty expression");
+		case UNKNOWN_EXPRESSION:		return tr("Encountered unknown expression");
+		case WRONG_SCRIPTCODE:		return tr("Wrong or empty Scriptcode");
+		case WRONG_PARAMETERS:		return tr("Encountered invalid expresion parameters");
+		case WRONG_EVALUATION:		return tr("Encountered invalid math expresion");
+		case VARIABLE_READONLY:		return tr("Selected variable is readonly");
+		case SCRIPT_TERMINATED:		return tr("Script terminated before end");
+
+		default: return tr("Script is valid");
+	}
 }
