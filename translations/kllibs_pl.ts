@@ -55,72 +55,72 @@
 <context>
     <name>KLScriptbinding</name>
     <message>
-        <location filename="../qt/klscriptbinding.cpp" line="77"/>
+        <location filename="../qt/klscriptbinding.cpp" line="100"/>
         <source>Encountered undefined variable</source>
         <translation>Napotkano niezdefiniowaną zmienną</translation>
     </message>
     <message>
-        <location filename="../qt/klscriptbinding.cpp" line="78"/>
+        <location filename="../qt/klscriptbinding.cpp" line="101"/>
         <source>Encountered undefined function bind</source>
         <translation>Napotkano niezdefiniowaną funkcję</translation>
     </message>
     <message>
-        <location filename="../qt/klscriptbinding.cpp" line="79"/>
+        <location filename="../qt/klscriptbinding.cpp" line="102"/>
         <source>Expected `fi` token</source>
         <translation>Oczekiwano znacznika `fi`</translation>
     </message>
     <message>
-        <location filename="../qt/klscriptbinding.cpp" line="80"/>
+        <location filename="../qt/klscriptbinding.cpp" line="103"/>
         <source>Expected `done` token</source>
         <translation>Oczekiwano znacznika `done`</translation>
     </message>
     <message>
-        <location filename="../qt/klscriptbinding.cpp" line="81"/>
+        <location filename="../qt/klscriptbinding.cpp" line="104"/>
         <source>Expected `;` token</source>
         <translation>Oczekiwano terminatora `;`</translation>
     </message>
     <message>
-        <location filename="../qt/klscriptbinding.cpp" line="82"/>
+        <location filename="../qt/klscriptbinding.cpp" line="105"/>
         <source>Encountered empty function</source>
         <translation>Napotkano pustą funkcję</translation>
     </message>
     <message>
-        <location filename="../qt/klscriptbinding.cpp" line="83"/>
+        <location filename="../qt/klscriptbinding.cpp" line="106"/>
         <source>Encountered empty expression</source>
         <translation>Napotkano puste wyrażenie</translation>
     </message>
     <message>
-        <location filename="../qt/klscriptbinding.cpp" line="84"/>
+        <location filename="../qt/klscriptbinding.cpp" line="107"/>
         <source>Encountered unknown expression</source>
         <translation>Napotkano nieznane wyrażenie</translation>
     </message>
     <message>
-        <location filename="../qt/klscriptbinding.cpp" line="85"/>
+        <location filename="../qt/klscriptbinding.cpp" line="108"/>
         <source>Wrong or empty Scriptcode</source>
         <translation>Pusty lub niepoprawny skrypt</translation>
     </message>
     <message>
-        <location filename="../qt/klscriptbinding.cpp" line="86"/>
+        <location filename="../qt/klscriptbinding.cpp" line="109"/>
         <source>Encountered invalid expresion parameters</source>
         <translation>Napotkano niepoprawne parametry wyrażenia</translation>
     </message>
     <message>
-        <location filename="../qt/klscriptbinding.cpp" line="87"/>
+        <location filename="../qt/klscriptbinding.cpp" line="110"/>
         <source>Encountered invalid math expresion</source>
         <translation>Napotkano niepoprawne wyrażenie matematyczne</translation>
     </message>
     <message>
-        <location filename="../qt/klscriptbinding.cpp" line="88"/>
+        <location filename="../qt/klscriptbinding.cpp" line="111"/>
         <source>Selected variable is readonly</source>
         <translation>Próba modyfikacji zmiennej tylko do odczytu</translation>
     </message>
     <message>
-        <location filename="../qt/klscriptbinding.cpp" line="89"/>
+        <location filename="../qt/klscriptbinding.cpp" line="112"/>
         <source>Script terminated before end</source>
         <translation>Przerwano wykonywanie skryptu przed jego zakończeniem</translation>
     </message>
     <message>
-        <location filename="../qt/klscriptbinding.cpp" line="91"/>
+        <location filename="../qt/klscriptbinding.cpp" line="114"/>
         <source>Script is valid</source>
         <translation>Skrypt jest poprawny</translation>
     </message>
