@@ -132,7 +132,7 @@ bool KLScript::Evaluate(const KLString& Script, KLList<double>* Params)
 
 	LastError		= NO_ERROR;
 	LastProcess	= 0;
-	LastReturn	= 0;
+	LastReturn	= NAN;
 	Sigterm		= false;
 
 	if (SkipComment(Script) == Script.Size()) ReturnError(WRONG_SCRIPTCODE);
@@ -408,7 +408,7 @@ bool KLScript::Validate(const KLString& Script, KLVariables* Scoope)
 
 	LastError 	= NO_ERROR;
 	LastProcess 	= 0;
-	LastReturn	= 0;
+	LastReturn	= NAN;
 
 	if (SkipComment(Script) == Script.Size()) ReturnError(WRONG_SCRIPTCODE);
 
