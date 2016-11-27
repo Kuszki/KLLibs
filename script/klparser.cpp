@@ -261,13 +261,13 @@ bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code, c
 
 		if (isdigit(Code[Pos]))
 		{
-			while (isdigit(Code[Pos]) || Code[Pos] == '.') ++Pos; isLastTokenOperator = false;
+			isLastTokenOperator = false; while (isdigit(Code[Pos]) || Code[Pos] == '.') ++Pos;
 
 			Tokens << new KLParserToken(Code.Part(Start, Pos), KLParserToken::CLASS::VALUE);
 		}
 		else if (isalpha(Code[Pos]))
 		{
-			while (isalnum(Code[Pos])) ++Pos; isLastTokenOperator = true;
+			isLastTokenOperator = true; while (isalnum(Code[Pos])) ++Pos;
 
 			const KLString Name = Code.Part(Start, Pos);
 			KLParserToken* Token = new KLParserToken(Name, KLParserToken::CLASS::FUNCTION);
