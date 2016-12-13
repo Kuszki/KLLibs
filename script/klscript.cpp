@@ -72,7 +72,7 @@ KLString KLScript::GetParam(const KLString& Script)
 	while (Script[LastProcess] != ';' &&
 		  Script[LastProcess] != '#' &&
 		  Script[LastProcess] != ',' &&
-		  Script[LastProcess] != '\0') ++LastProcess;
+		  Script[LastProcess] != 0) ++LastProcess;
 
 	KLString Param = Script.Part(Start, LastProcess);
 
@@ -104,7 +104,7 @@ bool KLScript::GetValue(const KLString& Script, KLVariables& Scoope)
 {
 	KLString Equation = GetParam(Script);
 
-	Equation.Replace("return", LastReturn, true, true);
+	Equation.Replace('$', LastReturn, true, true);
 
 	return Parser.Evaluate(Equation, &Scoope);
 }
