@@ -78,8 +78,8 @@ Możliwości:
 - [X] Obsługa wyrażeń w nawiasach.
 - [X] Operacje na liczbach zmiennoprzecinkowych i logicznych.
 - [X] Obsługa błędów.
+- [X] Obsługa zmiennych.
 - [ ] Rozszerzalna lista funkcji.
-- [ ] Automatyczna obsługa zmiennych.
 - [ ] Instrukcje przypisania.
 
 ### KLScript
@@ -120,7 +120,7 @@ Przykład:
      goto funkcja Zmienna1, Zmienna2;
 
      # pobranie wyniku wywołanej funkcji do zmiennej
-     var wynik; set wynik return;
+     var wynik; set wynik $;
 
      # instrukcja if
      if Zmienna != 100 || Zmienna < 50;
@@ -145,7 +145,7 @@ Przykład:
                call Procedura Zmienna % i, Zmienna;
                set i i+1;
 
-               if not return;
+               if not $;
 
                     # przerwanie skryptu
                     exit;
