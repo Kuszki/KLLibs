@@ -26,47 +26,49 @@ thread_local KLParser::ERROR KLParser::KLParserToken::LastError = KLParser::ERRO
 
 const KLParser::KLParserToken::KLParserOperatorData KLParser::KLParserToken::Operators[] =
 {
-	{KLParser::KLParserToken::OPERATOR::UNKNOWN,		"",		00},
+	{ KLParser::KLParserToken::OPERATOR::UNKNOWN,	"",		00 },
 
-	{KLParser::KLParserToken::OPERATOR::ROUND,		"~",		31},
-	{KLParser::KLParserToken::OPERATOR::ADD,		"+",		32},
-	{KLParser::KLParserToken::OPERATOR::SUB,		"-",		32},
-	{KLParser::KLParserToken::OPERATOR::MUL,		"*",		33},
-	{KLParser::KLParserToken::OPERATOR::DIV,		"/",		33},
-	{KLParser::KLParserToken::OPERATOR::MOD,		"%",		33},
-	{KLParser::KLParserToken::OPERATOR::POW,		"^",		34},
+	{ KLParser::KLParserToken::OPERATOR::ROUND,		"~",		31 },
+	{ KLParser::KLParserToken::OPERATOR::ADD,		"+",		32 },
+	{ KLParser::KLParserToken::OPERATOR::SUB,		"-",		32 },
+	{ KLParser::KLParserToken::OPERATOR::MUL,		"*",		33 },
+	{ KLParser::KLParserToken::OPERATOR::DIV,		"/",		33 },
+	{ KLParser::KLParserToken::OPERATOR::MOD,		"%",		33 },
+	{ KLParser::KLParserToken::OPERATOR::POW,		"^",		34 },
 
-	{KLParser::KLParserToken::OPERATOR::EQ,			"==",	21},
-	{KLParser::KLParserToken::OPERATOR::NEQ,		"!=",	21},
-	{KLParser::KLParserToken::OPERATOR::GT,			">",		22},
-	{KLParser::KLParserToken::OPERATOR::LT,			"<",		22},
-	{KLParser::KLParserToken::OPERATOR::GE,			">=",	22},
-	{KLParser::KLParserToken::OPERATOR::LE,			"<=",	22},
+	{ KLParser::KLParserToken::OPERATOR::EQ,		"=",		21 },
+	{ KLParser::KLParserToken::OPERATOR::NEQ,		"!=",	21 },
+	{ KLParser::KLParserToken::OPERATOR::GT,		">",		22 },
+	{ KLParser::KLParserToken::OPERATOR::LT,		"<",		22 },
+	{ KLParser::KLParserToken::OPERATOR::GE,		">=",	22 },
+	{ KLParser::KLParserToken::OPERATOR::LE,		"<=",	22 },
 
-	{KLParser::KLParserToken::OPERATOR::AND,		"&&",	11},
-	{KLParser::KLParserToken::OPERATOR::OR,			"||",	12},
+	{ KLParser::KLParserToken::OPERATOR::AND,		"&",		11 },
+	{ KLParser::KLParserToken::OPERATOR::FAND,		"@",		11 },
+	{ KLParser::KLParserToken::OPERATOR::OR,		"|",		12 },
+	{ KLParser::KLParserToken::OPERATOR::FOR,		"?",		12 },
 
-	{KLParser::KLParserToken::OPERATOR::L_BRACKET,	"(",		01},
-	{KLParser::KLParserToken::OPERATOR::R_BRACKET,	")",		01}
+	{ KLParser::KLParserToken::OPERATOR::L_BRACKET,	"(",		01 },
+	{ KLParser::KLParserToken::OPERATOR::R_BRACKET,	")",		01 }
 };
 
 const KLParser::KLParserToken::KLParserFunctionData KLParser::KLParserToken::Functions[] =
 {
-	{KLParser::KLParserToken::FUNCTION::UNKNOWN,		""},
+	{ KLParser::KLParserToken::FUNCTION::UNKNOWN,	""		},
 
-	{KLParser::KLParserToken::FUNCTION::SIN,		"sin"},
-	{KLParser::KLParserToken::FUNCTION::COS,		"cos"},
-	{KLParser::KLParserToken::FUNCTION::TAN,		"tan"},
+	{ KLParser::KLParserToken::FUNCTION::SIN,		"sin"	},
+	{ KLParser::KLParserToken::FUNCTION::COS,		"cos"	},
+	{ KLParser::KLParserToken::FUNCTION::TAN,		"tan"	},
 
-	{KLParser::KLParserToken::FUNCTION::ABS,		"abs"},
+	{ KLParser::KLParserToken::FUNCTION::ABS,		"abs"	},
 
-	{KLParser::KLParserToken::FUNCTION::EXP,		"exp"},
-	{KLParser::KLParserToken::FUNCTION::SQRT,		"sqrt"},
-	{KLParser::KLParserToken::FUNCTION::LOG,		"log"},
-	{KLParser::KLParserToken::FUNCTION::LN,			"ln"},
+	{ KLParser::KLParserToken::FUNCTION::EXP,		"exp"	},
+	{ KLParser::KLParserToken::FUNCTION::SQRT,		"sqrt"	},
+	{ KLParser::KLParserToken::FUNCTION::LOG,		"log"	},
+	{ KLParser::KLParserToken::FUNCTION::LN,		"ln"		},
 
-	{KLParser::KLParserToken::FUNCTION::NOT,		"not"},
-	{KLParser::KLParserToken::FUNCTION::MINUS,		"minus"}
+	{ KLParser::KLParserToken::FUNCTION::NOT,		"not"	},
+	{ KLParser::KLParserToken::FUNCTION::MINUS,		"minus"	}
 };
 
 KLParser::KLParserToken::KLParserToken(const char* Token, CLASS TokenClass)
@@ -179,6 +181,9 @@ double KLParser::KLParserToken::GetValue(KLList<double>* Values) const
 
 					case OPERATOR::AND:		return ParamA && ParamB;
 					case OPERATOR::OR:		return ParamA || ParamB;
+
+					case OPERATOR::FAND:	return fmin(ParamA, ParamB);
+					case OPERATOR::FOR:		return fmax(ParamA, ParamB);
 
 					default: LastError = UNKNOWN_OPERATOR;
 				}

@@ -107,15 +107,17 @@ class KLLIBS_EXPORT KLParser
 			MOD,			//!< Reszta z dzielenia: `a % b`.
 			POW,			//!< Potęgowanie: `a^b`.
 
-			EQ,			//!< Jest równy: `a == b`.
+			EQ,			//!< Jest równy: `a = b`.
 			NEQ,			//!< Jest różny: `a != b`.
 			GT,			//!< Jest większy: `a > b`.
 			LT,			//!< Jest mniejszy: `a < b`.
 			GE,			//!< Jest większy lub równy: `a >= b`.
 			LE,			//!< Jest mniejszy lub równy: `a <= b`.
 
-			AND,			//!< Iloczyn logiczny: `a && b`.
-			OR,			//!< Suma logiczna: `a || b`.
+			AND,			//!< Iloczyn logiczny: `a & b`.
+			OR,			//!< Suma logiczna: `a | b`.
+			FAND,		//!< Iloczyn rozmyty: `a @ b`.
+			FOR,			//!< Suma rozmyta: `a ? b`.
 
 			L_BRACKET,	//!< Nawias otwierający: `(`.
 			R_BRACKET		//!< Nawias zamykający: `)`.
