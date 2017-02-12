@@ -72,7 +72,7 @@ KLScriptbinding::ERROR KLScriptbinding::GetError(void) const
 
 QString KLScriptbinding::GetMessage(void) const
 {
-	return Errorcode(LastError);
+	return Errorcode(LastError, Parser.GetError());
 }
 
 int KLScriptbinding::GetLine(void) const
@@ -93,7 +93,7 @@ QString KLScriptbinding::Optimize(const QString& Script)
 			.replace(QRegExp("\\s+"), " ");
 }
 
-QString KLScriptbinding::Errorcode(KLScript::ERROR Code)
+QString KLScriptbinding::Errorcode(KLScript::ERROR Code, KLParser::ERROR Parser)
 {
 	switch (Code)
 	{
@@ -107,9 +107,10 @@ QString KLScriptbinding::Errorcode(KLScript::ERROR Code)
 		case UNKNOWN_EXPRESSION:		return tr("Encountered unknown expression");
 		case WRONG_SCRIPTCODE:		return tr("Wrong or empty Scriptcode");
 		case WRONG_PARAMETERS:		return tr("Encountered invalid expresion parameters");
-		case WRONG_EVALUATION:		return tr("Encountered invalid math expresion");
 		case VARIABLE_READONLY:		return tr("Selected variable is readonly");
 		case SCRIPT_TERMINATED:		return tr("Script terminated before end");
+
+		case WRONG_EVALUATION:		return KLParserbinding::Errorcode(Parser);
 
 		default: return tr("Script is valid");
 	}

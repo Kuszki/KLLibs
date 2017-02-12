@@ -102,6 +102,15 @@ class KLLIBS_EXPORT KLParserbinding : public QObject, KLParser
 		 */
 		QString GetMessage(void) const;
 
+		/*! \brief		Tłumaczenie kodu błędu.
+		 *  \param [in]	Code Kod błędu.
+		 *  \return		Czytelny opis błędu.
+		 *
+		 * Tłumaczy podany numer błędu na czytelny opis.
+		 *
+		 */
+		static QString Errorcode(ERROR Code);
+
 	signals:
 
 		/*! \brief		Zdarzenie obliczenia wartości.

@@ -24,6 +24,7 @@
 #include "../libbuild.hpp"
 
 #include "../script/klscript.hpp"
+#include "../qt/klparserbinding.hpp"
 
 #include <QObject>
 #include <QRegExp>
@@ -164,13 +165,14 @@ class KLLIBS_EXPORT KLScriptbinding : public QObject, KLScript
 		static QString Optimize(const QString& Script);
 
 		/*! \brief		Tłumaczenie kodu błędu.
-		 *  \param [in]	Code Kod błędu.
+		 *  \param [in]	Code		Kod błędu skryptu.
+		 *  \param [in]	Parser	Kod błędu parsera.
 		 *  \return		Czytelny opis błędu.
 		 *
 		 * Tłumaczy podany numer błędu na czytelny opis.
 		 *
 		 */
-		static QString Errorcode(ERROR Code);
+		static QString Errorcode(ERROR Code, KLParser::ERROR Parser = KLParser::NO_ERROR);
 
 		using KLScript::Terminate;
 

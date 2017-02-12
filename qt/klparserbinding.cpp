@@ -46,7 +46,12 @@ KLParserbinding::ERROR KLParserbinding::GetError(void) const
 
 QString KLParserbinding::GetMessage(void) const
 {
-	switch (LastError)
+	return Errorcode(LastError);
+}
+
+QString KLParserbinding::Errorcode(KLParser::ERROR Code)
+{
+	switch (Code)
 	{
 		case UNEXPECTED_OPERATOR:	return tr("Encountered unexpected operator");
 		case UNKNOWN_OPERATOR:		return tr("Encountered unknown operator");

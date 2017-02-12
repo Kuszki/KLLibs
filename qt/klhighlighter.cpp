@@ -42,7 +42,7 @@ KLHighlighter::KLHighlighter(QTextDocument* Parent)
 	Rule.Format.setForeground(Qt::darkBlue);
 	Rule.Format.setFontWeight(QFont::Bold);
 
-	Rule.Expresion = QRegExp("(?:\\~|\\+|\\-|\\*|\\/|\\%|\\^|\\=\\=|\\!\\=|\\>|\\<|\\>\\=|\\<\\=|\\&\\&|\\|\\||\\(|\\)|\\;|\\,)");
+	Rule.Expresion = QRegExp("(?:\\~|\\+|\\-|\\*|\\/|\\%|\\^|\\=|\\!\\=|\\>|\\<|\\>\\=|\\<\\=|\\&|\\@|\\||\\?|\\(|\\)|\\;|\\,)");
 
 	Rules.insert(OPERATORS, Rule);
 
