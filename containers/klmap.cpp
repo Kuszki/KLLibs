@@ -147,14 +147,13 @@ int KLMap<Data, Key>::Delete(const Key& ID)
 	{
 		if (MapItem->Record->Index == ID)
 		{
-			if (!PrevItem)
-				Begin = MapItem->Next;
-			else
-				PrevItem->Next = MapItem->Next;
+			if (!PrevItem) Begin = MapItem->Next;
+			else PrevItem->Next = MapItem->Next;
 
-			delete MapItem;
+			if (MapItem == Begin) Begin = nullptr;
+			if (MapItem == End) End = PrevItem;
 
-			return --Capacity;
+			delete MapItem; return --Capacity;
 		}
 		else
 		{
@@ -162,9 +161,6 @@ int KLMap<Data, Key>::Delete(const Key& ID)
 			MapItem = MapItem->Next;
 		}
 	}
-
-	if (MapItem == Begin) Begin = nullptr;
-	if (MapItem == End) End = PrevItem;
 
 	return -1;
 }
