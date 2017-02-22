@@ -131,7 +131,7 @@ unsigned KLParser::KLParserToken::GetPriority(void) const
 	switch (Class)
 	{
 		case CLASS::OPERATOR:
-			return Operators[(unsigned) Data.Operator].Priority;
+			return Operators[int(Data.Operator)].Priority;
 
 		default: return 100;
 	}
@@ -310,6 +310,9 @@ bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code, c
 				case '(':
 					Operators << new KLParserToken(KLParserToken::OPERATOR::L_BRACKET);
 				break;
+				case '~':
+					Operator = new KLParserToken(KLParserToken::OPERATOR::ROUND);
+				break;
 				case '+':
 					Operator = new KLParserToken(KLParserToken::OPERATOR::ADD);
 				break;
@@ -329,6 +332,27 @@ bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code, c
 				case '^':
 					Operator = new KLParserToken(KLParserToken::OPERATOR::POW);
 				break;
+				case '=':
+					Operator = new KLParserToken(KLParserToken::OPERATOR::EQ);
+				break;
+				case '>':
+					Operator = new KLParserToken(KLParserToken::OPERATOR::GT);
+				break;
+				case '<':
+					Operator = new KLParserToken(KLParserToken::OPERATOR::LT);
+				break;
+				case '|':
+					Operator = new KLParserToken(KLParserToken::OPERATOR::OR);
+				break;
+				case '&':
+					Operator = new KLParserToken(KLParserToken::OPERATOR::AND);
+				break;
+				case '?':
+					Operator = new KLParserToken(KLParserToken::OPERATOR::FOR);
+				break;
+				case '@':
+					Operator = new KLParserToken(KLParserToken::OPERATOR::FAND);
+				break;
 				default:
 				{
 					while (Code[Pos] &&
@@ -344,9 +368,7 @@ bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code, c
 
 			if (Operator)
 			{
-				while (Operators.Size() &&
-					  (Operator->GetPriority() <=
-					   Operators.Last()->GetPriority()))
+				while (Operators.Size() && (Operator->GetPriority() <= Operators.Last()->GetPriority()))
 				{
 					Tokens << Operators.Pop();
 				}
@@ -372,7 +394,7 @@ bool KLParser::Evaluate(const KLString& Code, const KLVariables* Scoope)
 	KLList<double> Values;
 
 	LastError = NO_ERROR;
-	LastValue = 0;
+	LastValue = NAN;
 
 	if (!GetTokens(Tokens, Code, Scoope)) return false;
 

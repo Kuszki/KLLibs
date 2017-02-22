@@ -222,19 +222,24 @@ bool KLScript::Evaluate(const KLString& Script, KLList<double>* Params)
 				{
 					if (KLString Name = GetName(Script))
 					{
+						const bool Local = LocalVars.Exists(Name, false);
+
 						if (ID == EXP)
 						{
-							if (LocalVars.Exists(Name, false))
+							const bool Global = Variables.Exists(Name);
+
+							if (Local && !Global)
 							{
 								Variables.Add(Name, LocalVars[Name]);
-								LocalVars.Delete(Name);
 							}
-							else if (Variables.Parent && !Variables.Parent->Exists(Name))
+							else if (!Global)
 							{
 								Variables.Add(Name);
 							}
+
+							if (Local && !Global) LocalVars.Delete(Name);
 						}
-						else
+						else if (!Local)
 						{
 							LocalVars.Add(Name);
 						}

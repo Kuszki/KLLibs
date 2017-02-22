@@ -114,10 +114,10 @@ class KLLIBS_EXPORT KLParser
 			GE,			//!< Jest większy lub równy: `a >= b`.
 			LE,			//!< Jest mniejszy lub równy: `a <= b`.
 
-			AND,			//!< Iloczyn logiczny: `a & b`.
 			OR,			//!< Suma logiczna: `a | b`.
-			FAND,		//!< Iloczyn rozmyty: `a @ b`.
 			FOR,			//!< Suma rozmyta: `a ? b`.
+			AND,			//!< Iloczyn logiczny: `a & b`.
+			FAND,		//!< Iloczyn rozmyty: `a @ b`.
 
 			L_BRACKET,	//!< Nawias otwierający: `(`.
 			R_BRACKET		//!< Nawias zamykający: `)`.

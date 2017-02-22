@@ -44,9 +44,7 @@ bool KLScriptbinding::Evaluate(void)
 
 	LastLine = KLScript::GetLine(LastCode.toStdString().c_str());
 
-	emit onEvaluate(LastReturn, LastError);
-
-	return OK;
+	emit onEvaluate(LastReturn, LastError); return OK;
 }
 
 bool KLScriptbinding::Validate(const QString& Script)
