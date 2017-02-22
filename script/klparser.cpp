@@ -43,10 +43,10 @@ const KLParser::KLParserToken::KLParserOperatorData KLParser::KLParserToken::Ope
 	{ KLParser::KLParserToken::OPERATOR::GE,		">=",	22 },
 	{ KLParser::KLParserToken::OPERATOR::LE,		"<=",	22 },
 
-	{ KLParser::KLParserToken::OPERATOR::AND,		"&",		11 },
-	{ KLParser::KLParserToken::OPERATOR::FAND,		"@",		11 },
-	{ KLParser::KLParserToken::OPERATOR::OR,		"|",		12 },
-	{ KLParser::KLParserToken::OPERATOR::FOR,		"?",		12 },
+	{ KLParser::KLParserToken::OPERATOR::OR,		"|",		11 },
+	{ KLParser::KLParserToken::OPERATOR::FOR,		"?",		11 },
+	{ KLParser::KLParserToken::OPERATOR::AND,		"&",		12 },
+	{ KLParser::KLParserToken::OPERATOR::FAND,		"@",		12 },
 
 	{ KLParser::KLParserToken::OPERATOR::L_BRACKET,	"(",		01 },
 	{ KLParser::KLParserToken::OPERATOR::R_BRACKET,	")",		01 }
