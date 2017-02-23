@@ -143,12 +143,12 @@ double KLParser::KLParserToken::GetValue(KLList<double>* Values) const
 {
 	static const auto roundto = [] (double Number, int To) -> double
 	{
-		if (To)
+		if (!To) return round(Number);
+		else
 		{
 			double Pow = pow(10, To);
 			return round(Number * Pow) / Pow;
 		}
-		else return round(Number);
 	};
 
 	LastError = NO_ERROR;
@@ -334,12 +334,6 @@ bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code, c
 				break;
 				case '=':
 					Operator = new KLParserToken(KLParserToken::OPERATOR::EQ);
-				break;
-				case '>':
-					Operator = new KLParserToken(KLParserToken::OPERATOR::GT);
-				break;
-				case '<':
-					Operator = new KLParserToken(KLParserToken::OPERATOR::LT);
 				break;
 				case '|':
 					Operator = new KLParserToken(KLParserToken::OPERATOR::OR);
