@@ -182,8 +182,8 @@ double KLParser::KLParserToken::GetValue(KLList<double>* Values) const
 					case OPERATOR::AND:		return ParamA && ParamB;
 					case OPERATOR::OR:		return ParamA || ParamB;
 
-					case OPERATOR::FAND:	return ParamA * ParamB;
-					case OPERATOR::FOR:		return ParamA + ParamB - ParamA * ParamB;
+					case OPERATOR::FAND:	return (ParamA * ParamB) / (ParamA + ParamB - ParamA * ParamB);
+					case OPERATOR::FOR:		return (ParamA + ParamB) / (1 + ParamA * ParamB);
 
 					default: LastError = UNKNOWN_OPERATOR;
 				}
