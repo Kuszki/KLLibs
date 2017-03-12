@@ -291,7 +291,7 @@ class KLLIBS_EXPORT KLParser
 		 * Parsuje wyrażenie i zamienia je na postać Odwrotnej Notacji Polskiej.
 		 *
 		 */
-		bool GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code, const KLVariables* Scoope);
+		bool GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code, const KLVariables* Scoope, const double Return);
 
 		double LastValue;				//!< Ostatnia poprawnie obliczona wartość wyrażenia.
 
@@ -308,7 +308,7 @@ class KLLIBS_EXPORT KLParser
 		 * Przetwarza podane wyrażenie i zwraca powodzenie jego wykonania.
 		 *
 		 */
-		bool Evaluate(const KLString& Code, const KLVariables* Scoope = nullptr);
+		bool Evaluate(const KLString& Code, const KLVariables* Scoope = nullptr, const double Return = NAN);
 
 		/*! \brief		Pobranie wartości.
 		 *  \return		Ostatnia poprawnie obliczona wartość.

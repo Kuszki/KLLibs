@@ -247,7 +247,7 @@ KLParser::ERROR KLParser::KLParserToken::GetError(void) const
 	return LastError;
 }
 
-bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code, const KLVariables* Scoope)
+bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code, const KLVariables* Scoope, const double Return)
 {
 	if (Code.Count('(') != Code.Count(')')) ReturnError(BRACKETS_NOT_EQUAL);
 
@@ -347,6 +347,9 @@ bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code, c
 				case '@':
 					Operator = new KLParserToken(KLParserToken::OPERATOR::FAND);
 				break;
+				case '$':
+					Tokens << new KLParserToken(Return);
+				break;
 				default:
 				{
 					while (Code[Pos] &&
@@ -382,7 +385,7 @@ bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code, c
 	return LastError == NO_ERROR;
 }
 
-bool KLParser::Evaluate(const KLString& Code, const KLVariables* Scoope)
+bool KLParser::Evaluate(const KLString& Code, const KLVariables* Scoope, const double Return)
 {
 	KLList<KLParserToken*> Tokens;
 	KLList<double> Values;
@@ -390,7 +393,7 @@ bool KLParser::Evaluate(const KLString& Code, const KLVariables* Scoope)
 	LastError = NO_ERROR;
 	LastValue = NAN;
 
-	if (!GetTokens(Tokens, Code, Scoope)) return false;
+	if (!GetTokens(Tokens, Code, Scoope, Return)) return false;
 
 	for (auto& Token: Tokens)
 	{

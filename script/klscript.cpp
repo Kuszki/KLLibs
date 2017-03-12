@@ -104,9 +104,7 @@ bool KLScript::GetValue(const KLString& Script, KLVariables& Scoope)
 {
 	KLString Equation = GetParam(Script);
 
-	Equation.Replace('$', LastReturn, true, true);
-
-	return Parser.Evaluate(Equation, &Scoope);
+	return Parser.Evaluate(Equation, &Scoope, LastReturn);
 }
 
 int KLScript::SkipComment(const KLString& Script)
