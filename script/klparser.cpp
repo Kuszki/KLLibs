@@ -37,7 +37,7 @@ const KLParser::KLParserToken::KLParserOperatorData KLParser::KLParserToken::Ope
 	{ KLParser::KLParserToken::OPERATOR::POW,		"^",		34 },
 
 	{ KLParser::KLParserToken::OPERATOR::EQ,		"=",		21 },
-	{ KLParser::KLParserToken::OPERATOR::NEQ,		"!=",	21 },
+	{ KLParser::KLParserToken::OPERATOR::NEQ,		"<>",	21 },
 	{ KLParser::KLParserToken::OPERATOR::GT,		">",		22 },
 	{ KLParser::KLParserToken::OPERATOR::LT,		"<",		22 },
 	{ KLParser::KLParserToken::OPERATOR::GE,		">=",	22 },
@@ -67,8 +67,8 @@ const KLParser::KLParserToken::KLParserFunctionData KLParser::KLParserToken::Fun
 	{ KLParser::KLParserToken::FUNCTION::LOG,		"log"	},
 	{ KLParser::KLParserToken::FUNCTION::LN,		"ln"		},
 
-	{ KLParser::KLParserToken::FUNCTION::NOT,		"not"	},
-	{ KLParser::KLParserToken::FUNCTION::MINUS,		"minus"	}
+	{ KLParser::KLParserToken::FUNCTION::NOT,		"!"	},
+	{ KLParser::KLParserToken::FUNCTION::MINUS,		"-"	}
 };
 
 KLParser::KLParserToken::KLParserToken(const char* Token, CLASS TokenClass)
@@ -346,6 +346,9 @@ bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code, c
 				break;
 				case '@':
 					Operator = new KLParserToken(KLParserToken::OPERATOR::FAND);
+				break;
+				case '!':
+					Operator = new KLParserToken(KLParserToken::FUNCTION::NOT);
 				break;
 				case '$':
 					Tokens << new KLParserToken(Return);

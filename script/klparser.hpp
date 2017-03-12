@@ -108,7 +108,7 @@ class KLLIBS_EXPORT KLParser
 			POW,			//!< Potęgowanie: `a^b`.
 
 			EQ,			//!< Jest równy: `a = b`.
-			NEQ,			//!< Jest różny: `a != b`.
+			NEQ,			//!< Jest różny: `a <> b`.
 			GT,			//!< Jest większy: `a > b`.
 			LT,			//!< Jest mniejszy: `a < b`.
 			GE,			//!< Jest większy lub równy: `a >= b`.
@@ -143,7 +143,7 @@ class KLLIBS_EXPORT KLParser
 			LOG,		//!< Logarytm dziesiętny: `log(x)`.
 			LN,		//!< Logarytm naturalny: `ln(x)`.
 
-			NOT,		//!< Negacja logiczna: `not(x)`.
+			NOT,		//!< Negacja logiczna: `!x`.
 
 			MINUS	//!< Przeciwieństwo liczby: `-x`.
 		};

@@ -123,7 +123,7 @@ Przykład:
      var wynik; set wynik $;
 
      # instrukcja if
-     if Zmienna != 100 | Zmienna < 50;
+     if Zmienna <> 100 | Zmienna < 50;
 
           # wywołanie funkcji (kolejne parametry po przecinku)
           call Funkcja sin(Zmienna), 30, Zmienna*2;
@@ -145,7 +145,7 @@ Przykład:
                call Procedura Zmienna % i, Zmienna;
                set i i+1;
 
-               if not $;
+               if ! $;
 
                     # przerwanie skryptu
                     exit;

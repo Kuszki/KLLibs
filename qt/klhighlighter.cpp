@@ -42,7 +42,7 @@ KLHighlighter::KLHighlighter(QTextDocument* Parent)
 	Rule.Format.setForeground(Qt::darkBlue);
 	Rule.Format.setFontWeight(QFont::Bold);
 
-	Rule.Expresion = QRegExp("(?:\\~|\\+|\\-|\\*|\\/|\\%|\\^|\\=|\\!\\=|\\>|\\<|\\>\\=|\\<\\=|\\&|\\@|\\||\\?|\\(|\\)|\\;|\\,)");
+	Rule.Expresion = QRegExp("(?:\\~|\\+|\\-|\\*|\\/|\\%|\\^|\\!|\\=|\\<\\>|\\>|\\<|\\>\\=|\\<\\=|\\&|\\@|\\||\\?|\\(|\\)|\\;|\\,)");
 
 	Rules.insert(OPERATORS, Rule);
 
@@ -56,7 +56,7 @@ KLHighlighter::KLHighlighter(QTextDocument* Parent)
 	Rule.Format.setForeground(Qt::darkCyan);
 	Rule.Format.setFontWeight(QFont::Bold);
 
-	Rule.Expresion = QRegExp("\\b(?:sin|cos|tan|abs|exp|sqrt|log|ln|not|minus)\\b");
+	Rule.Expresion = QRegExp("\\b(?:sin|cos|tan|abs|exp|sqrt|log|ln)\\b");
 
 	Rules.insert(MATHS, Rule);
 
