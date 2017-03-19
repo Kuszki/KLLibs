@@ -181,7 +181,7 @@ class KLLIBS_EXPORT KLVariables
 			 * Sprawdza czy obiekt jest bindem. Jeśli tak, to zwraca `true`, w przeciwnym razie zwraca `false`.
 			 *
 			 */
-			bool Binded(void) const;
+			bool IsBinded(void) const;
 
 			/*! \brief		Ustalenie funkcji zwrotnej.
 			 *  \param [in]	Handler Funkcja zwrotna.

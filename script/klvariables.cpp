@@ -88,7 +88,7 @@ bool KLVariables::KLVariable::ToBool(void) const
 	return ToNumber();
 }
 
-bool KLVariables::KLVariable::Binded(void) const
+bool KLVariables::KLVariable::IsBinded(void) const
 {
 	return Pointer;
 }
@@ -128,7 +128,18 @@ KLVariables::KLVariable& KLVariables::KLVariable::operator= (const Data& Value)
 			*reinterpret_cast<int*>(Pointer) = Value;
 		break;
 	}
-	else Variable = Value;
+	else switch (Type)
+	{
+		case BOOLEAN:
+			Variable = bool(Value);
+		break;
+		case NUMBER:
+			Variable = double(Value);
+		break;
+		case INTEGER:
+			Variable = int(Value);
+		break;
+	}
 
 	if (Callback) Callback(ToNumber());
 
