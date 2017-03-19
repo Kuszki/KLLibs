@@ -57,7 +57,7 @@ KLString::KLString(int Value)
 KLString::KLString(bool Bool)
 : KLString()
 {
-	const char* Buffer[] = {"true", "false"};
+	static const char* Buffer[] = {"true", "false"};
 
 	Capacity	= Bool ? 4 : 5;
 	Data		= (char*) malloc(Capacity + 1);
@@ -178,7 +178,7 @@ int KLString::Insert(const char* String, int Position, int Length)
 
 		memcpy(Data, String, Strlen + 1);
 	}
-	else	if (Position < 0 || Position == Capacity)
+	else if (Position < 0 || Position == Capacity)
 	{
 		Data = (char*) realloc(Data, Capacity + Strlen + 1);
 
@@ -211,7 +211,7 @@ int KLString::Insert(char Char, int Position)
 		Data[0] = Char;
 		Data[1] = 0;
 	}
-	else	if (Position < 0 || Position == Capacity)
+	else if (Position < 0 || Position == Capacity)
 	{
 		Data = (char*) realloc(Data, Capacity + 2);
 
