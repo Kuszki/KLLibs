@@ -62,8 +62,6 @@ class KLLIBS_EXPORT KLParser
 		UNKNOWN_OPERATOR,		//!< Napotkano nieznany operator.
 		UNKNOWN_EXPRESSION,		//!< Napotkano nieznane wyrażenie.
 
-		EXPECTED_BRACKET,		//!< Oczekiwano na otwierający lub zamykający nawias.
-
 		NOT_ENOUGH_PARAMETERS,	//!< Napotkano zbyt mało parametrów.
 		TOO_MANY_PARAMETERS,	//!< Napotkano zbyt wiele parametrów.
 

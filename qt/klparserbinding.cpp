@@ -55,11 +55,10 @@ QString KLParserbinding::Errorcode(KLParser::ERROR Code)
 	{
 		case UNEXPECTED_OPERATOR:	return tr("Encountered unexpected operator");
 		case UNKNOWN_OPERATOR:		return tr("Encountered unknown operator");
-		case UNKNOWN_EXPRESSION:		return tr("Encountered unknown function or variable");
-		case EXPECTED_BRACKET:		return tr("Expected bracket");
-		case NOT_ENOUGH_PARAMETERS:	return tr("Expected function paramters");
+		case UNKNOWN_EXPRESSION:		return tr("Encountered unknown symbol");
+		case NOT_ENOUGH_PARAMETERS:	return tr("Expected paramters");
 		case TOO_MANY_PARAMETERS:	return tr("Expected operator");
-		case BRACKETS_NOT_EQUAL:		return tr("Encountered wrong bracket number");
+		case BRACKETS_NOT_EQUAL:		return tr("Encountered single bracket");
 
 		default: return tr("Script is valid");
 	}

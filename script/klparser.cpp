@@ -156,7 +156,8 @@ double KLParser::KLParserToken::GetValue(KLList<double>* Values) const
 	switch (Class)
 	{
 		case CLASS::OPERATOR:
-			if (Values->Size() < 2) LastError = NOT_ENOUGH_PARAMETERS;
+			if (Data.Operator == OPERATOR::L_BRACKET) LastError = BRACKETS_NOT_EQUAL;
+			else if (Values->Size() < 2) LastError = NOT_ENOUGH_PARAMETERS;
 			else
 			{
 				double ParamB = Values->Pop();
@@ -249,8 +250,6 @@ KLParser::ERROR KLParser::KLParserToken::GetError(void) const
 
 bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code, const KLVariables* Scoope, const double Return)
 {
-	if (Code.Count('(') != Code.Count(')')) ReturnError(BRACKETS_NOT_EQUAL);
-
 	KLList<KLParserToken*> Operators;
 	KLParserToken* Operator = nullptr;
 
@@ -294,7 +293,7 @@ bool KLParser::GetTokens(KLList<KLParserToken*>& Tokens, const KLString& Code, c
 					do
 					{
 						if (Operators.Size()) Operator = Operators.Pop();
-						else ReturnError(EXPECTED_BRACKET);
+						else ReturnError(BRACKETS_NOT_EQUAL);
 
 						if (Operator->GetOperator() == KLParserToken::OPERATOR::L_BRACKET)
 						{
