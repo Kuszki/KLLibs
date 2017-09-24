@@ -107,7 +107,7 @@ Przykład:
 
           # obliczenie wyniku funkcji
           if (a > b); return a;
-          else; return b;
+          else; return b; fi;
      end;
 
      # utworzenie zmiennej
